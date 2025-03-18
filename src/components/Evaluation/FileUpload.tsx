@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { FiUpload, FiFile, FiX } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 interface FileUploadProps {
   onFilesSelected: (files: File[]) => void;
@@ -11,6 +12,7 @@ interface SelectedFile {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected }) => {
+  const navigate = useNavigate();
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -146,7 +148,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected }) => {
 
       {/* Evaluate Button */}
       {selectedFiles.length > 0 && (
-        <button className="w-full bg-black text-white py-3 rounded font-medium hover:bg-gray-900 transition-colors">
+        <button
+          onClick={() => navigate("/evaluation-summary")}
+          className="w-full bg-black text-white py-3 rounded font-medium hover:bg-gray-900 transition-colors"
+        >
           Evaluate Documents
         </button>
       )}

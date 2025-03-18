@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ChatArea from "../../Learn/ChatArea";
 import ChatSidebar from "../../Learn/ChatSidebar";
 import ReferencePanel from "../../Learn/ReferencePanel";
+import Footer from "../../Dashboard/footer/Footer";
 
 const LearnLayout: React.FC = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -36,6 +37,7 @@ const LearnLayout: React.FC = () => {
           onClose={() => setShowReferencePanel(false)}
         />
       </div>
+      <Footer />
     </div>
   );
 };

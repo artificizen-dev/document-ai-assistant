@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
+import Footer from "../../Dashboard/footer/Footer";
 
 const DashboardLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -49,6 +50,7 @@ const DashboardLayout: React.FC = () => {
           </main>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

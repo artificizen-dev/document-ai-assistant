@@ -37,7 +37,7 @@ const ReferencePanel: React.FC<ReferencePanelProps> = ({
       {/* Close button - visible only on mobile */}
       <button
         onClick={onClose}
-        className="md:hidden absolute top-3 left-3 text-gray-500 hover:text-black"
+        className="md:hidden absolute top-3 right-3 text-gray-500 hover:text-black"
         aria-label="Close reference panel"
       >
         <FiX size={20} />

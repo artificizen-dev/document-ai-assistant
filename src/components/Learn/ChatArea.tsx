@@ -4,6 +4,7 @@ import ChatNavbar from "./ChatNavbar";
 import CategorySelector from "./CategorySelector";
 import ChatInput from "./ChatInput";
 import { useNavigate } from "react-router-dom";
+import ROUTES from "../../routes";
 
 interface ChatAreaProps {
   toggleSidebar: () => void;
@@ -63,7 +64,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   };
 
   const onClose = () => {
-    navigate("/");
+    navigate(ROUTES.default);
   };
 
   return (

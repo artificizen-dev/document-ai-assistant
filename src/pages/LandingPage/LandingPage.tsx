@@ -3,15 +3,37 @@ import { IoBookOutline } from "react-icons/io5";
 import { MdOutlineAssessment } from "react-icons/md";
 import { HiArrowRight } from "react-icons/hi";
 import Footer from "../../components/Dashboard/footer/Footer";
+import { FiLogOut } from "react-icons/fi";
+import ROUTES from "../../routes";
+import { useAppContext } from "../../Providers/AppContext";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { logout } = useAppContext();
+
+  const handleLogout = () => {
+    logout();
+    navigate(ROUTES.login);
+  };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <header className="p-4 border-b border-gray-200">
-        <h2 className="text-2xl font-medium">Document AI Assistant</h2>
+      <header className="w-full bg-white border-b border-gray-200 p-4">
+        <div className="flex justify-between items-center">
+          <h2 className="md:text-2xl text-xl font-medium">
+            Document AI Assistant
+          </h2>
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 border border-gray-200 rounded-md hover:bg-gray-50"
+            aria-label="Logout"
+          >
+            <FiLogOut size={16} />
+            <span>Logout</span>
+          </button>
+        </div>
       </header>
 
       {/* Main Content */}

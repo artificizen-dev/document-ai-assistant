@@ -5,7 +5,8 @@ const EvaluatePage: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
 
   const handleFilesSelected = (selectedFiles: File[]) => {
-    setFiles((prev) => [...prev, ...selectedFiles]);
+    // Replace the existing files instead of appending
+    setFiles(selectedFiles);
   };
 
   console.log(files);
@@ -24,7 +25,7 @@ const EvaluatePage: React.FC = () => {
           </p>
         </div>
 
-        <FileUpload onFilesSelected={handleFilesSelected} />
+        <FileUpload onFilesSelected={handleFilesSelected} files={files} />
       </div>
     </section>
   );

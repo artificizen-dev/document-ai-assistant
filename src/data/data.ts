@@ -1,6 +1,4 @@
-import { EvaluationResult } from "../interfaces";
-
-export const sampleEvaluationData: EvaluationResult = {
+export const sampleEvaluationData = {
   id: "eval-2025-03-11",
   date: "11/03/2025",
   time: "09:11:46",

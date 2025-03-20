@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 import Footer from "../../Dashboard/footer/Footer";
+import { FiLogOut } from "react-icons/fi";
+import { useAppContext } from "../../../Providers/AppContext";
+import ROUTES from "../../../routes";
 
 const DashboardLayout: React.FC = () => {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
+  const { logout } = useAppContext();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -27,11 +32,29 @@ const DashboardLayout: React.FC = () => {
     return "Document AI Assistant";
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate(ROUTES.login);
+  };
+
   return (
     <div className="flex flex-col h-screen bg-white">
       {/* Top Header */}
       <header className="w-full bg-white border-b border-gray-200 p-4">
-        <h2 className="text-2xl font-medium">{getHeaderTitle()}</h2>
+        <div className="flex justify-between items-center">
+          <h2 className="md:text-2xl text-xl font-medium">
+            {getHeaderTitle()}
+          </h2>
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 border border-gray-200 rounded-md hover:bg-gray-50"
+            aria-label="Logout"
+          >
+            <FiLogOut size={16} />
+            <span>Logout</span>
+          </button>
+        </div>
       </header>
 
       {/* Main Content Area */}

@@ -29,6 +29,8 @@ import DashboardLayout from "./components/Layout/DashboardLayout/DashboardLayout
 import LearnPage from "./pages/LearnPage/LearnPage";
 import EvaluatePage from "./pages/EvaluationPage/EvaluationPage";
 import EvaluationResultPage from "./pages/EvalutionResultsPage/EvolutionResultPage";
+import LoginPage from "./pages/Login/Login";
+import SignupPage from "./pages/Signup/Signup";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path={ROUTES.default} element={<LandingPage />} />
+        <Route path={ROUTES.login} element={<LoginPage />} />
+        <Route path={ROUTES.signup} element={<SignupPage />} />
 
         {/* Dashboard routes - wrapped with DashboardLayout */}
         <Route element={<DashboardLayout />}>

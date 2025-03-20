@@ -70,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 id={evaluation.id}
                 docName={evaluation.doc_name}
                 date={evaluation.created_at}
-                score={74}
+                // score={74}
               />
             ))}
           </div>

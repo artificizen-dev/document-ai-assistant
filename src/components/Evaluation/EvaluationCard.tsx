@@ -7,7 +7,7 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({
   id,
   docName,
   date,
-  score = 0,
+  // score = 0,
 }) => {
   const navigate = useNavigate();
 
@@ -39,9 +39,9 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({
           </div>
           <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full pr-1">
             <span>1 document</span>
-            {score > 0 && (
+            {/* {score > 0 && (
               <span className="whitespace-nowrap">Avg. Grade: {score}/100</span>
-            )}
+            )} */}
           </div>
         </div>
       </div>

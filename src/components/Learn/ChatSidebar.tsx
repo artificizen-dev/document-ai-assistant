@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FiPlus, FiMessageSquare, FiHeadphones, FiX } from "react-icons/fi";
+import React from "react";
+import { FiPlus, FiMessageSquare, FiX } from "react-icons/fi";
 
 interface ChatSidebarProps {
   isVisible: boolean;
@@ -7,8 +7,7 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
-  const [activeTab, setActiveTab] = useState("chats");
-  // Using initialChats to avoid the setChats warning
+  // Using initialChats for chat history
   const initialChats = [
     { id: "chat1", title: "What is AI", timestamp: new Date() },
   ];
@@ -29,28 +28,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
         <FiX size={20} />
       </button>
 
-      {/* Tabs */}
-      <div className="flex border-b border-gray-200">
-        <button
-          className={`flex-1 py-3 px-4 text-sm font-medium ${
-            activeTab === "chats"
-              ? "bg-white text-black border-b-2 border-black"
-              : "bg-gray-100 text-gray-600"
-          }`}
-          onClick={() => setActiveTab("chats")}
-        >
-          Chats
-        </button>
-        <button
-          className={`flex-1 py-3 px-4 text-sm font-medium ${
-            activeTab === "podcasts"
-              ? "bg-white text-black border-b-2 border-black"
-              : "bg-gray-100 text-gray-600"
-          }`}
-          onClick={() => setActiveTab("podcasts")}
-        >
-          Podcasts
-        </button>
+      {/* Header */}
+      <div className="py-3 px-4 border-b border-gray-200">
+        <h2 className="text-lg font-medium">Chats</h2>
       </div>
 
       {/* Content */}
@@ -61,27 +41,28 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
         </button>
 
         {/* Chat List */}
-        {activeTab === "chats" && (
-          <div className="space-y-2">
-            {initialChats.map((chat) => (
-              <div
-                key={chat.id}
-                className="p-3 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200"
-              >
-                <div className="flex items-center">
-                  <FiMessageSquare className="text-gray-500 mr-2" size={14} />
-                  <span className="text-sm">{chat.title}</span>
-                </div>
+        <div className="space-y-2">
+          {initialChats.map((chat) => (
+            <div
+              key={chat.id}
+              className="p-3 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200"
+            >
+              <div className="flex items-center">
+                <FiMessageSquare className="text-gray-500 mr-2" size={14} />
+                <span className="text-sm">{chat.title}</span>
               </div>
-            ))}
-          </div>
-        )}
+              <div className="text-xs text-gray-500 mt-1">
+                {chat.timestamp.toLocaleDateString()}
+              </div>
+            </div>
+          ))}
+        </div>
 
-        {/* Podcasts List (empty for now) */}
-        {activeTab === "podcasts" && (
+        {/* Empty state when no chats exist */}
+        {initialChats.length === 0 && (
           <div className="flex flex-col items-center justify-center py-8 text-gray-500">
-            <FiHeadphones size={24} className="mb-2" />
-            <p className="text-sm text-center">No podcasts yet</p>
+            <FiMessageSquare size={24} className="mb-2" />
+            <p className="text-sm text-center">No chats yet</p>
           </div>
         )}
       </div>

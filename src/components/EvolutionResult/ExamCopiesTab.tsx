@@ -113,8 +113,6 @@ const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       } catch (error) {
-        handleError("Failed to download the PDF");
-        // Open in new tab as fallback
         window.open(pdfUrl, "_blank");
       }
     } else if (pdfUrl) {

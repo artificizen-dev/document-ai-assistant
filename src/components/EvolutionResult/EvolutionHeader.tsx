@@ -1,63 +1,6 @@
-// import React from "react";
-// import { FiDownload, FiShare2, FiPlus } from "react-icons/fi";
-// import { useNavigate } from "react-router-dom";
-// import { EvaluationHeaderProps } from "../../interfaces";
-
-// const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
-//   title,
-//   date,
-//   time,
-//   onNewEvaluation,
-// }) => {
-//   const navigate = useNavigate();
-
-//   const displayTitle = title.includes("Evaluation")
-//     ? title
-//     : `Evaluation ${date}`;
-
-//   return (
-//     <div className="mb-6">
-//       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-//         <div>
-//           <h1 className="text-2xl font-bold text-gray-900">{displayTitle}</h1>
-//           <p className="text-sm text-gray-500 mt-1">
-//             {date} {time}
-//           </p>
-//         </div>
-
-//         <div className="flex mt-3 md:mt-0 space-x-2">
-//           <button className="flex items-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs text-gray-700 hover:bg-gray-50">
-//             <FiDownload className="mr-1.5" size={14} /> Export
-//           </button>
-
-//           <button className="flex items-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs text-gray-700 hover:bg-gray-50">
-//             <FiShare2 className="mr-1.5" size={14} /> Share
-//           </button>
-
-//           <button
-//             onClick={onNewEvaluation || (() => navigate("/evaluate"))}
-//             className="flex items-center bg-black text-white py-1.5 px-3 rounded-md text-xs hover:bg-gray-800"
-//           >
-//             <FiPlus className="mr-1.5" size={14} /> New Evaluation
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EvaluationHeader;
-
 import React, { useState } from "react";
-import {
-  FiDownload,
-  FiShare2,
-  FiPlus,
-  FiThumbsUp,
-  FiThumbsDown,
-} from "react-icons/fi";
+import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { HiThumbUp, HiThumbDown } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
 import { EvaluationHeaderProps } from "../../interfaces";
 import axios from "axios";
 import { backendURL, access_token } from "../../utils/constants";
@@ -66,11 +9,9 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   title,
   date,
   time,
-  onNewEvaluation,
   documentId,
   userFeedback,
 }) => {
-  const navigate = useNavigate();
   // Initialize feedbackSubmitted based on whether userFeedback already exists
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(
     userFeedback !== null
@@ -200,21 +141,6 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
               {renderThumbsDown()}
             </button>
           </div>
-
-          <button className="flex items-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs text-gray-700 hover:bg-gray-50">
-            <FiDownload className="mr-1.5" size={14} /> Export
-          </button>
-
-          <button className="flex items-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs text-gray-700 hover:bg-gray-50">
-            <FiShare2 className="mr-1.5" size={14} /> Share
-          </button>
-
-          <button
-            onClick={onNewEvaluation || (() => navigate("/evaluate"))}
-            className="flex items-center bg-black text-white py-1.5 px-3 rounded-md text-xs hover:bg-gray-800"
-          >
-            <FiPlus className="mr-1.5" size={14} /> New Evaluation
-          </button>
         </div>
       </div>
     </div>

@@ -41,6 +41,24 @@ const appReducer = (state: AppState, action: ActionType): AppState => {
         error: action.payload,
         loading: false,
       };
+    case "UPDATE_USER":
+      if (!state.user) return state;
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...(action.payload.id !== undefined ? { id: action.payload.id } : {}),
+          ...(action.payload.username !== undefined
+            ? { username: action.payload.username }
+            : {}),
+          ...(action.payload.email !== undefined
+            ? { email: action.payload.email }
+            : {}),
+          ...(action.payload.avatar !== undefined
+            ? { avatar: action.payload.avatar }
+            : {}),
+        },
+      };
     default:
       return state;
   }
@@ -52,7 +70,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
-
   const [refreshKey, setRefreshKey] = useState(0);
 
   const triggerRefresh = () => {
@@ -60,22 +77,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
+      const isAuthenticated = localStorage.getItem("isAuthenticated");
 
-    if (token && storedUser) {
-      try {
-        const user = JSON.parse(storedUser);
-        dispatch({ type: "LOGIN", payload: { user } });
-      } catch (error) {
-        console.error("Error parsing stored user data:", error);
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+      if (token && storedUser && isAuthenticated === "true") {
+        try {
+          const user = JSON.parse(storedUser);
+          dispatch({ type: "LOGIN", payload: { user } });
+        } catch (error) {
+          console.error("Error parsing stored user data:", error);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          localStorage.removeItem("isAuthenticated");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("profileImage");
+        }
       }
-    }
+    };
+
+    checkAuthStatus();
   }, []);
 
-  // Login function
   const login = (token: string, userData: User) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
@@ -87,16 +111,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
-  // Logout function
+  const googleLogin = async (
+    tokenData: string,
+    userData: User,
+    profileImage?: string
+  ) => {
+    localStorage.setItem("token", tokenData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("isAuthenticated", "true");
+
+    if (profileImage) {
+      localStorage.setItem("profileImage", profileImage);
+    }
+
+    dispatch({
+      type: "LOGIN",
+      payload: { user: userData },
+    });
+  };
+
+  const updateUser = (userData: Partial<User>) => {
+    const currentUser = localStorage.getItem("user");
+    if (currentUser) {
+      const parsedUser = JSON.parse(currentUser);
+      const updatedUser = { ...parsedUser, ...userData };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+    }
+
+    dispatch({ type: "UPDATE_USER", payload: userData });
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("profileImage");
 
     dispatch({ type: "LOGOUT" });
   };
 
-  // Handle API success with toast notification
   const handleSuccess = (message: string) => {
     toast.success(message, {
       position: "top-right",
@@ -108,7 +162,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
-  // Handle API errors with toast notification
   const handleError = (message: string) => {
     toast.error(message, {
       position: "top-right",
@@ -122,9 +175,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     dispatch({ type: "SET_ERROR", payload: message });
   };
 
-  // Set loading state
   const setLoading = (isLoading: boolean) => {
     dispatch({ type: "SET_LOADING", payload: isLoading });
+  };
+
+  const getUserProfileImage = () => {
+    return localStorage.getItem("profileImage") || "";
   };
 
   return (
@@ -132,12 +188,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         ...state,
         login,
+        googleLogin,
         logout,
+        updateUser,
         handleSuccess,
         handleError,
         setLoading,
         refreshKey,
         triggerRefresh,
+        getUserProfileImage,
       }}
     >
       {children}
@@ -145,7 +204,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Create a custom hook to use the context
 export const useAppContext = (): AppContextType => {
   const context = useContext(AppContext);
   if (context === undefined) {

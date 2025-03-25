@@ -80,12 +80,19 @@ export interface AppState {
 
 export interface AppContextType extends AppState {
   login: (token: string, userData: User) => void;
+  googleLogin: (
+    tokenData: string,
+    userData: User,
+    profileImage?: string
+  ) => void;
   logout: () => void;
+  updateUser: (userData: Partial<User>) => void;
   handleSuccess: (message: string) => void;
   handleError: (message: string) => void;
   setLoading: (isLoading: boolean) => void;
   refreshKey: number;
   triggerRefresh: () => void;
+  getUserProfileImage: () => string;
 }
 
 export interface EvaluationCardProps {
@@ -141,7 +148,8 @@ export type ActionType =
   | { type: "LOGIN"; payload: { user: User } }
   | { type: "LOGOUT" }
   | { type: "SET_LOADING"; payload: boolean }
-  | { type: "SET_ERROR"; payload: string | null };
+  | { type: "SET_ERROR"; payload: string }
+  | { type: "UPDATE_USER"; payload: Partial<User> };
 
 export const initialState: AppState = {
   user: null,
@@ -149,3 +157,10 @@ export const initialState: AppState = {
   loading: false,
   error: null,
 };
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  avatar?: string;
+}

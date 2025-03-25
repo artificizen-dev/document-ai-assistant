@@ -24,16 +24,18 @@ const CategoryScores: React.FC<CategoryScoresProps> = ({ scores }) => {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      {scoreItems.map((item) => (
-        <div
-          key={item.name}
-          className="bg-white border border-gray-200 rounded-lg p-4 text-center"
-        >
-          <h3 className="text-gray-500 text-sm mb-1">{item.name}</h3>
-          <p className="text-4xl font-bold text-gray-900">{item.score}</p>
-        </div>
-      ))}
+    <div className="flex flex-nowrap overflow-x-auto gap-4 mb-8 w-full pb-2">
+      {scoreItems.map((item) => {
+        return (
+          <div
+            key={item.name}
+            className={` border border-gray-200 rounded-lg p-4 text-center flex-shrink-0 w-24 md:w-32 lg:w-40`}
+          >
+            <h3 className="text-gray-700 text-sm mb-1">{item.name}</h3>
+            <p className={`text-4xl font-bold text-black`}>{item.score}</p>
+          </div>
+        );
+      })}
     </div>
   );
 };

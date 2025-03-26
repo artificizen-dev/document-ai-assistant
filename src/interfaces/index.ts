@@ -24,6 +24,7 @@ export interface EvaluationResponse {
   updated_at: string;
   user: number;
   user_feedback: boolean;
+  score_sum: number;
 }
 
 export interface CategoryScoresProps {
@@ -93,6 +94,8 @@ export interface AppContextType extends AppState {
   refreshKey: number;
   triggerRefresh: () => void;
   getUserProfileImage: () => string;
+  getSessionId: () => string;
+  initializeSessionId: () => void;
 }
 
 export interface EvaluationCardProps {
@@ -149,14 +152,16 @@ export type ActionType =
   | { type: "LOGOUT" }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string }
-  | { type: "UPDATE_USER"; payload: Partial<User> };
+  | { type: "UPDATE_USER"; payload: Partial<User> }
+  | { type: "SET_SESSION_ID"; payload: string };
 
-export const initialState: AppState = {
-  user: null,
-  isAuthenticated: false,
-  loading: false,
-  error: null,
-};
+export interface AppState {
+  user: User | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
+  sessionId: string | null;
+}
 
 export interface User {
   id: string;
@@ -164,3 +169,11 @@ export interface User {
   email: string;
   avatar?: string;
 }
+
+export const initialState: AppState = {
+  user: null,
+  isAuthenticated: false,
+  loading: false,
+  error: null,
+  sessionId: null,
+};

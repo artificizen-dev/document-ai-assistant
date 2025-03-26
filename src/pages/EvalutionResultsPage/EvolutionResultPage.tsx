@@ -11,60 +11,85 @@ import EvaluationTabs from "../../components/EvolutionResult/EvolutionTabs";
 import ExamCopiesTab from "../../components/EvolutionResult/ExamCopiesTab";
 import DetailedFeedbackTab from "../../components/EvolutionResult/DetailedFeedbackTab";
 import RecommendationsTab from "../../components/EvolutionResult/RecommendationsTab";
+import BlurSection from "../../components/EvolutionResult/BlurSection";
 
 const EvaluationResultPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { handleError, setLoading } = useAppContext();
+  const { handleError, setLoading, getSessionId } = useAppContext();
   const [activeTab, setActiveTab] = useState("exam-copies");
   const [evaluationData, setEvaluationData] =
     useState<EvaluationResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSessionUser, setIsSessionUser] = useState(false);
 
   useEffect(() => {
+    let isMounted = true; // Flag to prevent state updates if component unmounts
+
     const fetchEvaluation = async () => {
       try {
-        setLoading(true);
-        setIsLoading(true);
-
-        const token = access_token();
-        if (!token) {
-          handleError("Authentication required");
-          navigate("/login");
-          return;
+        if (isMounted) {
+          setLoading(true);
+          setIsLoading(true);
         }
 
+        const token = access_token();
+        const sessionId = getSessionId();
         const evaluationId = id || localStorage.getItem("evaluationId");
 
         if (!evaluationId) {
-          handleError("Evaluation ID not found");
+          if (isMounted) {
+            handleError("Evaluation ID not found");
+          }
           return;
         }
 
-        const response = await axios.get(
-          `${backendURL}/api/services/docs/${evaluationId}/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        let url = `${backendURL}/api/services/docs/${evaluationId}/`;
+        let headers: Record<string, string> = {};
+        let isUsingSession = false;
 
-        setEvaluationData(response.data);
-        console.log(response.data);
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        } else if (sessionId) {
+          url += `?session_id=${sessionId}`;
+          isUsingSession = true;
+        } else {
+          if (isMounted) {
+            handleError("Authentication required");
+            navigate("/login");
+          }
+          return;
+        }
+
+        const response = await axios.get(url, { headers });
+
+        if (isMounted) {
+          setEvaluationData(response.data);
+          setIsSessionUser(isUsingSession);
+          console.log(response.data);
+        }
       } catch (error: any) {
-        console.error("Error fetching evaluation:", error);
-        handleError(
-          error.response?.data?.message || "Failed to fetch evaluation data"
-        );
+        if (isMounted) {
+          console.error("Error fetching evaluation:", error);
+          handleError(
+            error.response?.data?.message || "Failed to fetch evaluation data"
+          );
+        }
       } finally {
-        setLoading(false);
-        setIsLoading(false);
+        if (isMounted) {
+          setLoading(false);
+          setIsLoading(false);
+        }
       }
     };
 
     fetchEvaluation();
-  }, [id]);
+
+    // Cleanup function to prevent state updates if component unmounts
+    return () => {
+      isMounted = false;
+    };
+  }, [id]); // Removed dependencies that could cause infinite loops
 
   if (isLoading) {
     return (
@@ -93,11 +118,11 @@ const EvaluationResultPage: React.FC = () => {
     );
   }
 
-  const scoreValues = Object.values(evaluationData.scores);
+  const scoreValues = Object.values(evaluationData.scores || {});
   const overallScore =
     scoreValues.length > 0
       ? scoreValues.reduce((sum, score) => sum + score, 0)
-      : 0;
+      : evaluationData.score_sum || 0;
 
   const createdDate = new Date(evaluationData.created_at);
   const formattedDate = createdDate.toLocaleDateString();
@@ -105,6 +130,7 @@ const EvaluationResultPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
+      {/* Header is always visible */}
       <EvaluationHeader
         title={`Evaluation of ${evaluationData.doc_name}`}
         date={formattedDate}
@@ -113,6 +139,7 @@ const EvaluationResultPage: React.FC = () => {
         userFeedback={evaluationData.user_feedback}
       />
 
+      {/* Summary is always visible */}
       <EvaluationSummary
         overallScore={overallScore}
         documentCount={1}
@@ -123,30 +150,40 @@ const EvaluationResultPage: React.FC = () => {
         improvements={evaluationData.improvements}
       />
 
-      <CategoryScores scores={evaluationData.scores} />
+      {/* For session users, show everything below as blurred with signup prompt */}
+      {isSessionUser ? (
+        <BlurSection />
+      ) : (
+        <>
+          {/* Full content for authenticated users */}
+          <CategoryScores scores={evaluationData.scores} />
 
-      <EvaluationTabs activeTab={activeTab} setActiveTab={setActiveTab}>
-        {activeTab === "exam-copies" && (
-          <ExamCopiesTab
-            docName={evaluationData.doc_name}
-            docLink={evaluationData.doc_link}
-            question={evaluationData.question}
-            answer={evaluationData.answer}
-          />
-        )}
+          <EvaluationTabs activeTab={activeTab} setActiveTab={setActiveTab}>
+            {activeTab === "exam-copies" && (
+              <ExamCopiesTab
+                docName={evaluationData.doc_name}
+                docLink={evaluationData.doc_link}
+                question={evaluationData.question}
+                answer={evaluationData.answer}
+              />
+            )}
 
-        {activeTab === "detailed-feedback" && (
-          <DetailedFeedbackTab
-            feedback={evaluationData.feedback}
-            improvements={evaluationData.improvements}
-            strengths={evaluationData.strengths}
-          />
-        )}
+            {activeTab === "detailed-feedback" && (
+              <DetailedFeedbackTab
+                feedback={evaluationData.feedback}
+                improvements={evaluationData.improvements}
+                strengths={evaluationData.strengths}
+              />
+            )}
 
-        {activeTab === "recommendations" && (
-          <RecommendationsTab referenceLinks={evaluationData.reference_links} />
-        )}
-      </EvaluationTabs>
+            {activeTab === "recommendations" && (
+              <RecommendationsTab
+                referenceLinks={evaluationData.reference_links}
+              />
+            )}
+          </EvaluationTabs>
+        </>
+      )}
     </div>
   );
 };

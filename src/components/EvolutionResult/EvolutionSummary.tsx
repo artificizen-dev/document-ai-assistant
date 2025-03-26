@@ -238,7 +238,7 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
 
   return (
     <div className="bg-gray-100 rounded-lg p-6 mb-6">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4">
         <div>
           <h2 className="text-xl font-bold text-gray-800 mb-1">
             Evaluation Summary

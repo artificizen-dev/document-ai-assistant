@@ -1,7 +1,7 @@
 export const ROUTES = {
-  login: "/",
+  login: "/login",
   signup: "/signup",
-  default: "/landing",
+  default: "/",
   learn: "/learn",
   evaluate: "/evaluate",
   "evalution-summary": "/evaluation-summary/:id",

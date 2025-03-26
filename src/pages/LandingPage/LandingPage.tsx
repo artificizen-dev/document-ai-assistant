@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoBookOutline } from "react-icons/io5";
 import { MdOutlineAssessment } from "react-icons/md";
 import { HiArrowRight } from "react-icons/hi";
-import { FiLogOut, FiUser, FiMail } from "react-icons/fi";
+import { FiLogOut, FiUser, FiMail, FiLogIn } from "react-icons/fi";
 import Footer from "../../components/Dashboard/footer/Footer";
 import ROUTES from "../../routes";
 import { useAppContext } from "../../Providers/AppContext";
@@ -74,6 +74,7 @@ const LandingPage = () => {
                     "#C271B4",
                     "#C20D90",
                   ]}
+                  referrerpolicy="no-referrer"
                 />
               )}
             </button>
@@ -81,23 +82,35 @@ const LandingPage = () => {
             {/* Dropdown Menu */}
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-auto bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200">
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-900 truncate flex items-center">
-                    <FiUser className="mr-2 text-gray-500" />
-                    {user?.username || "User"}
-                  </p>
-                  <p className="text-sm text-gray-500 truncate mt-1 flex items-center">
-                    <FiMail className="mr-2 text-gray-400" />
-                    {user?.email || "No email"}
-                  </p>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  <FiLogOut className="mr-2 text-gray-500" />
-                  Logout
-                </button>
+                {user ? (
+                  <>
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900 truncate flex items-center">
+                        <FiUser className="mr-2 text-gray-500" />
+                        {user?.username || "User"}
+                      </p>
+                      <p className="text-sm text-gray-500 truncate mt-1 flex items-center">
+                        <FiMail className="mr-2 text-gray-400" />
+                        {user?.email || "No email"}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <FiLogOut className="mr-2 text-gray-500" />
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => navigate(ROUTES.login)}
+                    className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <FiLogIn className="mr-2 text-gray-500" />
+                    Login
+                  </button>
+                )}
               </div>
             )}
           </div>

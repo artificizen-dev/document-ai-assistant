@@ -39,7 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     };
 
     fetchEvaluations();
-  }, [isOpen, refreshKey]);
+  }, [refreshKey]);
 
   return (
     <aside

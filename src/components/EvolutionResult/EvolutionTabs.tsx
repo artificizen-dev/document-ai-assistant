@@ -12,9 +12,9 @@ const EvaluationTabs: React.FC<EvaluationTabsProps> = ({
   setActiveTab,
 }) => {
   const tabs = [
-    { id: "exam-copies", label: "Exam Copies" },
-    { id: "detailed-feedback", label: "Detailed Feedback" },
-    { id: "recommendations", label: "Recommendations" },
+    { id: "submitted-answer", label: "Submitted Answer" },
+    { id: "smart-ai-review", label: "Smart AI Review" },
+    { id: "boost-your-score", label: "Boost Your Score" },
   ];
 
   return (

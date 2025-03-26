@@ -17,7 +17,7 @@ const EvaluationResultPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { handleError, setLoading, getSessionId } = useAppContext();
-  const [activeTab, setActiveTab] = useState("exam-copies");
+  const [activeTab, setActiveTab] = useState("submitted-answer");
   const [evaluationData, setEvaluationData] =
     useState<EvaluationResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -159,7 +159,7 @@ const EvaluationResultPage: React.FC = () => {
           <CategoryScores scores={evaluationData.scores} />
 
           <EvaluationTabs activeTab={activeTab} setActiveTab={setActiveTab}>
-            {activeTab === "exam-copies" && (
+            {activeTab === "submitted-answer" && (
               <ExamCopiesTab
                 docName={evaluationData.doc_name}
                 docLink={evaluationData.doc_link}
@@ -168,7 +168,7 @@ const EvaluationResultPage: React.FC = () => {
               />
             )}
 
-            {activeTab === "detailed-feedback" && (
+            {activeTab === "smart-ai-review" && (
               <DetailedFeedbackTab
                 feedback={evaluationData.feedback}
                 improvements={evaluationData.improvements}
@@ -176,7 +176,7 @@ const EvaluationResultPage: React.FC = () => {
               />
             )}
 
-            {activeTab === "recommendations" && (
+            {activeTab === "boost-your-score" && (
               <RecommendationsTab
                 referenceLinks={evaluationData.reference_links}
               />

@@ -16,12 +16,12 @@ const EvaluatePage: React.FC = () => {
       <div className="max-w-3xl mx-auto py-6 px-4">
         <div className="text-center mb-8">
           <h2 className="text-2xl text-center font-bold mb-2">
-            Document Evaluation
+            AI Powered Evaluation
           </h2>
           <p className="text-gray-600 text-center max-w-2xl mx-auto">
-            Upload documents to get an AI-powered evaluation and analysis. The
-            AI will assess structure, content quality, clarity, and provide
-            recommendations.
+            Get expert-level assessment and insights with AI. Evaluate
+            structure, content quality, and clarity, and receive actionable
+            recommendations for improvement.
           </p>
         </div>
 

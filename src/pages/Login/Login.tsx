@@ -19,6 +19,7 @@ const LoginPage: React.FC = () => {
     setLoading,
   } = useAppContext();
   const session_id = localStorage.getItem("sessionId");
+  const documentId = localStorage.getItem("evaluationId");
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -114,7 +115,11 @@ const LoginPage: React.FC = () => {
       // handleSuccess("Login successful!");
 
       // Navigate to default route after successful login
-      navigate(ROUTES.default);
+      if (documentId) {
+        navigate(`/evaluation-summary/${documentId}`);
+      } else {
+        navigate(ROUTES.default);
+      }
     } catch (error: any) {
       console.error("Login error:", error);
       if (error.response && error.response.data) {

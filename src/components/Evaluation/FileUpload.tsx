@@ -608,6 +608,7 @@ import { useAppContext } from "../../Providers/AppContext";
 import { access_token } from "../../utils/constants";
 import { FileUploadProps, SelectedFile } from "../../interfaces";
 import UploadNotification from "./UploadNotification";
+import { useNavigate } from "react-router-dom";
 
 interface UploadingFile {
   id: string;
@@ -619,6 +620,7 @@ interface UploadingFile {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
+  const navigate = useNavigate();
   const token = access_token();
   const { handleError, getSessionId, triggerRefresh } = useAppContext();
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
@@ -869,7 +871,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
         }
       );
 
-      console.log("Document upload response:", response.data);
+      if (!token) {
+        const documentId = response.data.id;
+        localStorage.setItem("evaluationId", documentId);
+        navigate(`/evaluation-summary/${documentId}`);
+        return;
+      }
 
       // Update upload status to complete
       setUploadingFiles((prev) =>

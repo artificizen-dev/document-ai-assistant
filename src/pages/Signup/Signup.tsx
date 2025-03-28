@@ -35,6 +35,7 @@ const SignupPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const documentId = localStorage.getItem("evaluationId");
 
   const validateForm = (): boolean => {
     const newErrors: AuthError = {};
@@ -125,7 +126,11 @@ const SignupPage: React.FC = () => {
 
       // handleSuccess("Account created successfully!");
 
-      navigate(ROUTES.default);
+      if (documentId) {
+        navigate(`/evaluation-summary/${documentId}`);
+      } else {
+        navigate(ROUTES.default);
+      }
     } catch (error: any) {
       console.error("Signup error:", error);
       if (error.response && error.response.data) {

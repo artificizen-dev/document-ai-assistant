@@ -185,6 +185,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("profileImage");
+    localStorage.removeItem("evaluationId");
 
     dispatch({ type: "LOGOUT" });
   };

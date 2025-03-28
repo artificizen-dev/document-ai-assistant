@@ -24,7 +24,6 @@ const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
-    sessionId: session_id || "",
   });
   const [errors, setErrors] = useState<AuthError>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -72,15 +71,20 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
     setLoading(true);
 
+    const requestData = {
+      ...formData,
+    };
+
+    if (session_id) {
+      requestData.session_id = session_id;
+    }
+
     try {
       const response = await axios.post(
         `${backendURL}/api/users/login/`,
-        formData
+        requestData
       );
 
-      console.log("Login response:", response.data);
-
-      // Prepare user data ensuring all required fields are present
       const userData: User = {
         id: response.data.user?.id || response.data.id || String(Date.now()),
         username:

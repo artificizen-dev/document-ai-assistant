@@ -71,6 +71,42 @@ const appReducer = (state: AppState, action: ActionType): AppState => {
         ...state,
         sessionId: action.payload,
       };
+
+    case "START_DOCUMENT_PROCESSING":
+      return {
+        ...state,
+        processingDocuments: {
+          ...state.processingDocuments,
+          [action.payload.id]: {
+            name: action.payload.name,
+            startTime: Date.now(),
+            status: "processing",
+          },
+        },
+      };
+    case "COMPLETE_DOCUMENT_PROCESSING":
+      return {
+        ...state,
+        processingDocuments: {
+          ...state.processingDocuments,
+          [action.payload.id]: {
+            ...state.processingDocuments[action.payload.id],
+            status: "completed",
+            docId: action.payload.docId,
+          },
+        },
+      };
+    case "DOCUMENT_PROCESSING_ERROR":
+      return {
+        ...state,
+        processingDocuments: {
+          ...state.processingDocuments,
+          [action.payload.id]: {
+            ...state.processingDocuments[action.payload.id],
+            status: "error",
+          },
+        },
+      };
     default:
       return state;
   }
@@ -222,6 +258,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     return localStorage.getItem("profileImage") || "";
   };
 
+  const startDocumentProcessing = (id: string, name: string) => {
+    dispatch({ type: "START_DOCUMENT_PROCESSING", payload: { id, name } });
+  };
+
+  const completeDocumentProcessing = (id: string, docId: string) => {
+    dispatch({ type: "COMPLETE_DOCUMENT_PROCESSING", payload: { id, docId } });
+  };
+
+  const documentProcessingError = (id: string, error: string) => {
+    dispatch({ type: "DOCUMENT_PROCESSING_ERROR", payload: { id, error } });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -239,6 +287,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         getUserProfileImage,
         getSessionId,
         initializeSessionId,
+        startDocumentProcessing,
+        completeDocumentProcessing,
+        documentProcessingError,
       }}
     >
       {children}

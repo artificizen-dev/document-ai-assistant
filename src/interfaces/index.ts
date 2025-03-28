@@ -49,7 +49,7 @@ export interface ExecutiveSummaryProps {
 export interface LoginFormData {
   email: string;
   password: string;
-  sessionId?: string;
+  session_id?: string;
 }
 
 export interface SignupFormData {
@@ -78,6 +78,15 @@ export interface AppState {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  sessionId: string | null;
+  processingDocuments: {
+    [id: string]: {
+      name: string;
+      startTime: number;
+      status: "processing" | "completed" | "error";
+      docId?: string;
+    };
+  };
 }
 
 export interface AppContextType extends AppState {
@@ -98,6 +107,9 @@ export interface AppContextType extends AppState {
   getUserProfileImage: () => string;
   getSessionId: () => string;
   initializeSessionId: () => void;
+  startDocumentProcessing: (id: string, name: string) => void;
+  completeDocumentProcessing: (id: string, docId: string) => void;
+  documentProcessingError: (id: string, error: string) => void;
 }
 
 export interface EvaluationCardProps {
@@ -156,7 +168,16 @@ export type ActionType =
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string }
   | { type: "UPDATE_USER"; payload: Partial<User> }
-  | { type: "SET_SESSION_ID"; payload: string };
+  | { type: "SET_SESSION_ID"; payload: string }
+  | { type: "START_DOCUMENT_PROCESSING"; payload: { id: string; name: string } }
+  | {
+      type: "COMPLETE_DOCUMENT_PROCESSING";
+      payload: { id: string; docId: string };
+    }
+  | {
+      type: "DOCUMENT_PROCESSING_ERROR";
+      payload: { id: string; error: string };
+    };
 
 export interface AppState {
   user: User | null;
@@ -179,4 +200,5 @@ export const initialState: AppState = {
   loading: false,
   error: null,
   sessionId: null,
+  processingDocuments: {},
 };

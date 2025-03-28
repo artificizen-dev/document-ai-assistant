@@ -10,6 +10,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { handleError, refreshKey } = useAppContext();
   const [evaluations, setEvaluations] = useState<EvaluationListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const session_id = localStorage.getItem("sessionId");
 
   useEffect(() => {
     const fetchEvaluations = async () => {
@@ -19,11 +20,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         setIsLoading(true);
         const token = access_token();
 
-        if (!token) {
-          return;
-        }
+        const url = session_id
+          ? `${backendURL}/api/services/docs/?session_id=${session_id}`
+          : `${backendURL}/api/services/docs/`;
 
-        const response = await axios.get(`${backendURL}/api/services/docs/`, {
+        const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -70,7 +71,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 id={evaluation.id}
                 docName={evaluation.doc_name}
                 date={evaluation.created_at}
-                // score={74}
               />
             ))}
           </div>

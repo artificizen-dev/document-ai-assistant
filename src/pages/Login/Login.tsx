@@ -12,11 +12,18 @@ import { app } from "../../utils/firebase";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { login, handleSuccess, handleError, setLoading } = useAppContext();
+  const {
+    login,
+    // handleSuccess,
+    // handleError,
+    setLoading,
+  } = useAppContext();
+  const session_id = localStorage.getItem("sessionId");
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
+    sessionId: session_id || "",
   });
   const [errors, setErrors] = useState<AuthError>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -104,7 +111,7 @@ const LoginPage: React.FC = () => {
       // Login using the context - this will update global state and localStorage
       login(accessToken, userData);
 
-      handleSuccess("Login successful!");
+      // handleSuccess("Login successful!");
 
       // Navigate to default route after successful login
       navigate(ROUTES.default);
@@ -115,19 +122,19 @@ const LoginPage: React.FC = () => {
           setErrors({
             email: error.response.data.email,
           });
-          handleError(error.response.data.email);
+          // handleError(error.response.data.email);
         } else if (error.response.data.password) {
           setErrors({
             password: error.response.data.password,
           });
-          handleError(error.response.data.password);
+          // handleError(error.response.data.password);
         } else {
           const errorMessage =
             error.response.data.message || "Invalid email or password";
           setErrors({
             general: errorMessage,
           });
-          handleError(errorMessage);
+          // handleError(errorMessage);
         }
       } else {
         const errorMessage =
@@ -135,7 +142,7 @@ const LoginPage: React.FC = () => {
         setErrors({
           general: errorMessage,
         });
-        handleError(errorMessage);
+        // handleError(errorMessage);
       }
     } finally {
       setIsLoading(false);
@@ -191,13 +198,14 @@ const LoginPage: React.FC = () => {
 
       login(accessToken, userData);
 
-      handleSuccess("Login with Google successful!");
+      // handleSuccess("Login with Google successful!");
       navigate(ROUTES.default);
     } catch (error: any) {
       console.error("Google login error:", error);
       const errorMessage =
         error.message || "Google login failed. Please try again.";
-      handleError(errorMessage);
+      // handleError(errorMessage);
+      console.error(errorMessage);
     } finally {
       setIsLoading(false);
       setLoading(false);

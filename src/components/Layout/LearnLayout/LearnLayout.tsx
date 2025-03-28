@@ -80,7 +80,7 @@ const LearnLayout: React.FC = () => {
 
             {/* Dropdown Menu */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-auto bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200">
+              <div className="absolute right-0 mt-2 w-auto bg-white rounded-md shadow-lg py-1 z-100 border border-gray-200">
                 {user ? (
                   <>
                     <div className="px-4 py-3 border-b border-gray-100">

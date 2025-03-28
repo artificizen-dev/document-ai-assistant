@@ -3,8 +3,6 @@ import ChatMessage, { MessageType } from "./ChatMessage";
 import ChatNavbar from "./ChatNavbar";
 import CategorySelector from "./CategorySelector";
 import ChatInput from "./ChatInput";
-import { useNavigate } from "react-router-dom";
-import ROUTES from "../../routes";
 
 interface ChatAreaProps {
   toggleSidebar: () => void;
@@ -22,7 +20,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   toggleSidebar,
   toggleReferencePanel,
 }) => {
-  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -63,17 +60,11 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     // In a real implementation, this would filter or adjust the AI response
   };
 
-  const onClose = () => {
-    navigate(ROUTES.default);
-  };
-
   return (
     <>
       <ChatNavbar
         toggleSidebar={toggleSidebar}
-        onUploadDocument={() => console.log("Upload document")}
         onGeneratePodcast={() => console.log("Generate podcast")}
-        onClose={onClose}
       />
 
       <div className="flex-1 overflow-y-auto bg-white">

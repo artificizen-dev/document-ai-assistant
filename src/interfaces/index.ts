@@ -49,6 +49,7 @@ export interface ExecutiveSummaryProps {
 export interface LoginFormData {
   email: string;
   password: string;
+  sessionId?: string;
 }
 
 export interface SignupFormData {
@@ -80,6 +81,7 @@ export interface AppState {
 }
 
 export interface AppContextType extends AppState {
+  register: (token: string, userData: User, profileImage?: string) => void;
   login: (token: string, userData: User) => void;
   googleLogin: (
     tokenData: string,
@@ -126,6 +128,7 @@ export interface FileUploadProps {
 export interface SelectedFile {
   file: File;
   id: string;
+  timestamp?: Date;
 }
 
 export interface DetailedFeedbackTabProps {

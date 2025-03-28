@@ -59,6 +59,8 @@ const DashboardLayout: React.FC = () => {
     navigate(ROUTES.login);
   };
 
+  console.log(user, "the user is");
+
   return (
     <div className="flex flex-col h-screen bg-white">
       {/* Top Header */}

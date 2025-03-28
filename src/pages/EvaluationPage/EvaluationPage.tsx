@@ -5,11 +5,8 @@ const EvaluatePage: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
 
   const handleFilesSelected = (selectedFiles: File[]) => {
-    // Replace the existing files instead of appending
     setFiles(selectedFiles);
   };
-
-  console.log(files);
 
   return (
     <section className="min-h-[85vh] flex items-center justify-center">

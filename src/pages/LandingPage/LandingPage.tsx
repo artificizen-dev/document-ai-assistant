@@ -130,7 +130,7 @@ const LandingPage = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Learn Card */}
-            <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow flex flex-col h-full">
               <div className="flex items-center mb-4">
                 <div className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded">
                   <IoBookOutline className="h-6 w-6" />
@@ -140,25 +140,24 @@ const LandingPage = () => {
                 </h3>
               </div>
 
-              <ul className="ml-6 mb-6 space-y-2 list-disc text-gray-600">
-                <li>Get expert guidance on any subject</li>
-                <li>Ask questions about your documents</li>
-                <li>Receive clear, comprehensive answers</li>
-                <li>Gain deep insights from your content</li>
-                <li>Master complex topics with personalized help</li>
-              </ul>
+              <p className="mb-6 text-gray-600">
+                Get expert guidance, clear answers, and deep insights to master
+                any subject.
+              </p>
 
-              <button
-                onClick={() => navigate("/learn/chat/new")}
-                className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
-              >
-                Start Learning
-                <HiArrowRight className="h-4 w-4 ml-2" />
-              </button>
+              <div className="mt-auto">
+                <button
+                  onClick={() => navigate("/learn/chat/new")}
+                  className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
+                >
+                  Start Learning
+                  <HiArrowRight className="h-4 w-4 ml-2" />
+                </button>
+              </div>
             </div>
 
             {/* Evaluate Card */}
-            <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow flex flex-col h-full">
               <div className="flex items-center mb-4">
                 <div className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded">
                   <MdOutlineAssessment className="h-6 w-6" />
@@ -168,21 +167,20 @@ const LandingPage = () => {
                 </h3>
               </div>
 
-              <ul className="ml-6 mb-6 space-y-2 list-disc text-gray-600">
-                <li>Get instant grading on your answers</li>
-                <li>Receive detailed, insightful feedback</li>
-                <li>Understand your strengths and weaknesses</li>
-                <li>Learn from expert-level evaluations</li>
-                <li>Improve your answers with targeted suggestions</li>
-              </ul>
+              <p className="mb-6 text-gray-600">
+                Get instant grading, insightful feedback, and expert-level
+                evaluation to improve your answers.
+              </p>
 
-              <button
-                onClick={() => navigate("/evaluate")}
-                className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
-              >
-                Start Evaluating
-                <HiArrowRight className="h-4 w-4 ml-2" />
-              </button>
+              <div className="mt-auto">
+                <button
+                  onClick={() => navigate("/evaluate")}
+                  className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
+                >
+                  Start Evaluating
+                  <HiArrowRight className="h-4 w-4 ml-2" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

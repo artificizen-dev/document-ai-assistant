@@ -10,12 +10,10 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   date,
   time,
   documentId,
-  userFeedback,
+  userFeedback: initialUserFeedback,
 }) => {
-  // Initialize feedbackSubmitted based on whether userFeedback already exists
-  const [feedbackSubmitted, setFeedbackSubmitted] = useState(
-    userFeedback !== null
-  );
+  // Local state to manage feedback without page reload
+  const [userFeedback, setUserFeedback] = useState(initialUserFeedback);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const displayTitle = title.includes("Evaluation")
@@ -23,14 +21,18 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
     : `Evaluation ${date}`;
 
   const submitFeedback = async (liked: boolean) => {
-    if (isSubmitting || (feedbackSubmitted && userFeedback === liked)) return;
+    if (isSubmitting || userFeedback === liked) return;
+
+    setUserFeedback(liked);
+
+    setIsSubmitting(true);
 
     try {
-      setIsSubmitting(true);
       const token = access_token();
 
       if (!token) {
         console.error("Authentication required");
+        setUserFeedback(initialUserFeedback);
         return;
       }
 
@@ -47,17 +49,15 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
         }
       );
 
-      setFeedbackSubmitted(true);
-      // Refresh the page to show updated feedback
-      window.location.reload();
+      console.log("Feedback submitted successfully");
     } catch (error) {
       console.error("Failed to submit feedback:", error);
+      setUserFeedback(initialUserFeedback);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Render appropriate thumb icon based on feedback
   const renderThumbsUp = () => {
     if (userFeedback === true) {
       return <HiThumbUp className="mr-1.5" size={14} />;
@@ -84,7 +84,6 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
           </p>
         </div>
 
-        {/* Feedback buttons for mobile - shown in a separate row on mobile */}
         <div className="flex md:hidden w-full space-x-2 mb-3">
           <button
             onClick={() => submitFeedback(true)}
@@ -112,9 +111,7 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
           </button>
         </div>
 
-        {/* Action buttons row */}
         <div className="flex flex-wrap gap-2 w-full md:w-auto">
-          {/* Feedback buttons for desktop - shown in line with other buttons on desktop */}
           <div className="hidden md:flex space-x-2">
             <button
               onClick={() => submitFeedback(true)}

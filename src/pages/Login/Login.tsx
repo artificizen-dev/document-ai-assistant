@@ -208,7 +208,11 @@ const LoginPage: React.FC = () => {
       login(accessToken, userData);
 
       // handleSuccess("Login with Google successful!");
-      navigate(ROUTES.default);
+      if (documentId) {
+        navigate(`/evaluation-summary/${documentId}`);
+      } else {
+        navigate(ROUTES.default);
+      }
     } catch (error: any) {
       console.error("Google login error:", error);
       const errorMessage =

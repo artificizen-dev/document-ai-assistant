@@ -206,7 +206,11 @@ const SignupPage: React.FC = () => {
       register(accessToken, userData);
 
       // handleSuccess("Signup with Google successful!");
-      navigate(ROUTES.default);
+      if (documentId) {
+        navigate(`/evaluation-summary/${documentId}`);
+      } else {
+        navigate(ROUTES.default);
+      }
     } catch (error: any) {
       console.error("Google signup error:", error);
       const errorMessage =

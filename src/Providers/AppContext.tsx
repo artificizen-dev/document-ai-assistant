@@ -185,18 +185,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("profileImage");
-    // Do not remove sessionId during logout, as it's page-visit specific
-    // Instead, we'll just generate a new one on next page load/refresh
 
     dispatch({ type: "LOGOUT" });
-    toast.success("Logged out successfully", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
   };
 
   const handleSuccess = (message: string) => {

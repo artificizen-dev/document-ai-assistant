@@ -7,38 +7,29 @@ import EvaluationCard from "../Evaluation/EvaluationCard";
 import { EvaluationListItem, SidebarProps } from "../../interfaces";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const { handleError, refreshKey } = useAppContext();
+  const { refreshKey } = useAppContext();
   const [evaluations, setEvaluations] = useState<EvaluationListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const session_id = localStorage.getItem("sessionId");
 
   useEffect(() => {
     const fetchEvaluations = async () => {
       if (!isOpen) return;
-
       try {
         setIsLoading(true);
         const token = access_token();
-
-        const url = session_id
-          ? `${backendURL}/api/services/docs/?session_id=${session_id}`
-          : `${backendURL}/api/services/docs/`;
-
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        if (!token) {
+          return;
+        }
+        const response = await axios.get(`${backendURL}/api/services/docs/`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-
         setEvaluations(response.data);
       } catch (error) {
         console.error("Failed to fetch evaluations:", error);
-        handleError("Failed to load evaluation history");
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchEvaluations();
   }, [refreshKey]);
 

@@ -42,7 +42,7 @@ const ProcessingLoader: React.FC<{ documents: any }> = ({ documents }) => {
             </div>
           </div>
           <h2 className="text-xl font-semibold text-center">
-            Processing Documents
+            Evaluating Documents
           </h2>
           <p className="text-gray-500 text-center mt-2">
             We're analyzing your documents. This may take a few minutes.
@@ -310,6 +310,16 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
   return (
     <div className="w-full">
       {/* Upload Area */}
+      <div className="text-center mb-8">
+        <h2 className="text-2xl text-center font-bold mb-2">
+          AI Powered Evaluation
+        </h2>
+        <p className="text-gray-600 text-center max-w-2xl mx-auto">
+          Get expert-level assessment and insights with AI. Evaluate structure,
+          content quality, and clarity, and receive actionable recommendations
+          for improvement.
+        </p>
+      </div>
       <div
         className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer mb-4 transition-colors ${
           isDragging ? "border-black bg-gray-50" : "border-gray-300"

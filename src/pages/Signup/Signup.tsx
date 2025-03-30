@@ -42,8 +42,6 @@ const SignupPage: React.FC = () => {
 
     if (!formData.username) {
       newErrors.username = "Username is required";
-    } else if (formData.username.includes(" ")) {
-      newErrors.username = "Username cannot contain spaces";
     } else if (formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
     }
@@ -96,7 +94,7 @@ const SignupPage: React.FC = () => {
 
     try {
       const apiData = {
-        username: formData.username,
+        username: formData.username.replace(/\s+/g, ""),
         email: formData.email,
         password: formData.password,
         confirm_password: formData.confirmPassword,

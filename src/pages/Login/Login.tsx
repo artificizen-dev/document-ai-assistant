@@ -9,6 +9,7 @@ import axios from "axios";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAppContext } from "../../Providers/AppContext";
 import { app } from "../../utils/firebase";
+import { FaHome } from "react-icons/fa";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -232,6 +233,15 @@ const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+        <div className="my-0">
+          <Link
+            to={ROUTES.default}
+            className="inline-flex items-center gap-1 text-gray-800 hover:text-black transition-colors duration-200 font-medium"
+          >
+            <FaHome size={18} />
+            <span className="flex items-center">Home</span>
+          </Link>
+        </div>
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             Welcome Back

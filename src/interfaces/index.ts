@@ -19,6 +19,9 @@ export interface EvaluationResponse {
   strengths: {
     [key: string]: string;
   };
+  weaknesses: {
+    [key: string]: string;
+  };
   reference_links: string[];
   created_at: string;
   updated_at: string;
@@ -149,6 +152,9 @@ export interface DetailedFeedbackTabProps {
     [key: string]: string;
   };
   strengths: {
+    [key: string]: string;
+  };
+  weaknesses?: {
     [key: string]: string;
   };
 }

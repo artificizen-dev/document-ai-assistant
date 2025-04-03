@@ -24,7 +24,7 @@ const EvaluationResultPage: React.FC = () => {
   const [isSessionUser, setIsSessionUser] = useState(false);
 
   useEffect(() => {
-    let isMounted = true; // Flag to prevent state updates if component unmounts
+    let isMounted = true;
 
     const fetchEvaluation = async () => {
       try {
@@ -85,11 +85,10 @@ const EvaluationResultPage: React.FC = () => {
 
     fetchEvaluation();
 
-    // Cleanup function to prevent state updates if component unmounts
     return () => {
       isMounted = false;
     };
-  }, [id]); // Removed dependencies that could cause infinite loops
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -148,6 +147,7 @@ const EvaluationResultPage: React.FC = () => {
         answer={evaluationData.answer}
         strengths={evaluationData.strengths}
         improvements={evaluationData.improvements}
+        feedback={evaluationData.feedback}
       />
 
       {/* For session users, show everything below as blurred with signup prompt */}
@@ -173,6 +173,7 @@ const EvaluationResultPage: React.FC = () => {
                 feedback={evaluationData.feedback}
                 improvements={evaluationData.improvements}
                 strengths={evaluationData.strengths}
+                weaknesses={evaluationData.weaknesses}
               />
             )}
 

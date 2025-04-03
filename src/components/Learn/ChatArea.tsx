@@ -39,7 +39,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
     setMessages([...messages, newMessage]);
 
-    // Simulate AI response after a short delay
     setTimeout(() => {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -50,14 +49,12 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       };
 
       setMessages((prev) => [...prev, aiResponse]);
-      // Trigger reference panel update
       toggleReferencePanel();
     }, 1000);
   };
 
   const handleSelectCategory = (category: string) => {
     console.log("Selected category:", category);
-    // In a real implementation, this would filter or adjust the AI response
   };
 
   return (

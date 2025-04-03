@@ -59,8 +59,6 @@ const DashboardLayout: React.FC = () => {
     navigate(ROUTES.login);
   };
 
-  console.log(user, "the user is");
-
   return (
     <div className="flex flex-col h-screen bg-white">
       {/* Top Header */}
@@ -83,6 +81,7 @@ const DashboardLayout: React.FC = () => {
                   src={profileImage}
                   alt="User Profile"
                   className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <Avatar

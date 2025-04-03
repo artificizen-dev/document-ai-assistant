@@ -203,15 +203,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
   };
 
   const uploadFile = async (file: SelectedFile) => {
-    // Validate question before upload
     if (!validateQuestion()) {
       return;
     }
 
-    // Generate a unique processing ID
     const processingId = `processing-${file.id}`;
 
-    // Start document processing state in global context
     startDocumentProcessing(processingId, file.file.name);
 
     try {
@@ -223,7 +220,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
         "Content-Type": "multipart/form-data",
       };
 
-      // If no token is available, use session ID
       if (!token) {
         const sessionId = getSessionId();
         if (!sessionId) {
@@ -242,24 +238,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
         }
       );
 
-      if (!token) {
-        const documentId = response.data.id;
-        localStorage.setItem("evaluationId", documentId);
-        completeDocumentProcessing(processingId, String(documentId));
-        navigate(`/evaluation-summary/${documentId}`);
-        return;
-      }
-
-      // Complete document processing in global context
-      completeDocumentProcessing(processingId, String(response.data.id));
-
-      // Clear the question after successful upload
+      const documentId = response.data?.id;
+      localStorage.setItem("evaluationId", documentId);
+      completeDocumentProcessing(processingId, String(documentId));
       setQuestion("");
-
-      // Explicitly trigger refresh
       triggerRefresh();
-
-      // Remove from selected files
+      navigate(`/evaluation-summary/${documentId}`);
       setSelectedFiles((prev) => prev.filter((f) => f.id !== file.id));
     } catch (error: any) {
       console.error("Error uploading document:", error);
@@ -268,8 +252,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
         error.response?.data?.message ||
         error.message ||
         "Failed to upload document. Please try again.";
-
-      // Mark document processing as error in global context
       documentProcessingError(processingId, errorMessage);
     }
   };

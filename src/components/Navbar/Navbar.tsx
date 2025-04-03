@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMenu, FiArrowLeft, FiPlus } from "react-icons/fi";
 import ROUTES from "../../routes";
+import { access_token } from "../../utils/constants";
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -9,6 +10,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const navigate = useNavigate();
+  const token = access_token();
 
   return (
     <nav className="bg-white border-b border-gray-200 py-3 px-4">
@@ -31,14 +33,16 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           </button>
         </div>
 
-        <div>
-          <button
-            onClick={() => navigate(ROUTES.evaluate)}
-            className="flex items-center border-[1px] border-gray-200 py-1 px-1 rounded-md text-gray-600 hover:text-black"
-          >
-            <FiPlus size={16} className="mr-1" /> New Evaluation
-          </button>
-        </div>
+        {token && (
+          <div>
+            <button
+              onClick={() => navigate(ROUTES.evaluate)}
+              className="flex items-center border-[1px] border-gray-200 py-1 px-1 rounded-md text-gray-600 hover:text-black"
+            >
+              <FiPlus size={16} className="mr-1" /> New Evaluation
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );

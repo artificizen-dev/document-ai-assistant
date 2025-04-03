@@ -61,6 +61,7 @@ const LandingPage = () => {
                   src={profileImage}
                   alt="User Profile"
                   className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <Avatar
@@ -74,7 +75,7 @@ const LandingPage = () => {
                     "#C271B4",
                     "#C20D90",
                   ]}
-                  referrerpolicy="no-referrer"
+                  referrerPolicy="no-referrer"
                 />
               )}
             </button>

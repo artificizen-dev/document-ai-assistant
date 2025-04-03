@@ -51,22 +51,28 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
         {referenceLinks.map((link, index) => (
           <div
             key={index}
-            className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex flex-col sm:flex-row items-start sm:items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            <div className="bg-blue-50 p-2 rounded-full mr-4">
-              <FiBook className="text-blue-500" size={20} />
-            </div>
+            <div className="flex items-center w-full mb-3 sm:mb-0">
+              <div className="bg-blue-50 p-2 rounded-full mr-4 flex-shrink-0">
+                <FiBook className="text-blue-500" size={20} />
+              </div>
 
-            <div className="flex-1">
-              <p className="font-medium text-gray-800">Reference {index + 1}</p>
-              <p className="text-gray-500 text-sm">{formatLinkText(link)}</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gray-800">
+                  Reference {index + 1}
+                </p>
+                <p className="text-gray-500 text-sm truncate">
+                  {formatLinkText(link)}
+                </p>
+              </div>
             </div>
 
             <a
               href={link.startsWith("http") ? link : `https://${link}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 flex items-center"
+              className="text-blue-600 hover:text-blue-800 flex items-center self-start sm:self-center ml-0 sm:ml-4 mt-2 sm:mt-0"
             >
               <span className="mr-1">Visit</span>
               <FiExternalLink size={16} />

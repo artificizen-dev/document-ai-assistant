@@ -48,8 +48,6 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
           },
         }
       );
-
-      console.log("Feedback submitted successfully");
     } catch (error) {
       console.error("Failed to submit feedback:", error);
       setUserFeedback(initialUserFeedback);

@@ -385,9 +385,6 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
       </div>
       {feedback && (
         <div className="mt-8 bg-gray-50 rounded-lg p-6 border border-gray-200 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
-            Detailed Feedback
-          </h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed whitespace-pre-line">
               {feedback}

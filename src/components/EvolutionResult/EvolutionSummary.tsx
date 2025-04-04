@@ -353,14 +353,23 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
 
   return (
     <div className="bg-gray-100 rounded-lg p-6 mb-6">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-        <div>
+      <div className="flex flex-col md:flex-row justify-between md:gap-5 mb-4">
+        <div className="">
           <h2 className="text-xl font-bold text-gray-800 mb-1">
             Evaluation Summary
           </h2>
           <p className="text-gray-600 text-sm">
             {documentCount} {documentType} evaluated
           </p>
+          {feedback && (
+            <div className="mt-4">
+              <div className="prose prose-gray max-w-none">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {feedback}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         <div className="mt-4 md:mt-0 flex justify-center">
           <div className="relative w-32 h-32 flex items-center justify-center">
@@ -383,15 +392,6 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
           </div>
         </div>
       </div>
-      {feedback && (
-        <div className="mt-8 bg-gray-50 rounded-lg p-6 border border-gray-200 shadow-sm">
-          <div className="prose prose-gray max-w-none">
-            <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-              {feedback}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* <div className="grid md:grid-cols-2 gap-6 mt-4">
         <div>

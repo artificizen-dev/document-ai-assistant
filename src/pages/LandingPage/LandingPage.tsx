@@ -200,7 +200,7 @@ const LandingPage = () => {
                   className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
                   disabled={isLoadingEvaluations}
                 >
-                  Start Evaluating
+                  {isLoadingEvaluations ? "Loading" : "Start Evaluating"}
                   <HiArrowRight className="h-4 w-4 ml-2" />
                 </button>
               </div>

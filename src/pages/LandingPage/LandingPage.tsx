@@ -11,7 +11,14 @@ import Avatar from "boring-avatars";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { user, logout, getUserProfileImage } = useAppContext();
+  const {
+    user,
+    logout,
+    getUserProfileImage,
+    evaluations,
+    fetchEvaluations,
+    isLoadingEvaluations,
+  } = useAppContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +45,14 @@ const LandingPage = () => {
     logout();
     navigate(ROUTES.login);
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchEvaluations();
+    }
+  }, [user]);
+
+  console.log(evaluations?.[0], "evaluations");
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -175,8 +190,15 @@ const LandingPage = () => {
 
               <div className="mt-auto">
                 <button
-                  onClick={() => navigate("/evaluate")}
+                  onClick={() => {
+                    if (evaluations && evaluations.length > 0) {
+                      navigate(`/evaluation-summary/${evaluations[0].id}`);
+                    } else {
+                      navigate("/evaluate");
+                    }
+                  }}
                   className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
+                  disabled={isLoadingEvaluations}
                 >
                   Start Evaluating
                   <HiArrowRight className="h-4 w-4 ml-2" />

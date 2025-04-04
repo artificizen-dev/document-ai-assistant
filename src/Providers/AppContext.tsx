@@ -13,8 +13,9 @@ import {
   initialState,
   User,
 } from "../interfaces";
+import { access_token, backendURL } from "../utils/constants";
+import axios from "axios";
 
-// Helper function to generate a unique session ID
 const generateSessionId = (): string => {
   const timestamp = new Date().getTime();
   const randomStr = Math.random().toString(36).substring(2, 15);
@@ -36,6 +37,7 @@ const appReducer = (state: AppState, action: ActionType): AppState => {
         user: null,
         isAuthenticated: false,
         loading: false,
+        evaluations: [],
       };
     case "SET_LOADING":
       return {
@@ -70,6 +72,12 @@ const appReducer = (state: AppState, action: ActionType): AppState => {
       return {
         ...state,
         sessionId: action.payload,
+      };
+
+    case "SET_EVALUATIONS":
+      return {
+        ...state,
+        evaluations: action.payload,
       };
 
     case "START_DOCUMENT_PROCESSING":
@@ -119,6 +127,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isLoadingEvaluations, setIsLoadingEvaluations] = useState(false);
 
   const triggerRefresh = () => {
     setRefreshKey((prevKey) => prevKey + 1);
@@ -146,19 +155,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     checkAuthStatus();
-
-    // Create and store a new session ID when the app loads
     initializeSessionId();
   }, []);
 
-  // Function to initialize a unique session ID
+  const fetchEvaluations = async () => {
+    try {
+      setIsLoadingEvaluations(true);
+      const token = access_token();
+      if (!token) {
+        return;
+      }
+      const response = await axios.get(`${backendURL}/api/services/docs/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      dispatch({ type: "SET_EVALUATIONS", payload: response.data });
+    } catch (error) {
+      console.error("Failed to fetch evaluations:", error);
+      handleError("Failed to fetch documents. Please try again.");
+    } finally {
+      setIsLoadingEvaluations(false);
+    }
+  };
+
   const initializeSessionId = () => {
     const newSessionId = generateSessionId();
     localStorage.setItem("sessionId", newSessionId);
     dispatch({ type: "SET_SESSION_ID", payload: newSessionId });
   };
 
-  // Function to get the current session ID
   const getSessionId = () => {
     return state.sessionId || localStorage.getItem("sessionId") || "";
   };
@@ -172,6 +196,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       type: "LOGIN",
       payload: { user: userData },
     });
+
+    fetchEvaluations();
   };
 
   const login = (token: string, userData: User) => {
@@ -183,6 +209,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       type: "LOGIN",
       payload: { user: userData },
     });
+
+    fetchEvaluations();
   };
 
   const googleLogin = async (
@@ -202,6 +230,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       type: "LOGIN",
       payload: { user: userData },
     });
+
+    fetchEvaluations();
   };
 
   const updateUser = (userData: Partial<User>) => {
@@ -290,6 +320,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         startDocumentProcessing,
         completeDocumentProcessing,
         documentProcessingError,
+        fetchEvaluations,
+        isLoadingEvaluations,
       }}
     >
       {children}

@@ -82,6 +82,7 @@ export interface AppState {
   loading: boolean;
   error: string | null;
   sessionId: string | null;
+  evaluations: Evaluation[];
   processingDocuments: {
     [id: string]: {
       name: string;
@@ -113,6 +114,8 @@ export interface AppContextType extends AppState {
   startDocumentProcessing: (id: string, name: string) => void;
   completeDocumentProcessing: (id: string, docId: string) => void;
   documentProcessingError: (id: string, error: string) => void;
+  fetchEvaluations: () => Promise<void>;
+  isLoadingEvaluations: boolean;
 }
 
 export interface EvaluationCardProps {
@@ -168,6 +171,13 @@ export interface EvaluationHeaderProps {
   userFeedback?: boolean | null;
 }
 
+export interface Evaluation {
+  id: number;
+  doc_name: string;
+  user: number;
+  created_at: string;
+}
+
 export type ActionType =
   | { type: "LOGIN"; payload: { user: User } }
   | { type: "LOGOUT" }
@@ -183,15 +193,8 @@ export type ActionType =
   | {
       type: "DOCUMENT_PROCESSING_ERROR";
       payload: { id: string; error: string };
-    };
-
-export interface AppState {
-  user: User | null;
-  isAuthenticated: boolean;
-  loading: boolean;
-  error: string | null;
-  sessionId: string | null;
-}
+    }
+  | { type: "SET_EVALUATIONS"; payload: Evaluation[] };
 
 export interface User {
   id: string;
@@ -207,4 +210,5 @@ export const initialState: AppState = {
   error: null,
   sessionId: null,
   processingDocuments: {},
+  evaluations: [],
 };

@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { FiSend } from "react-icons/fi";
-
-interface ChatInputProps {
-  onSendMessage: (message: string) => void;
-  isLoading?: boolean;
-  disabled?: boolean;
-}
+import { ChatInputProps } from "../../interfaces";
 
 const ChatInput: React.FC<ChatInputProps> = ({
   onSendMessage,

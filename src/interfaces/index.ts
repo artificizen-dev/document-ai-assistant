@@ -212,3 +212,47 @@ export const initialState: AppState = {
   processingDocuments: {},
   evaluations: [],
 };
+
+export interface ChatMessageProps {
+  type: MessageType;
+  content: string;
+  timestamp?: Date;
+}
+
+export interface SimpleCodeProps {
+  node?: any;
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  [key: string]: any;
+}
+
+export interface ChatInputProps {
+  onSendMessage: (message: string) => void;
+  isLoading?: boolean;
+  disabled?: boolean;
+}
+
+export interface ChatAreaProps {
+  toggleSidebar: () => void;
+  toggleReferencePanel: () => void;
+  chatroomId: string | null;
+}
+
+export type MessageType = "user" | "bot";
+
+export interface Message {
+  id: string;
+  type: MessageType;
+  content: string;
+  timestamp: Date;
+  sources?: string[];
+}
+
+export interface ChatThread {
+  id: number;
+  chatroom: number;
+  ai_response: string;
+  user_response: string;
+  created_at: string;
+}

@@ -3,24 +3,12 @@ import { FiBookOpen } from "react-icons/fi";
 import { useAppContext } from "../../Providers/AppContext";
 import Avatar from "boring-avatars";
 import ReactMarkdown from "react-markdown";
-import { CodeProps } from "react-markdown/lib/ast-to-react";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { ChatMessageProps, SimpleCodeProps } from "../../interfaces";
 
-export type MessageType = "user" | "bot";
-
-interface ChatMessageProps {
-  type: MessageType;
-  content: string;
-  timestamp?: Date;
-}
-
-const ChatMessage: React.FC<ChatMessageProps> = ({
-  type,
-  content,
-  // timestamp,
-}) => {
+const ChatMessage: React.FC<ChatMessageProps> = ({ type, content }) => {
   const isUser = type === "user";
   const { user, getUserProfileImage } = useAppContext();
   const profileImage = getUserProfileImage ? getUserProfileImage() : "";
@@ -61,9 +49,9 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           <div className="text-gray-800">{content}</div>
         ) : (
           <div className="text-gray-800 markdown-content">
+            {/* @ts-ignore - Skip type checking for ReactMarkdown */}
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              // @ts-ignore
               components={{
                 code({
                   node,
@@ -71,13 +59,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
                   className,
                   children,
                   ...props
-                }: CodeProps) {
+                }: SimpleCodeProps) {
                   const match = /language-(\w+)/.exec(className || "");
                   return !inline && match ? (
                     <SyntaxHighlighter
                       language={match[1]}
                       PreTag="div"
                       {...props}
+                      // @ts-ignore - Ignore style type issues
                       style={oneDark}
                     >
                       {String(children).replace(/\n$/, "")}
@@ -88,47 +77,47 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
                     </code>
                   );
                 },
-                h1: ({ children, ...props }) => (
+                h1: ({ children, ...props }: any) => (
                   <h1 className="text-2xl font-bold mt-4 mb-2" {...props}>
                     {children}
                   </h1>
                 ),
-                h2: ({ children, ...props }) => (
+                h2: ({ children, ...props }: any) => (
                   <h2 className="text-xl font-bold mt-3 mb-2" {...props}>
                     {children}
                   </h2>
                 ),
-                h3: ({ children, ...props }) => (
+                h3: ({ children, ...props }: any) => (
                   <h3 className="text-lg font-bold mt-3 mb-1" {...props}>
                     {children}
                   </h3>
                 ),
-                h4: ({ children, ...props }) => (
+                h4: ({ children, ...props }: any) => (
                   <h4 className="text-base font-bold mt-2 mb-1" {...props}>
                     {children}
                   </h4>
                 ),
-                p: ({ children, ...props }) => (
+                p: ({ children, ...props }: any) => (
                   <p className="my-2" {...props}>
                     {children}
                   </p>
                 ),
-                ul: ({ children, ...props }) => (
+                ul: ({ children, ...props }: any) => (
                   <ul className="list-disc pl-5 my-2" {...props}>
                     {children}
                   </ul>
                 ),
-                ol: ({ children, ...props }) => (
+                ol: ({ children, ...props }: any) => (
                   <ol className="list-decimal pl-5 my-2" {...props}>
                     {children}
                   </ol>
                 ),
-                li: ({ children, ...props }) => (
+                li: ({ children, ...props }: any) => (
                   <li className="my-1" {...props}>
                     {children}
                   </li>
                 ),
-                blockquote: ({ children, ...props }) => (
+                blockquote: ({ children, ...props }: any) => (
                   <blockquote
                     className="pl-4 border-l-4 border-gray-300 italic my-2"
                     {...props}
@@ -136,7 +125,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
                     {children}
                   </blockquote>
                 ),
-                a: ({ children, ...props }) => (
+                a: ({ children, ...props }: any) => (
                   <a
                     className="text-blue-600 hover:underline"
                     target="_blank"

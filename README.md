@@ -1,54 +1,98 @@
-# React + TypeScript + Vite
+# Document AI Assistant
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Document AI Assistant is an advanced RAG application.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js (version 20 or above)
+- npm
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clone the repository:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+   ```bash
+   git clone https://github.com/artificizen-dev/document-ai-assistant.git
+   cd document-ai-assistant
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables:
+   we have a constants.ts file in /src/utils update the follow variable there:
+   ```
+   backendUrl=your_backend_url
+   ```
+
+## Development
+
+To start the development server:
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The application will be available at `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Building for Production
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+To create a production build:
+
+```bash
+npm run build
 ```
+
+## Deployment
+
+To deploy the application:
+
+```bash
+make deploy
+```
+
+## Project Structure
+
+```
+document-ai-assistant/
+├── dist/               # Build output
+├── node_modules/       # Dependencies
+├── public/             # Static assets
+├── src/                # Source code
+│   ├── assets/         # Images, fonts, etc.
+│   ├── components/     # React components
+│   ├── data/           # Data files
+│   ├── interfaces/     # TypeScript interfaces
+│   ├── pages/          # Page components
+│   ├── Providers/      # Context providers
+│   ├── routes/         # Routing configuration
+│   ├── utils/          # Utility functions
+│   ├── App.css         # App styles
+│   ├── App.tsx         # Main App component
+│   ├── index.css       # Global styles
+│   ├── main.tsx        # Entry point
+│   └── vite-env.d.ts   # Vite type declarations
+├── .gcloudignore       # Google Cloud ignore file
+├── .gitignore          # Git ignore file
+├── app.yaml            # App Engine configuration
+├── eslint.config.js    # ESLint configuration
+├── index.html          # HTML entry point
+├── makefile            # Build scripts
+├── package-lock.json   # Dependency versions
+├── package.json        # Project metadata
+├── README.md           # Project documentation
+├── tsconfig.app.json   # TypeScript app config
+├── tsconfig.json       # TypeScript base config
+├── tsconfig.node.json  # TypeScript Node config
+├── vercel.json         # Vercel configuration
+└── vite.config.ts      # Vite configuration
+```
+
+## Technologies Used
+
+- React.js with TypeScript
+- Tailwind CSS
+- Vite

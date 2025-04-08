@@ -3,14 +3,20 @@ import { FiSend } from "react-icons/fi";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
+  isLoading?: boolean;
+  disabled?: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
+const ChatInput: React.FC<ChatInputProps> = ({
+  onSendMessage,
+  isLoading = false,
+  // disabled = false,
+}) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (message.trim()) {
+    if (message.trim() && !isLoading) {
       onSendMessage(message);
       setMessage("");
     }
@@ -25,16 +31,21 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
           className="flex-1 border border-gray-300 rounded-l-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-gray-400"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          disabled={isLoading}
         />
         <button
           type="submit"
           className="bg-gray-200 hover:bg-gray-300 rounded-r-md px-4 flex items-center justify-center"
-          disabled={!message.trim()}
+          disabled={!message.trim() || isLoading}
         >
-          <FiSend
-            size={16}
-            className={message.trim() ? "text-gray-800" : "text-gray-400"}
-          />
+          {isLoading ? (
+            <div className="w-4 h-4 border-t-2 border-gray-600 border-solid rounded-full animate-spin"></div>
+          ) : (
+            <FiSend
+              size={16}
+              className={message.trim() ? "text-gray-800" : "text-gray-400"}
+            />
+          )}
         </button>
       </form>
 

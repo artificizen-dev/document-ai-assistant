@@ -43,7 +43,6 @@ function App() {
 
         {/* Dashboard routes - wrapped with DashboardLayout */}
         <Route element={<DashboardLayout />}>
-          <Route path={ROUTES.learn} element={<LearnPage />} />
           <Route path={ROUTES.evaluate} element={<EvaluatePage />} />
           <Route
             path={ROUTES["evalution-summary"]}

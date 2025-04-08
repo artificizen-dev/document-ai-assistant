@@ -163,7 +163,7 @@ const LandingPage = () => {
 
               <div className="mt-auto">
                 <button
-                  onClick={() => navigate("/learn/chat/new")}
+                  onClick={() => navigate(`${ROUTES.chat}`)}
                   className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
                 >
                   Start Learning

@@ -5,8 +5,8 @@ export const ROUTES = {
   learn: "/learn",
   evaluate: "/evaluate",
   "evalution-summary": "/evaluation-summary/:id",
-  chat: "/learn/chat/:id",
-  newChat: "/learn/chat/new",
+  chat: "/learn/chat",
+  newChat: "/learn/chat",
 };
 
 export default ROUTES;

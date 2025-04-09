@@ -154,7 +154,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   return (
     <aside
       className={`bg-white border-r border-gray-200 transition-all duration-300 z-20
-        md:relative absolute md:h-auto h-full
+        md:relative absolute md:h-auto h-full mt-2
         ${isVisible ? "w-64 left-0" : "w-0 -left-64 md:left-0 overflow-hidden"}
       `}
     >

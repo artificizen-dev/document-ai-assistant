@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ChatMessage from "./ChatMessage";
-import ChatNavbar from "./ChatNavbar";
 import CategorySelector from "./CategorySelector";
 import ChatInput from "./ChatInput";
 import { access_token, backendURL } from "../../utils/constants";
@@ -10,7 +9,6 @@ import { FiBookOpen } from "react-icons/fi";
 import { ChatAreaProps, ChatThread, Message } from "../../interfaces";
 
 const ChatArea: React.FC<ChatAreaProps> = ({
-  toggleSidebar,
   // toggleReferencePanel,
   chatroomId,
 }) => {
@@ -22,7 +20,14 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   const token = access_token();
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesEndRef.current) {
+      // Use scrollIntoView with block: 'nearest' to minimize layout shifts
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
   };
 
   useEffect(() => {
@@ -190,12 +195,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
   return (
     <>
-      <ChatNavbar
-        toggleSidebar={toggleSidebar}
-        onGeneratePodcast={() => console.log("Generate podcast")}
-      />
-
-      <div className="flex-1 overflow-y-auto bg-white pt-2 flex flex-col">
+      <div className="flex-1 overflow-y-auto bg-white pt-8 flex flex-col">
         {fetchingHistory ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>

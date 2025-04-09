@@ -234,7 +234,6 @@ export interface ChatInputProps {
 }
 
 export interface ChatAreaProps {
-  toggleSidebar: () => void;
   toggleReferencePanel: () => void;
   chatroomId: string | null;
 }

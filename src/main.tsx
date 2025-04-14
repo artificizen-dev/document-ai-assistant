@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App.tsx";
 import { AppProvider } from "./Providers/AppContext.tsx";
 import { ToastContainer } from "react-toastify";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AppProvider>
-      <ToastContainer />
-      <App />
-    </AppProvider>
+    <BrowserRouter>
+      <AppProvider>
+        <ToastContainer />
+        <App />
+      </AppProvider>
+    </BrowserRouter>
   </StrictMode>
 );

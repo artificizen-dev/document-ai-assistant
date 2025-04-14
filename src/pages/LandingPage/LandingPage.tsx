@@ -18,6 +18,9 @@ const LandingPage = () => {
     evaluations,
     fetchEvaluations,
     isLoadingEvaluations,
+    fetchChatrooms,
+    chatrooms,
+    isLoadingChatrooms,
   } = useAppContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -49,19 +52,26 @@ const LandingPage = () => {
   useEffect(() => {
     if (user) {
       fetchEvaluations();
+      fetchChatrooms();
     }
   }, [user]);
 
-  console.log(evaluations?.[0], "evaluations");
+  const handleStartLearning = async () => {
+    if (chatrooms && chatrooms.length > 0) {
+      navigate(`${ROUTES.chat}?chatroom_id=${chatrooms[0].id}`);
+    } else {
+      navigate(ROUTES.chat);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <header className="w-full bg-white border-b border-gray-200 p-4">
-        <div className="flex justify-between items-center">
-          <h2 className="md:text-2xl text-xl font-medium">
+      <header className="w-full bg-white border-b border-gray-200 py-2 px-4">
+        <div className="flex justify-end items-center">
+          {/* <h2 className="md:text-2xl text-xl font-medium">
             Document AI Assistant
-          </h2>
+          </h2> */}
 
           {/* User Avatar with Dropdown */}
           <div className="relative" ref={dropdownRef}>
@@ -163,10 +173,11 @@ const LandingPage = () => {
 
               <div className="mt-auto">
                 <button
-                  onClick={() => navigate(`${ROUTES.chat}`)}
+                  onClick={handleStartLearning}
                   className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
+                  disabled={isLoadingChatrooms}
                 >
-                  Start Learning
+                  {isLoadingChatrooms ? "Loading" : "Start Learning"}
                   <HiArrowRight className="h-4 w-4 ml-2" />
                 </button>
               </div>

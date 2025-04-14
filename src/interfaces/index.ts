@@ -76,6 +76,12 @@ export interface User {
   email: string;
 }
 
+export interface Chatroom {
+  id: string;
+  title: string;
+  created_at: string;
+}
+
 export interface AppState {
   user: User | null;
   isAuthenticated: boolean;
@@ -91,6 +97,8 @@ export interface AppState {
       docId?: string;
     };
   };
+  chatrooms: Chatroom[];
+  currentChatroomId: string | null;
 }
 
 export interface AppContextType extends AppState {
@@ -116,6 +124,11 @@ export interface AppContextType extends AppState {
   documentProcessingError: (id: string, error: string) => void;
   fetchEvaluations: () => Promise<void>;
   isLoadingEvaluations: boolean;
+  // Chatroom related functions
+  fetchChatrooms: () => Promise<void>;
+  createChatroom: () => Promise<string | null>;
+  selectChatroom: (chatroomId: string) => void;
+  isLoadingChatrooms: boolean;
 }
 
 export interface EvaluationCardProps {
@@ -194,7 +207,10 @@ export type ActionType =
       type: "DOCUMENT_PROCESSING_ERROR";
       payload: { id: string; error: string };
     }
-  | { type: "SET_EVALUATIONS"; payload: Evaluation[] };
+  | { type: "SET_EVALUATIONS"; payload: Evaluation[] }
+  | { type: "SET_CHATROOMS"; payload: Chatroom[] }
+  | { type: "ADD_CHATROOM"; payload: Chatroom }
+  | { type: "SET_CURRENT_CHATROOM"; payload: string };
 
 export interface User {
   id: string;
@@ -211,12 +227,15 @@ export const initialState: AppState = {
   sessionId: null,
   processingDocuments: {},
   evaluations: [],
+  chatrooms: [],
+  currentChatroomId: null,
 };
 
 export interface ChatMessageProps {
   type: MessageType;
   content: string;
   timestamp?: Date;
+  isLoading?: boolean;
 }
 
 export interface SimpleCodeProps {
@@ -246,6 +265,7 @@ export interface Message {
   content: string;
   timestamp: Date;
   sources?: string[];
+  isLoading?: boolean;
 }
 
 export interface ChatThread {
@@ -254,4 +274,9 @@ export interface ChatThread {
   ai_response: string;
   user_response: string;
   created_at: string;
+}
+
+export interface LoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
 }

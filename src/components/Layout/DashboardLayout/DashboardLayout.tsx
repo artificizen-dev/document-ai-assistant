@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 import Footer from "../../Dashboard/footer/Footer";
@@ -12,13 +12,12 @@ const DashboardLayout: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const location = useLocation();
+  // const location = useLocation();
   const { user, logout, getUserProfileImage } = useAppContext();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const profileImage = getUserProfileImage ? getUserProfileImage() : "";
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -43,16 +42,15 @@ const DashboardLayout: React.FC = () => {
     setSidebarOpen(false);
   };
 
-  // Determine the header title based on the current route
-  const getHeaderTitle = () => {
-    if (location.pathname.includes("/evaluate")) {
-      return "Document Evaluation";
-    }
-    if (location.pathname.includes("/learn")) {
-      return "Document Learning";
-    }
-    return "Document AI Assistant";
-  };
+  // const getHeaderTitle = () => {
+  //   if (location.pathname.includes("/evaluate")) {
+  //     return "Document Evaluation";
+  //   }
+  //   if (location.pathname.includes("/learn")) {
+  //     return "Document Learning";
+  //   }
+  //   return "Document AI Assistant";
+  // };
 
   const handleLogout = () => {
     logout();
@@ -62,11 +60,11 @@ const DashboardLayout: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-white">
       {/* Top Header */}
-      <header className="w-full bg-white border-b border-gray-200 px-4 py-2">
-        <div className="flex justify-between items-center">
-          <h2 className="md:text-2xl text-xl font-medium">
+      <header className="w-full bg-white border-b border-gray-200 px-4 py-1">
+        <div className="flex justify-end items-center">
+          {/* <h2 className="md:text-2xl text-xl font-medium">
             {getHeaderTitle()}
-          </h2>
+          </h2> */}
 
           {/* User Avatar with Dropdown */}
           <div className="relative" ref={dropdownRef}>
@@ -85,7 +83,7 @@ const DashboardLayout: React.FC = () => {
                 />
               ) : (
                 <Avatar
-                  size={40}
+                  size={30}
                   name={user?.username || user?.email || "User"}
                   variant="beam"
                   colors={[

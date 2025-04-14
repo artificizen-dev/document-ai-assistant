@@ -1,27 +1,50 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import ChatMessage from "./ChatMessage";
-import CategorySelector from "./CategorySelector";
+// import CategorySelector from "./CategorySelector";
 import ChatInput from "./ChatInput";
 import { access_token, backendURL } from "../../utils/constants";
 import { useAppContext } from "../../Providers/AppContext";
 import { FiBookOpen } from "react-icons/fi";
-import { ChatAreaProps, ChatThread, Message } from "../../interfaces";
+import { ChatThread, Message } from "../../interfaces";
+import LoginModal from "./LoginModal";
 
-const ChatArea: React.FC<ChatAreaProps> = ({
-  // toggleReferencePanel,
-  chatroomId,
-}) => {
+interface ChatAreaProps {
+  toggleReferencePanel?: () => void;
+}
+
+const ChatArea: React.FC<ChatAreaProps> = (
+  {
+    // toggleReferencePanel,
+  }
+) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchingHistory, setFetchingHistory] = useState(false);
+  // const [selectedCategory, setSelectedCategory] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { user } = useAppContext();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const location = useLocation();
+
+  const { user, currentChatroomId, createChatroom, selectChatroom } =
+    useAppContext();
+
   const token = access_token();
+
+  useEffect(() => {
+    if (!currentChatroomId) {
+      const searchParams = new URLSearchParams(location.search);
+      const urlChatroomId = searchParams.get("chatroom_id");
+
+      if (urlChatroomId) {
+        selectChatroom(urlChatroomId);
+      }
+    }
+  }, [currentChatroomId, location.search]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      // Use scrollIntoView with block: 'nearest' to minimize layout shifts
       messagesEndRef.current.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
@@ -31,6 +54,10 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   };
 
   useEffect(() => {
+    const chatroomId =
+      currentChatroomId ||
+      new URLSearchParams(location.search).get("chatroom_id");
+
     if (!chatroomId || !user) return;
 
     const fetchMessages = async () => {
@@ -80,38 +107,79 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     };
 
     fetchMessages();
-  }, [chatroomId, user]);
+  }, [currentChatroomId, user, location.search]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   const handleSendMessage = async (content: string) => {
-    if (!content.trim() || !chatroomId || !user) return;
+    if (!content.trim() || !user) {
+      setShowLoginModal(true);
+      return;
+    }
 
-    const newMessage: Message = {
-      id: Date.now().toString(),
+    const userMessageId = Date.now().toString();
+    const newUserMessage: Message = {
+      id: userMessageId,
       type: "user",
       content,
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newUserMessage]);
+
+    const tempBotMessageId = Date.now() + 1 + "";
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: tempBotMessageId,
+        type: "bot",
+        content: "Generating response...",
+        timestamp: new Date(),
+        isLoading: true,
+      },
+    ]);
+
     setLoading(true);
 
     try {
-      const tempBotMessageId = Date.now() + 1;
+      let chatId = currentChatroomId;
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: tempBotMessageId.toString(),
-          type: "bot",
-          content: "",
-          timestamp: new Date(),
-        },
-      ]);
+      if (!chatId) {
+        const searchParams = new URLSearchParams(location.search);
+        const urlChatroomId = searchParams.get("chatroom_id");
 
+        if (urlChatroomId) {
+          chatId = urlChatroomId;
+          selectChatroom(urlChatroomId);
+        } else {
+          chatId = await createChatroom();
+
+          if (!chatId) {
+            console.error("Failed to create chatroom");
+            setMessages((prev) =>
+              prev.filter((msg) => msg.id !== tempBotMessageId)
+            );
+            setLoading(false);
+            return;
+          }
+        }
+      }
+      await sendMessageToApi(content, chatId, tempBotMessageId);
+    } catch (error) {
+      console.error("Error in message flow:", error);
+      setLoading(false);
+      setMessages((prev) => prev.filter((msg) => msg.id !== tempBotMessageId));
+    }
+  };
+
+  const sendMessageToApi = async (
+    content: string,
+    chatroomId: string,
+    tempBotMessageId: string
+  ) => {
+    try {
       const response = await fetch(`${backendURL}/api/chat/chat-thread/`, {
         method: "POST",
         headers: {
@@ -121,6 +189,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         body: JSON.stringify({
           chatroom_id: Number(chatroomId),
           query: content,
+          // category: selectedCategory || undefined,
         }),
       });
 
@@ -130,6 +199,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       }
 
       let accumulatedContent = "";
+      let receivedFirstChunk = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -145,12 +215,21 @@ const ChatArea: React.FC<ChatAreaProps> = ({
               const data = JSON.parse(jsonStr);
 
               if (data.type === "chunk" && data.content) {
-                accumulatedContent += data.content;
+                if (!receivedFirstChunk) {
+                  accumulatedContent = data.content;
+                  receivedFirstChunk = true;
+                } else {
+                  accumulatedContent += data.content;
+                }
 
                 setMessages((prev) =>
                   prev.map((msg) =>
-                    msg.id === tempBotMessageId.toString()
-                      ? { ...msg, content: accumulatedContent }
+                    msg.id === tempBotMessageId
+                      ? {
+                          ...msg,
+                          content: accumulatedContent,
+                          isLoading: false,
+                        }
                       : msg
                   )
                 );
@@ -162,15 +241,29 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         }
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error sending message to API:", error);
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === tempBotMessageId
+            ? {
+                ...msg,
+                content:
+                  "Sorry, I couldn't process your request. Please try again.",
+                isLoading: false,
+              }
+            : msg
+        )
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSelectCategory = (category: string) => {
-    console.log("Selected category:", category);
-  };
+  // const handleSelectCategory = (category: string) => {
+  //   setSelectedCategory(category);
+  //   console.log("Selected category:", category);
+  // };
 
   const EmptyState = () => (
     <div className="flex flex-col items-center justify-center h-full text-center px-4">
@@ -195,7 +288,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto bg-white pt-8 flex flex-col">
+      <div className="flex-1 overflow-y-auto bg-white pt-8 flex flex-col md:max-w-[48rem] md:min-w-[48rem] md:mx-auto">
         {fetchingHistory ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>
@@ -208,6 +301,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
                 type={message.type}
                 content={message.content}
                 timestamp={message.timestamp}
+                isLoading={message.isLoading}
               />
             ))}
             <div ref={messagesEndRef} />
@@ -217,10 +311,16 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         )}
       </div>
 
-      <div className="mt-auto">
-        <CategorySelector onSelectCategory={handleSelectCategory} />
+      <div className="mt-auto md:max-w-[48rem] md:min-w-[48rem] md:mx-auto">
+        {/* <CategorySelector onSelectCategory={handleSelectCategory} /> */}
         <ChatInput onSendMessage={handleSendMessage} isLoading={loading} />
       </div>
+      {showLoginModal && (
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+        />
+      )}
     </>
   );
 };

@@ -25,7 +25,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   onSelectCategory,
 }) => {
   return (
-    <div className="flex flex-wrap justify-center border-t border-gray-200 py-3 bg-white">
+    <div className="flex flex-wrap justify-center py-1 bg-white">
       {categories.map((category) => {
         const Icon = category.icon;
         return (

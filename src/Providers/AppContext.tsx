@@ -15,6 +15,7 @@ import {
 } from "../interfaces";
 import { access_token, backendURL } from "../utils/constants";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const generateSessionId = (): string => {
   const timestamp = new Date().getTime();
@@ -115,6 +116,23 @@ const appReducer = (state: AppState, action: ActionType): AppState => {
           },
         },
       };
+    case "SET_CHATROOMS":
+      return {
+        ...state,
+        chatrooms: action.payload,
+      };
+
+    case "ADD_CHATROOM":
+      return {
+        ...state,
+        chatrooms: [action.payload, ...state.chatrooms],
+      };
+
+    case "SET_CURRENT_CHATROOM":
+      return {
+        ...state,
+        currentChatroomId: action.payload,
+      };
     default:
       return state;
   }
@@ -125,9 +143,11 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoadingEvaluations, setIsLoadingEvaluations] = useState(false);
+  const [isLoadingChatrooms, setIsLoadingChatrooms] = useState(false);
 
   const triggerRefresh = () => {
     setRefreshKey((prevKey) => prevKey + 1);
@@ -175,6 +195,66 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     } finally {
       setIsLoadingEvaluations(false);
     }
+  };
+
+  const fetchChatrooms = async () => {
+    const token = access_token();
+    if (!token || !state.user) return;
+
+    setIsLoadingChatrooms(true);
+    try {
+      const response = await axios.get(`${backendURL}/api/chat/chatroom/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch({ type: "SET_CHATROOMS", payload: response.data });
+    } catch (error) {
+      console.error("Failed to fetch chatrooms:", error);
+      handleError("Failed to fetch chat history. Please try again.");
+    } finally {
+      setIsLoadingChatrooms(false);
+    }
+  };
+
+  const createChatroom = async (): Promise<string | null> => {
+    const token = access_token();
+    if (!token || !state.user) return null;
+
+    try {
+      const response = await axios.post(
+        `${backendURL}/api/chat/chatroom/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const newChatroom = response.data;
+      dispatch({ type: "ADD_CHATROOM", payload: newChatroom });
+      dispatch({ type: "SET_CURRENT_CHATROOM", payload: newChatroom.id });
+
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set("chatroom_id", newChatroom.id);
+      navigate(`${location.pathname}?${searchParams.toString()}`, {
+        replace: true,
+      });
+
+      return newChatroom.id;
+    } catch (error) {
+      console.error("Failed to create chatroom:", error);
+      handleError("Failed to create a new chat. Please try again.");
+      return null;
+    }
+  };
+
+  const selectChatroom = (chatroomId: string) => {
+    dispatch({ type: "SET_CURRENT_CHATROOM", payload: chatroomId });
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("chatroom_id", chatroomId);
+    window.history.replaceState({}, "", currentUrl.toString());
   };
 
   const initializeSessionId = () => {
@@ -322,6 +402,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         documentProcessingError,
         fetchEvaluations,
         isLoadingEvaluations,
+        // Chatroom related functions
+        fetchChatrooms,
+        createChatroom,
+        selectChatroom,
+        isLoadingChatrooms,
       }}
     >
       {children}

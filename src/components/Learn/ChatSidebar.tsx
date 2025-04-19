@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
-import { FiPlus, FiMessageSquare, FiX, FiLoader } from "react-icons/fi";
+import {
+  FiPlus,
+  FiMessageSquare,
+  FiX,
+  FiLoader,
+  FiArrowLeft,
+} from "react-icons/fi";
 import { useAppContext } from "../../Providers/AppContext";
+import ROUTES from "../../routes";
+import { useNavigate } from "react-router-dom";
 
 interface ChatSidebarProps {
   isVisible: boolean;
@@ -17,6 +25,8 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
     user,
     fetchChatrooms,
   } = useAppContext();
+
+  const navigate = useNavigate();
 
   const handleCreateNewChat = async () => {
     await createChatroom();
@@ -61,7 +71,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
           New Chat
         </button>
 
-        <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
+        <div className="space-y-2 max-h-[calc(100vh-205px)] overflow-y-auto">
           {isLoadingChatrooms && chatrooms.length === 0 ? (
             <div className="flex justify-center py-4">
               <FiLoader className="animate-spin text-gray-400" size={24} />
@@ -98,6 +108,14 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
             <p className="text-sm text-center">No chats yet</p>
           </div>
         )}
+        <div className="absolute md:bottom-2 bottom-15 left-1">
+          <button
+            onClick={() => navigate(ROUTES.default)}
+            className="flex items-center text-gray-600 hover:text-black pt-2"
+          >
+            <FiArrowLeft size={16} className="mr-2" /> Back to Home
+          </button>
+        </div>
       </div>
     </aside>
   );

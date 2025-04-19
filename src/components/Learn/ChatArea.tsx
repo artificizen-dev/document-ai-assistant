@@ -10,6 +10,32 @@ import { FiBookOpen } from "react-icons/fi";
 import { ChatThread, Message } from "../../interfaces";
 import LoginModal from "./LoginModal";
 
+const scrollbarStyles = `
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+  
+  /* For Firefox */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db #f1f1f1;
+  }
+`;
+
 interface ChatAreaProps {
   toggleReferencePanel?: () => void;
 }
@@ -288,13 +314,14 @@ const ChatArea: React.FC<ChatAreaProps> = (
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto bg-white pt-8 flex flex-col md:max-w-[48rem] md:min-w-[48rem] md:mx-auto">
+      <style>{scrollbarStyles}</style>
+      <div className="flex-1 overflow-y-auto custom-scrollbar bg-white pt-8 flex flex-col  md:min-w-[48rem]">
         {fetchingHistory ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>
           </div>
         ) : messages.length > 0 ? (
-          <>
+          <div className="md:max-w-[48rem] md:mx-auto">
             {messages.map((message) => (
               <ChatMessage
                 key={message.id}
@@ -305,7 +332,7 @@ const ChatArea: React.FC<ChatAreaProps> = (
               />
             ))}
             <div ref={messagesEndRef} />
-          </>
+          </div>
         ) : (
           <EmptyState />
         )}

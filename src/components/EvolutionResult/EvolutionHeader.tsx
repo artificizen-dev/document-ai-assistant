@@ -10,6 +10,7 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   date,
   time,
   documentId,
+  category,
   userFeedback: initialUserFeedback,
 }) => {
   // Local state to manage feedback without page reload
@@ -77,9 +78,16 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
           <h1 className="text-xl md:text-2xl font-bold text-gray-900">
             {displayTitle}
           </h1>
-          <p className="text-xs md:text-sm text-gray-500 mt-1">
-            {date} {time}
-          </p>
+          <div className="flex items-center mt-1">
+            <p className="text-xs md:text-sm text-gray-500">
+              {date} {time}
+            </p>
+            {category && (
+              <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full">
+                {category}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex md:hidden w-full space-x-2 mb-3">

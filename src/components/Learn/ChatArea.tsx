@@ -1,8 +1,8 @@
+// ChatArea.tsx
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import ChatMessage from "./ChatMessage";
-// import CategorySelector from "./CategorySelector";
 import ChatInput from "./ChatInput";
 import { access_token, backendURL } from "../../utils/constants";
 import { useAppContext } from "../../Providers/AppContext";
@@ -67,7 +67,7 @@ const ChatArea: React.FC<ChatAreaProps> = (
         selectChatroom(urlChatroomId);
       }
     }
-  }, [currentChatroomId, location.search]);
+  }, [currentChatroomId, location.search, selectChatroom]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -133,7 +133,7 @@ const ChatArea: React.FC<ChatAreaProps> = (
     };
 
     fetchMessages();
-  }, [currentChatroomId, user, location.search]);
+  }, [currentChatroomId, user, location.search, token]);
 
   useEffect(() => {
     scrollToBottom();
@@ -161,7 +161,7 @@ const ChatArea: React.FC<ChatAreaProps> = (
       {
         id: tempBotMessageId,
         type: "bot",
-        content: "Generating response...",
+        content: "",
         timestamp: new Date(),
         isLoading: true,
       },
@@ -225,7 +225,19 @@ const ChatArea: React.FC<ChatAreaProps> = (
       }
 
       let accumulatedContent = "";
-      let receivedFirstChunk = false;
+
+      // Update loading state to show "Generating response..." in ChatMessage
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === tempBotMessageId
+            ? {
+                ...msg,
+                content: "Generating response...",
+                isLoading: true,
+              }
+            : msg
+        )
+      );
 
       while (true) {
         const { done, value } = await reader.read();
@@ -233,32 +245,33 @@ const ChatArea: React.FC<ChatAreaProps> = (
 
         const chunkText = new TextDecoder().decode(value);
 
-        const lines = chunkText.split("\n");
+        // Split the text by data: and process each chunk
+        const lines = chunkText.split("data:");
         for (const line of lines) {
-          if (line.startsWith("data:")) {
+          if (line.trim()) {
             try {
-              const jsonStr = line.substring(line.indexOf("{"));
-              const data = JSON.parse(jsonStr);
+              // Find the JSON part starting with {
+              const jsonStart = line.indexOf("{");
+              if (jsonStart !== -1) {
+                const jsonStr = line.substring(jsonStart);
+                const data = JSON.parse(jsonStr);
 
-              if (data.type === "chunk" && data.content) {
-                if (!receivedFirstChunk) {
-                  accumulatedContent = data.content;
-                  receivedFirstChunk = true;
-                } else {
+                if (data.type === "chunk" && data.content !== undefined) {
                   accumulatedContent += data.content;
-                }
 
-                setMessages((prev) =>
-                  prev.map((msg) =>
-                    msg.id === tempBotMessageId
-                      ? {
-                          ...msg,
-                          content: accumulatedContent,
-                          isLoading: false,
-                        }
-                      : msg
-                  )
-                );
+                  // Update the message content with each chunk received
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === tempBotMessageId
+                        ? {
+                            ...msg,
+                            content: accumulatedContent,
+                            isLoading: false,
+                          }
+                        : msg
+                    )
+                  );
+                }
               }
             } catch (e) {
               console.error("Error parsing chunk:", e, line);
@@ -286,11 +299,6 @@ const ChatArea: React.FC<ChatAreaProps> = (
     }
   };
 
-  // const handleSelectCategory = (category: string) => {
-  //   setSelectedCategory(category);
-  //   console.log("Selected category:", category);
-  // };
-
   const EmptyState = () => (
     <div className="flex flex-col items-center justify-center h-full text-center px-4">
       <div className="w-16 h-16 mb-6 bg-gray-100 rounded-full flex items-center justify-center">
@@ -315,13 +323,13 @@ const ChatArea: React.FC<ChatAreaProps> = (
   return (
     <>
       <style>{scrollbarStyles}</style>
-      <div className="flex-1 overflow-y-auto custom-scrollbar bg-white pt-8 flex flex-col  md:min-w-[48rem]">
+      <div className="flex-1 overflow-y-auto custom-scrollbar bg-white pt-8 flex flex-col md:min-w-[48rem]">
         {fetchingHistory ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>
           </div>
         ) : messages.length > 0 ? (
-          <div className="md:max-w-[48rem] md:mx-auto">
+          <div className="md:max-w-[48rem] md:min-w-[48rem] md:mx-auto">
             {messages.map((message) => (
               <ChatMessage
                 key={message.id}
@@ -339,7 +347,6 @@ const ChatArea: React.FC<ChatAreaProps> = (
       </div>
 
       <div className="mt-auto md:max-w-[48rem] md:min-w-[48rem] md:mx-auto">
-        {/* <CategorySelector onSelectCategory={handleSelectCategory} /> */}
         <ChatInput onSendMessage={handleSendMessage} isLoading={loading} />
       </div>
       {showLoginModal && (

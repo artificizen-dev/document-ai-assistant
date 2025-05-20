@@ -3,31 +3,26 @@ export interface EvaluationResponse {
   doc_name: string;
   doc_link: string;
   question: string;
-  answer: string;
-  feedback: string;
-  scores: {
-    Content: number;
-    "Language and Expression": number;
-    "Analysis and Argumentation": number;
-    "Structure and Organization": number;
-    "Understanding of the Question": number;
-    [key: string]: number;
-  };
-  improvements: {
-    [key: string]: string;
-  };
-  strengths: {
-    [key: string]: string;
-  };
-  weaknesses: {
-    [key: string]: string;
-  };
-  reference_links: string[];
+  category?: string;
+  score_sum: string;
+  answer?: string;
   created_at: string;
   updated_at: string;
   user: number;
-  user_feedback: boolean;
-  score_sum: number;
+  user_feedback: boolean | null;
+  feedback?: string;
+  strengths?: { [key: string]: any };
+  weaknesses?: { [key: string]: any };
+  improvements?: { [key: string]: any };
+  scores?: { [key: string]: number };
+  llm_response?: {
+    Evaluation?: EvaluationCategory[];
+    "Evaluation-P1"?: EvaluationCategory[];
+    FinalAssessment?: {
+      overall_feedback?: string[];
+      suggested_improvements?: string[];
+    };
+  };
 }
 
 export interface CategoryScoresProps {
@@ -136,6 +131,7 @@ export interface EvaluationCardProps {
   docName: string;
   date: string;
   score?: number;
+  onDelete?: (id: number) => void;
 }
 
 export interface SidebarProps {
@@ -162,16 +158,30 @@ export interface SelectedFile {
   timestamp?: Date;
 }
 
+export interface EvaluationCategory {
+  name: string;
+  items: EvaluationItem[];
+}
+
 export interface DetailedFeedbackTabProps {
-  feedback: string;
-  improvements: {
-    [key: string]: string;
+  llm_response?: {
+    Evaluation?: EvaluationCategory[];
+    "Evaluation-P1"?: EvaluationCategory[];
+    FinalAssessment?: {
+      overall_feedback?: string[];
+      suggested_improvements?: string[];
+    };
+    [key: string]: any;
   };
-  strengths: {
-    [key: string]: string;
+  feedback?: string;
+  improvements?: {
+    [key: string]: any;
+  };
+  strengths?: {
+    [key: string]: any;
   };
   weaknesses?: {
-    [key: string]: string;
+    [key: string]: any;
   };
 }
 
@@ -179,9 +189,18 @@ export interface EvaluationHeaderProps {
   title: string;
   date: string;
   time: string;
-  onNewEvaluation?: () => void;
-  documentId?: number;
-  userFeedback?: boolean | null;
+  documentId: number;
+  category?: string;
+  userFeedback: boolean | null;
+}
+
+export interface EvaluationItem {
+  Score?: number;
+  Feedback?: string;
+  Strengths?: string[];
+  Weaknesses?: string[];
+  "Instruction Analyses"?: string;
+  [key: string]: any;
 }
 
 export interface Evaluation {

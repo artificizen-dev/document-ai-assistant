@@ -1,3 +1,4 @@
+// ChatMessage.tsx
 import React, { useState } from "react";
 import { FiBookOpen, FiCopy, FiCheck } from "react-icons/fi";
 import { useAppContext } from "../../Providers/AppContext";
@@ -97,6 +98,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
                     .
                   </span>
                 </span>
+              </div>
+            ) : content === "" ? (
+              <div className="flex items-center pt-2">
+                <span className="text-gray-700">Waiting for response...</span>
               </div>
             ) : (
               <div className="text-gray-800 markdown-content">

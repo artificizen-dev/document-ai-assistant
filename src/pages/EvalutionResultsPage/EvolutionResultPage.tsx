@@ -6,11 +6,9 @@ import { useAppContext } from "../../Providers/AppContext";
 import { backendURL, access_token } from "../../utils/constants";
 import EvaluationHeader from "../../components/EvolutionResult/EvolutionHeader";
 import EvaluationSummary from "../../components/EvolutionResult/EvolutionSummary";
-import CategoryScores from "../../components/EvolutionResult/CategoryScores";
 import EvaluationTabs from "../../components/EvolutionResult/EvolutionTabs";
 import ExamCopiesTab from "../../components/EvolutionResult/ExamCopiesTab";
 import DetailedFeedbackTab from "../../components/EvolutionResult/DetailedFeedbackTab";
-import RecommendationsTab from "../../components/EvolutionResult/RecommendationsTab";
 import BlurSection from "../../components/EvolutionResult/BlurSection";
 
 const EvaluationResultPage: React.FC = () => {
@@ -117,11 +115,18 @@ const EvaluationResultPage: React.FC = () => {
     );
   }
 
-  const scoreValues = Object.values(evaluationData.scores || {});
-  const overallScore =
-    scoreValues.length > 0
-      ? scoreValues.reduce((sum, score) => sum + score, 0)
-      : evaluationData.score_sum || 0;
+  // Determine if we're using the new format (with llm_response) or old format
+  const isNewFormat = !!evaluationData.llm_response;
+
+  // Calculate the overallScore
+  const overallScore = isNewFormat
+    ? evaluationData.score_sum
+    : (() => {
+        const scoreValues = Object.values(evaluationData.scores || {});
+        return scoreValues.length > 0
+          ? scoreValues.reduce((sum, score) => sum + score, 0)
+          : 0;
+      })();
 
   const createdDate = new Date(evaluationData.created_at);
   const formattedDate = createdDate.toLocaleDateString();
@@ -135,6 +140,7 @@ const EvaluationResultPage: React.FC = () => {
         date={formattedDate}
         time={formattedTime}
         documentId={evaluationData.id}
+        category={evaluationData.category}
         userFeedback={evaluationData.user_feedback}
       />
 
@@ -144,10 +150,7 @@ const EvaluationResultPage: React.FC = () => {
         documentCount={1}
         documentType="exam copy"
         question={evaluationData.question}
-        answer={evaluationData.answer}
-        strengths={evaluationData.strengths}
-        improvements={evaluationData.improvements}
-        feedback={evaluationData.feedback}
+        llm_response={isNewFormat ? evaluationData.llm_response : undefined}
       />
 
       {/* For session users, show everything below as blurred with signup prompt */}
@@ -155,31 +158,35 @@ const EvaluationResultPage: React.FC = () => {
         <BlurSection />
       ) : (
         <>
-          {/* Full content for authenticated users */}
-          <CategoryScores scores={evaluationData.scores} />
-
           <EvaluationTabs activeTab={activeTab} setActiveTab={setActiveTab}>
             {activeTab === "submitted-answer" && (
               <ExamCopiesTab
                 docName={evaluationData.doc_name}
                 docLink={evaluationData.doc_link}
                 question={evaluationData.question}
-                answer={evaluationData.answer}
+                answer={
+                  evaluationData.answer ||
+                  (isNewFormat &&
+                    evaluationData.llm_response?.FinalAssessment
+                      ?.overall_feedback?.[0]) ||
+                  ""
+                }
               />
             )}
 
             {activeTab === "smart-ai-review" && (
               <DetailedFeedbackTab
-                feedback={evaluationData.feedback}
-                improvements={evaluationData.improvements}
-                strengths={evaluationData.strengths}
-                weaknesses={evaluationData.weaknesses}
-              />
-            )}
-
-            {activeTab === "boost-your-score" && (
-              <RecommendationsTab
-                referenceLinks={evaluationData.reference_links}
+                llm_response={
+                  isNewFormat ? evaluationData.llm_response : undefined
+                }
+                feedback={!isNewFormat ? evaluationData.feedback : undefined}
+                improvements={
+                  !isNewFormat ? evaluationData.improvements : undefined
+                }
+                strengths={!isNewFormat ? evaluationData.strengths : undefined}
+                weaknesses={
+                  !isNewFormat ? evaluationData.weaknesses : undefined
+                }
               />
             )}
           </EvaluationTabs>

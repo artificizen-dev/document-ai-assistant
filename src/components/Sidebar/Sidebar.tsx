@@ -52,7 +52,7 @@ const ProcessingCard: React.FC<{
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const { refreshKey, processingDocuments } = useAppContext();
+  const { triggerRefresh, refreshKey, processingDocuments } = useAppContext();
   const [evaluations, setEvaluations] = useState<EvaluationListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -86,6 +86,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     };
     fetchEvaluations();
   }, [refreshKey]);
+
+  const handleDeleteEvaluation = () => {
+    triggerRefresh();
+  };
 
   return (
     <aside
@@ -141,6 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     id={evaluation.id}
                     docName={evaluation.doc_name}
                     date={evaluation.created_at}
+                    onDelete={handleDeleteEvaluation}
                   />
                 ))}
               </>

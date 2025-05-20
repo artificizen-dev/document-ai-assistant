@@ -14,7 +14,6 @@ const EvaluationTabs: React.FC<EvaluationTabsProps> = ({
   const tabs = [
     { id: "submitted-answer", label: "Submitted Answer" },
     { id: "smart-ai-review", label: "Smart AI Review" },
-    { id: "boost-your-score", label: "Boost Your Score" },
   ];
 
   return (

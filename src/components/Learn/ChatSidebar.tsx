@@ -1,14 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiPlus,
   FiMessageSquare,
   FiX,
   FiLoader,
   FiArrowLeft,
+  FiTrash2,
 } from "react-icons/fi";
 import { useAppContext } from "../../Providers/AppContext";
 import ROUTES from "../../routes";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { backendURL, access_token } from "../../utils/constants";
+import DeleteChatroomModal from "./DeleteChatroomModal";
 
 interface ChatSidebarProps {
   isVisible: boolean;
@@ -26,6 +30,11 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
     fetchChatrooms,
   } = useAppContext();
 
+  const [hoveredChatId, setHoveredChatId] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletingChatId, setDeletingChatId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const navigate = useNavigate();
 
   const handleCreateNewChat = async () => {
@@ -37,6 +46,58 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
       fetchChatrooms();
     }
   }, [user]);
+
+  const handleDeleteClick = (e: React.MouseEvent, chatId: string) => {
+    e.stopPropagation();
+    setDeletingChatId(chatId);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deletingChatId) return;
+
+    setIsDeleting(true);
+    try {
+      const token = access_token();
+      await axios.delete(`${backendURL}/api/chat/delete-conversation/`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { chatroom_id: deletingChatId },
+      });
+
+      // If the deleted chatroom is the current one, create a new one or select another
+      if (currentChatroomId === deletingChatId) {
+        if (chatrooms.length > 1) {
+          // Find another chatroom to select
+          const nextChatroom = chatrooms.find(
+            (chat) => chat.id !== deletingChatId
+          );
+          if (nextChatroom) {
+            selectChatroom(nextChatroom.id);
+          }
+        } else {
+          // Create a new chatroom if this was the last one
+          await createChatroom();
+        }
+      }
+
+      // Refresh the chatrooms list
+      fetchChatrooms();
+
+      setDeleteModalOpen(false);
+    } catch (error) {
+      console.error("Failed to delete chatroom:", error);
+    } finally {
+      setIsDeleting(false);
+      setDeletingChatId(null);
+    }
+  };
+
+  // Find the title of the chat being deleted
+  const getChatTitle = (chatId: string | null) => {
+    if (!chatId) return "";
+    const chat = chatrooms.find((c) => c.id === chatId);
+    return chat ? chat.title || `Chat ${String(chat.id).substring(0, 8)}` : "";
+  };
 
   return (
     <aside
@@ -80,18 +141,36 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
             chatrooms.map((chat) => (
               <div
                 key={chat.id}
-                className={`p-3 rounded-md cursor-pointer ${
+                className={`p-3 rounded-md cursor-pointer relative group ${
                   currentChatroomId === chat.id
                     ? "bg-gray-300"
                     : "bg-gray-100 hover:bg-gray-200"
                 }`}
                 onClick={() => selectChatroom(chat.id)}
+                onMouseEnter={() => setHoveredChatId(chat.id)}
+                onMouseLeave={() => setHoveredChatId(null)}
               >
-                <div className="flex items-center">
-                  <FiMessageSquare className="text-gray-500 mr-2" size={14} />
-                  <span className="text-sm truncate">
-                    {chat.title || `Chat ${String(chat.id).substring(0, 8)}`}
-                  </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center overflow-hidden">
+                    <FiMessageSquare
+                      className="text-gray-500 mr-2 flex-shrink-0"
+                      size={14}
+                    />
+                    <span className="text-sm truncate">
+                      {chat.title || `Chat ${String(chat.id).substring(0, 8)}`}
+                    </span>
+                  </div>
+
+                  {/* Delete button appears on hover */}
+                  <button
+                    className={`text-gray-500 hover:text-red-500 p-1 rounded transition-opacity ${
+                      hoveredChatId === chat.id ? "opacity-100" : "opacity-0"
+                    }`}
+                    onClick={(e) => handleDeleteClick(e, chat.id)}
+                    aria-label="Delete chat"
+                  >
+                    <FiTrash2 size={14} />
+                  </button>
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
                   {new Date(chat.created_at).toLocaleDateString()}
@@ -117,6 +196,15 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isVisible, onClose }) => {
           </button>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteChatroomModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        isDeleting={isDeleting}
+        chatTitle={getChatTitle(deletingChatId)}
+      />
     </aside>
   );
 };

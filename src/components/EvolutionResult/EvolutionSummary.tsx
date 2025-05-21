@@ -2,7 +2,6 @@ import React from "react";
 
 interface EvaluationSummaryProps {
   overallScore: number | string;
-  question?: string;
   documentCount?: number;
   documentType?: string;
   category?: string;
@@ -22,7 +21,6 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
   overallScore,
   documentCount = 1,
   documentType = "exam copy",
-  question,
   llm_response,
 }) => {
   // Convert string score to number if needed
@@ -118,22 +116,8 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
             {documentCount} {documentType} evaluated
           </p>
 
-          {question && (
-            <div className="mt-4">
-              <h3 className="text-md font-medium text-gray-800 mb-1">
-                Question:
-              </h3>
-              <p className="text-gray-700 bg-white p-3 rounded-md border border-gray-200">
-                {question}
-              </p>
-            </div>
-          )}
-
           {initialAssessment && (
             <div className="mt-4">
-              <h3 className="text-md font-medium text-gray-800 mb-1">
-                Initial Assessment:
-              </h3>
               <div className="bg-white p-3 rounded-md border border-gray-200">
                 <p className="text-gray-700">{initialAssessment}</p>
               </div>
@@ -154,7 +138,7 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
                 fontWeight="bold"
                 fill="#000000"
               >
-                {numericScore}/10
+                {numericScore}
               </text>
             </svg>
           </div>

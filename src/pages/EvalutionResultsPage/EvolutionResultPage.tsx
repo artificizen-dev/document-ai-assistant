@@ -134,7 +134,6 @@ const EvaluationResultPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      {/* Header is always visible */}
       <EvaluationHeader
         title={`Evaluation of ${evaluationData.doc_name}`}
         date={formattedDate}
@@ -144,16 +143,13 @@ const EvaluationResultPage: React.FC = () => {
         userFeedback={evaluationData.user_feedback}
       />
 
-      {/* Summary is always visible */}
       <EvaluationSummary
         overallScore={overallScore}
         documentCount={1}
         documentType="exam copy"
-        question={evaluationData.question}
         llm_response={isNewFormat ? evaluationData.llm_response : undefined}
       />
 
-      {/* For session users, show everything below as blurred with signup prompt */}
       {isSessionUser ? (
         <BlurSection />
       ) : (

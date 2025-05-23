@@ -5,45 +5,7 @@ import {
   FiCheckCircle,
   FiXCircle,
 } from "react-icons/fi";
-
-interface EvaluationItem {
-  name?: string;
-  Score?: number;
-  Feedback?: string;
-  Strengths?: string[];
-  Weaknesses?: string[];
-  "Instruction Analyses"?: string;
-  [key: string]: any;
-}
-
-interface EvaluationCategory {
-  name: string;
-  items: EvaluationItem[];
-}
-
-interface DetailedFeedbackTabProps {
-  llm_response?: {
-    Evaluation?: EvaluationCategory[];
-    "Evaluation-P1"?: EvaluationCategory[];
-    FinalAssessment?: {
-      overall_feedback?: string[];
-      suggested_improvements?: string[];
-      overall_strengths?: string[];
-    };
-    [key: string]: any;
-  };
-  feedback?: string;
-  improvements?: {
-    [key: string]: any;
-  };
-  strengths?: {
-    [key: string]: any;
-  };
-  weaknesses?: {
-    [key: string]: any;
-  };
-  category?: string;
-}
+import { DetailedFeedbackTabProps } from "../../interfaces/evaluationDetail";
 
 const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
   llm_response,
@@ -91,74 +53,6 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
   if (isNewFormat) {
     return (
       <div className="space-y-8">
-        {/* Show Final Assessment at the top */}
-        {llm_response?.FinalAssessment && (
-          <div className="mb-8 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
-              Final Assessment
-            </h3>
-
-            {llm_response.FinalAssessment.overall_feedback && (
-              <div className="bg-white p-5 rounded-lg border border-gray-200 mb-5 shadow-sm">
-                <h4 className="font-medium text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                  Overall Feedback
-                </h4>
-                {llm_response.FinalAssessment.overall_feedback.map(
-                  (feedback, index) => (
-                    <p
-                      key={`feedback-${index}`}
-                      className="text-gray-700 mb-3 last:mb-0 leading-relaxed"
-                    >
-                      {feedback}
-                    </p>
-                  )
-                )}
-              </div>
-            )}
-
-            {llm_response.FinalAssessment.overall_strengths &&
-              llm_response.FinalAssessment.overall_strengths.length > 0 && (
-                <div className="bg-white p-5 rounded-lg border border-gray-200 mb-5 shadow-sm">
-                  <h4 className="font-medium text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                    Overall Strengths
-                  </h4>
-                  <ul className="space-y-2">
-                    {llm_response.FinalAssessment.overall_strengths.map(
-                      (strength, index) => (
-                        <li
-                          key={`strength-${index}`}
-                          className="text-gray-700 pl-4 border-l-2 border-gray-300 py-1"
-                        >
-                          {strength}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              )}
-
-            {llm_response.FinalAssessment.suggested_improvements && (
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h4 className="font-medium text-gray-900 mb-3 pb-2 border-b border-gray-100">
-                  Suggested Improvements
-                </h4>
-                <ul className="space-y-2">
-                  {llm_response.FinalAssessment.suggested_improvements.map(
-                    (improvement, index) => (
-                      <li
-                        key={`improvement-${index}`}
-                        className="text-gray-700 pl-4 border-l-2 border-gray-300 py-1"
-                      >
-                        {improvement}
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
-
         <h3 className="text-xl font-semibold my-5 text-gray-800 border-b pb-2 border-gray-200">
           Detailed Evaluation
         </h3>
@@ -168,11 +62,11 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
           <div
             key={`eval-${categoryIndex}`}
             className={`rounded-lg overflow-hidden mb-5 border border-gray-200 transition-all duration-300 shadow-sm 
-             ${expandedSections[`eval-${categoryIndex}`] ? "shadow-md" : ""}`}
+            ${expandedSections[`eval-${categoryIndex}`] ? "shadow-md" : ""}`}
           >
             <button
               className="w-full flex justify-between items-center p-5 
-               bg-gray-50 hover:bg-gray-100 transition-all duration-300 text-left"
+              bg-gray-50 hover:bg-gray-100 transition-all duration-300 text-left"
               onClick={() => toggleSection(`eval-${categoryIndex}`)}
             >
               <h4 className="font-semibold text-gray-900">{category.name}</h4>
@@ -185,11 +79,11 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
 
             <div
               className={`overflow-hidden transition-all duration-300 ease-in-out
-               ${
-                 expandedSections[`eval-${categoryIndex}`]
-                   ? "max-h-[5000px] opacity-100"
-                   : "max-h-0 opacity-0"
-               }`}
+              ${
+                expandedSections[`eval-${categoryIndex}`]
+                  ? "max-h-[5000px] opacity-100"
+                  : "max-h-0 opacity-0"
+              }`}
             >
               <div className="p-5 border-t border-gray-200 bg-white">
                 {isEthics
@@ -205,7 +99,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                             {subItem.Score !== undefined && (
                               <span
                                 className={`ml-3 px-3 py-1 rounded-full text-sm font-medium border inline-block
-                               ${getScoreColor(subItem.Score)}`}
+                              ${getScoreColor(subItem.Score)}`}
                               >
                                 {subItem.Score}/3
                               </span>
@@ -281,7 +175,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                             <span className="font-medium mr-2">Score:</span>
                             <span
                               className={`px-3 py-1 rounded-full text-sm font-medium border
-                           ${getScoreColor(item.Score)}`}
+                          ${getScoreColor(item.Score)}`}
                             >
                               {item.Score}/3
                             </span>
@@ -366,116 +260,96 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
           </div>
         ))}
 
-        {/* Evaluation-P1 if present and not already displayed */}
-        {llm_response?.["Evaluation-P1"] && (
-          <div className="mt-6">
-            {llm_response["Evaluation-P1"].map((category, categoryIndex) => (
-              <div
-                key={`evalp1-${categoryIndex}`}
-                className={`rounded-lg overflow-hidden mb-5 border border-gray-200 transition-all duration-300 shadow-sm 
-                 ${
-                   expandedSections[`evalp1-${categoryIndex}`]
-                     ? "shadow-md"
-                     : ""
-                 }`}
-              >
-                <button
-                  className="w-full flex justify-between items-center p-5 
-                   bg-gray-50 hover:bg-gray-100 transition-all duration-300 text-left"
-                  onClick={() => toggleSection(`evalp1-${categoryIndex}`)}
-                >
-                  <h4 className="font-semibold text-gray-900">
-                    {category.name}
-                  </h4>
-                  {expandedSections[`evalp1-${categoryIndex}`] ? (
-                    <FiChevronUp className="text-gray-500 transition-transform duration-300" />
-                  ) : (
-                    <FiChevronDown className="text-gray-500 transition-transform duration-300" />
-                  )}
-                </button>
+        {/* Final Assessment at the bottom as accordion */}
+        {llm_response?.FinalAssessment && (
+          <div className="rounded-lg overflow-hidden mb-5 border border-gray-200 transition-all duration-300 shadow-sm">
+            <button
+              className="w-full flex justify-between items-center p-5 
+              bg-gray-50 hover:bg-gray-100 transition-all duration-300 text-left"
+              onClick={() => toggleSection("final-assessment")}
+            >
+              <h4 className="font-semibold text-gray-900">Final Assessment</h4>
+              {expandedSections["final-assessment"] ? (
+                <FiChevronUp className="text-gray-500 transition-transform duration-300" />
+              ) : (
+                <FiChevronDown className="text-gray-500 transition-transform duration-300" />
+              )}
+            </button>
 
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out
-                   ${
-                     expandedSections[`evalp1-${categoryIndex}`]
-                       ? "max-h-[2000px] opacity-100"
-                       : "max-h-0 opacity-0"
-                   }`}
-                >
-                  <div className="p-5 border-t border-gray-200 bg-white">
-                    {category.items.map((item, itemIndex) => (
-                      <div
-                        key={`evalp1-item-${categoryIndex}-${itemIndex}`}
-                        className="mb-4 last:mb-0"
-                      >
-                        {item.Feedback && (
-                          <div className="mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <h5 className="font-medium text-gray-800 mb-2">
-                              Feedback:
-                            </h5>
-                            <p className="text-gray-700 leading-relaxed">
-                              {item.Feedback}
-                            </p>
-                          </div>
-                        )}
-
-                        {item["Initial Scan"] && (
-                          <div className="mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <h5 className="font-medium text-gray-800 mb-2">
-                              Initial Scan:
-                            </h5>
-                            <p className="text-gray-700 leading-relaxed">
-                              {item["Initial Scan"]}
-                            </p>
-                          </div>
-                        )}
-
-                        {item["Grasp Requirements"] && (
-                          <div className="mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <h5 className="font-medium text-gray-800 mb-2">
-                              Requirements Analysis:
-                            </h5>
-                            <p className="text-gray-700 leading-relaxed">
-                              {item["Grasp Requirements"]}
-                            </p>
-                          </div>
-                        )}
-
-                        {item["Identify Key Ethical Issues"] &&
-                          item["Identify Key Ethical Issues"] !==
-                            "Not applicable as the question pertains to history, not ethics." && (
-                            <div className="mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                              <h5 className="font-medium text-gray-800 mb-2">
-                                Key Ethical Issues:
-                              </h5>
-                              <p className="text-gray-700 leading-relaxed">
-                                {item["Identify Key Ethical Issues"]}
-                              </p>
-                            </div>
-                          )}
-
-                        {item["Instruction Analyses"] && (
-                          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <h5 className="font-medium text-gray-800 mb-2">
-                              Analysis:
-                            </h5>
-                            <p className="text-gray-700 leading-relaxed">
-                              {item["Instruction Analyses"]}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+            <div
+              className={`overflow-hidden transition-all duration-300 ease-in-out
+              ${
+                expandedSections["final-assessment"]
+                  ? "max-h-[2000px] opacity-100"
+                  : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="p-5 border-t border-gray-200 bg-white">
+                {llm_response.FinalAssessment.overall_feedback && (
+                  <div className="mb-5">
+                    <h4 className="font-medium text-gray-900 mb-3 pb-2 border-b border-gray-100">
+                      Overall Feedback
+                    </h4>
+                    {llm_response.FinalAssessment.overall_feedback.map(
+                      (feedback, index) => (
+                        <p
+                          key={`feedback-${index}`}
+                          className="text-gray-700 mb-3 last:mb-0 leading-relaxed"
+                        >
+                          {feedback}
+                        </p>
+                      )
+                    )}
                   </div>
-                </div>
+                )}
+
+                {llm_response.FinalAssessment.overall_strengths &&
+                  llm_response.FinalAssessment.overall_strengths.length > 0 && (
+                    <div className="mb-5">
+                      <h4 className="font-medium text-gray-900 mb-3 pb-2 border-b border-gray-100">
+                        Overall Strengths
+                      </h4>
+                      <ul className="space-y-2">
+                        {llm_response.FinalAssessment.overall_strengths.map(
+                          (strength, index) => (
+                            <li
+                              key={`strength-${index}`}
+                              className="text-gray-700 pl-4 border-l-2 border-gray-300 py-1"
+                            >
+                              {strength}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
+
+                {llm_response.FinalAssessment.suggested_improvements && (
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3 pb-2 border-b border-gray-100">
+                      Suggested Improvements
+                    </h4>
+                    <ul className="space-y-2">
+                      {llm_response.FinalAssessment.suggested_improvements.map(
+                        (improvement, index) => (
+                          <li
+                            key={`improvement-${index}`}
+                            className="text-gray-700 pl-4 border-l-2 border-gray-300 py-1"
+                          >
+                            {improvement}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
           </div>
         )}
       </div>
     );
   } else {
-    // Original format for backward compatibility (left unchanged)
     const improvementItems =
       improvements && Object.keys(improvements).length > 0
         ? Object.entries(improvements).map(([key, value]) => ({
@@ -501,63 +375,54 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
         : [];
 
     const cleanText = (text: any) => {
-      // Check if text is a string
       if (!text || typeof text !== "string") {
-        // Handle object case for improvements
         if (text && typeof text === "object") {
           if ("Improvement Point" in text) {
             let result = text["Improvement Point"];
 
             if (text["Example"]) {
               result += `<div class="pl-4 border-l-2 border-gray-300 mt-2">
-               <span class="text-sm font-medium text-gray-700">Example: </span>
-               <span>${text["Example"]}</span>
-             </div>`;
+              <span class="text-sm font-medium text-gray-700">Example: </span>
+              <span>${text["Example"]}</span>
+            </div>`;
             }
 
             if (text["Link"]) {
               result += `<div class="mt-2">
-               <a 
-                 href="${text["Link"]}" 
-                 target="_blank" 
-                 rel="noopener noreferrer" 
-                 class="text-blue-600 hover:text-blue-800 underline text-sm flex items-center"
-               >
-                 Reference Link
-               </a>
-             </div>`;
+              <a 
+                href="${text["Link"]}" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="text-blue-600 hover:text-blue-800 underline text-sm flex items-center"
+              >
+                Reference Link
+              </a>
+            </div>`;
             }
 
             return result;
           }
 
-          // Return empty string for other object types
           return "";
         }
 
         return "";
       }
 
-      // Normal string processing from here
       let cleaned = text;
 
-      // Remove malformed HTML link structures
       cleaned = cleaned.replace(
         /\*+([^\*]+)\*+"[^"]+"[^"]+"[^"]+">\*+([^\*]+)\*+/g,
         "$1"
       );
 
-      // Remove standalone asterisks
       cleaned = cleaned.replace(/\*{2,}/g, "");
 
-      // Clean up "Links:" text
       cleaned = cleaned.replace(/Links:\s*\*/g, "Links:");
 
-      // Extract and clean URLs
       const urlPattern = /(www\.[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+(?:\/[^\s)]*)?)/g;
       const urls = cleaned.match(urlPattern) || [];
 
-      // Replace the Links section with a clean list of URLs
       if (urls.length > 0) {
         const linksSection = cleaned.indexOf("Links:");
         if (linksSection !== -1) {

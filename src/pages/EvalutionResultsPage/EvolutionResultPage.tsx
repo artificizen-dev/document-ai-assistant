@@ -115,10 +115,8 @@ const EvaluationResultPage: React.FC = () => {
     );
   }
 
-  // Determine if we're using the new format (with llm_response) or old format
   const isNewFormat = !!evaluationData.llm_response;
 
-  // Calculate the overallScore
   const overallScore = isNewFormat
     ? evaluationData.score_sum
     : (() => {
@@ -147,6 +145,7 @@ const EvaluationResultPage: React.FC = () => {
         overallScore={overallScore}
         documentCount={1}
         documentType="exam copy"
+        category={evaluationData.category}
         llm_response={isNewFormat ? evaluationData.llm_response : undefined}
       />
 

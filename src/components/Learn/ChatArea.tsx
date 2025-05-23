@@ -133,7 +133,7 @@ const ChatArea: React.FC<ChatAreaProps> = (
     };
 
     fetchMessages();
-  }, [currentChatroomId, user, location.search, token]);
+  }, [user, token]);
 
   useEffect(() => {
     scrollToBottom();

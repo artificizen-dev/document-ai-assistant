@@ -10,6 +10,7 @@ interface EvaluationSummaryProps {
       name: string;
       items: Array<{
         "Instruction Analyses"?: string;
+        Feedback?: string;
         [key: string]: any;
       }>;
     }>;
@@ -21,18 +22,20 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
   overallScore,
   documentCount = 1,
   documentType = "exam copy",
+  category,
   llm_response,
 }) => {
-  // Convert string score to number if needed
   const numericScore =
     typeof overallScore === "string" ? parseFloat(overallScore) : overallScore;
 
-  // Convert to percentage (assuming score is out of 10)
   const scorePercentage = (numericScore / 10) * 100;
+  const isEthics = category === "Ethics";
 
-  // Get the initial assessment from Evaluation-P1
-  const initialAssessment =
-    llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.["Instruction Analyses"];
+  const assessmentContent = isEthics
+    ? llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.["Feedback"]
+    : llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.[
+        "Instruction Analyses"
+      ];
 
   const getScoreColors = (score: number) => {
     if (score >= 0 && score <= 39) {
@@ -103,8 +106,6 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
     return segments;
   };
 
-  console.log("The LLM response is:", llm_response);
-
   return (
     <div className="bg-gray-100 rounded-lg p-6 mb-6">
       <div className="flex flex-col md:flex-row justify-between md:gap-5 mb-4">
@@ -116,10 +117,13 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
             {documentCount} {documentType} evaluated
           </p>
 
-          {initialAssessment && (
+          {assessmentContent && (
             <div className="mt-4">
+              <h3 className="text-md font-medium text-gray-800 mb-1">
+                {isEthics ? "Initial Feedback:" : "Initial Assessment:"}
+              </h3>
               <div className="bg-white p-3 rounded-md border border-gray-200">
-                <p className="text-gray-700">{initialAssessment}</p>
+                <p className="text-gray-700">{assessmentContent}</p>
               </div>
             </div>
           )}

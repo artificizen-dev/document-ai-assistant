@@ -131,7 +131,7 @@ const appReducer = (state: AppState, action: ActionType): AppState => {
     case "SET_CURRENT_CHATROOM":
       return {
         ...state,
-        currentChatroomId: action.payload,
+        currentChatroomId: action.payload || null,
       };
     default:
       return state;
@@ -209,6 +209,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
       dispatch({ type: "SET_CHATROOMS", payload: response.data });
+      if (!response.data || response.data.length === 0) {
+        dispatch({ type: "SET_CURRENT_CHATROOM", payload: "" });
+      }
     } catch (error) {
       console.error("Failed to fetch chatrooms:", error);
       handleError("Failed to fetch chat history. Please try again.");
@@ -234,7 +237,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const newChatroom = response.data;
       dispatch({ type: "ADD_CHATROOM", payload: newChatroom });
-      dispatch({ type: "SET_CURRENT_CHATROOM", payload: newChatroom.id });
+      setTimeout(() => {
+        dispatch({ type: "SET_CURRENT_CHATROOM", payload: newChatroom.id });
+      }, 1000);
 
       const searchParams = new URLSearchParams(location.search);
       searchParams.set("chatroom_id", newChatroom.id);

@@ -52,9 +52,13 @@ const ProcessingCard: React.FC<{
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const { triggerRefresh, refreshKey, processingDocuments } = useAppContext();
   const [evaluations, setEvaluations] = useState<EvaluationListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldRedirectAfterDelete, setShouldRedirectAfterDelete] =
+    useState(false);
+  const [hasRefreshedAfterDelete, setHasRefreshedAfterDelete] = useState(false);
 
   // Get processing documents as an array
   const processingDocs = Object.entries(processingDocuments)
@@ -64,6 +68,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       name: doc.name,
       startTime: doc.startTime,
     }));
+
+  const handleDeleteEvaluation = () => {
+    triggerRefresh();
+    setShouldRedirectAfterDelete(true);
+    setHasRefreshedAfterDelete(false);
+  };
 
   useEffect(() => {
     const fetchEvaluations = async () => {
@@ -78,6 +88,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEvaluations(response.data);
+
+        // Mark that we've refreshed after delete
+        if (shouldRedirectAfterDelete) {
+          setHasRefreshedAfterDelete(true);
+        }
       } catch (error) {
         console.error("Failed to fetch evaluations:", error);
       } finally {
@@ -85,11 +100,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       }
     };
     fetchEvaluations();
-  }, [refreshKey]);
+  }, [refreshKey, isOpen]);
 
-  const handleDeleteEvaluation = () => {
-    triggerRefresh();
-  };
+  useEffect(() => {
+    if (shouldRedirectAfterDelete && !isLoading && hasRefreshedAfterDelete) {
+      console.log("Evaluations:", evaluations);
+      if (evaluations && evaluations.length > 0) {
+        console.log("here");
+        navigate(`/evaluation-summary/${evaluations[0].id}`);
+      } else {
+        console.log("here 2");
+        navigate(ROUTES.default);
+      }
+      setShouldRedirectAfterDelete(false);
+      setHasRefreshedAfterDelete(false);
+    }
+  }, [
+    shouldRedirectAfterDelete,
+    isLoading,
+    hasRefreshedAfterDelete,
+    evaluations,
+  ]);
 
   return (
     <aside

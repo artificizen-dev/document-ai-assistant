@@ -79,62 +79,6 @@ const ChatArea: React.FC<ChatAreaProps> = (
     }
   };
 
-  // useEffect(() => {
-  //   const chatroomId =
-  //     currentChatroomId ||
-  //     new URLSearchParams(location.search).get("chatroom_id");
-
-  //   if (!chatroomId || !user) return;
-
-  //   const fetchMessages = async () => {
-  //     setFetchingHistory(true);
-  //     try {
-  //       const response = await axios.get(
-  //         `${backendURL}/api/chat/chat-thread/?chatroom_id=${chatroomId}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       let formattedMessages: Message[] = [];
-
-  //       if (Array.isArray(response.data)) {
-  //         const threads = response.data as ChatThread[];
-
-  //         threads.forEach((thread: ChatThread) => {
-  //           formattedMessages.push({
-  //             id: `user-${thread.id}`,
-  //             type: "user",
-  //             content: thread.user_response,
-  //             timestamp: new Date(thread.created_at),
-  //           });
-
-  //           if (thread.ai_response) {
-  //             formattedMessages.push({
-  //               id: `bot-${thread.id}`,
-  //               type: "bot",
-  //               content: thread.ai_response,
-  //               timestamp: new Date(thread.created_at),
-  //             });
-  //           }
-  //         });
-  //       } else {
-  //         console.error("Unexpected response format:", response.data);
-  //       }
-
-  //       setMessages(formattedMessages);
-  //     } catch (error) {
-  //       console.error("Failed to fetch messages:", error);
-  //     } finally {
-  //       setFetchingHistory(false);
-  //     }
-  //   };
-
-  //   fetchMessages();
-  // }, [user, token, currentChatroomId]);
-
   useEffect(() => {
     if (!currentChatroomId || currentChatroomId === "" || !user) {
       setMessages([]);

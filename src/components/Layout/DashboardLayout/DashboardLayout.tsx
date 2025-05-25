@@ -93,7 +93,7 @@ const DashboardLayout: React.FC = () => {
                     "#C271B4",
                     "#C20D90",
                   ]}
-                  referrerpolicy="no-referrer"
+                  referrerPolicy="no-referrer"
                 />
               )}
             </button>

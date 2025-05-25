@@ -218,40 +218,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // const createChatroom = async (): Promise<string | null> => {
-  //   const token = access_token();
-  //   if (!token || !state.user) return null;
-
-  //   try {
-  //     const response = await axios.post(
-  //       `${backendURL}/api/chat/chatroom/`,
-  //       {},
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const newChatroom = response.data;
-  //     dispatch({ type: "ADD_CHATROOM", payload: newChatroom });
-  //     setTimeout(() => {
-  //       dispatch({ type: "SET_CURRENT_CHATROOM", payload: newChatroom.id });
-  //     }, 1000);
-
-  //     const searchParams = new URLSearchParams(location.search);
-  //     searchParams.set("chatroom_id", newChatroom.id);
-  //     navigate(`${location.pathname}?${searchParams.toString()}`, {
-  //       replace: true,
-  //     });
-
-  //     return newChatroom.id;
-  //   } catch (error) {
-  //     console.error("Failed to create chatroom:", error);
-  //     return null;
-  //   }
-  // };
-
   const createChatroom = async (): Promise<string | null> => {
     const token = access_token();
     if (!token || !state.user) return null;

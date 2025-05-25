@@ -191,7 +191,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch({ type: "SET_EVALUATIONS", payload: response.data });
     } catch (error) {
       console.error("Failed to fetch evaluations:", error);
-      handleError("Failed to fetch documents. Please try again.");
     } finally {
       setIsLoadingEvaluations(false);
     }
@@ -214,11 +213,44 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     } catch (error) {
       console.error("Failed to fetch chatrooms:", error);
-      handleError("Failed to fetch chat history. Please try again.");
     } finally {
       setIsLoadingChatrooms(false);
     }
   };
+
+  // const createChatroom = async (): Promise<string | null> => {
+  //   const token = access_token();
+  //   if (!token || !state.user) return null;
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${backendURL}/api/chat/chatroom/`,
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     const newChatroom = response.data;
+  //     dispatch({ type: "ADD_CHATROOM", payload: newChatroom });
+  //     setTimeout(() => {
+  //       dispatch({ type: "SET_CURRENT_CHATROOM", payload: newChatroom.id });
+  //     }, 1000);
+
+  //     const searchParams = new URLSearchParams(location.search);
+  //     searchParams.set("chatroom_id", newChatroom.id);
+  //     navigate(`${location.pathname}?${searchParams.toString()}`, {
+  //       replace: true,
+  //     });
+
+  //     return newChatroom.id;
+  //   } catch (error) {
+  //     console.error("Failed to create chatroom:", error);
+  //     return null;
+  //   }
+  // };
 
   const createChatroom = async (): Promise<string | null> => {
     const token = access_token();
@@ -237,9 +269,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const newChatroom = response.data;
       dispatch({ type: "ADD_CHATROOM", payload: newChatroom });
-      setTimeout(() => {
-        dispatch({ type: "SET_CURRENT_CHATROOM", payload: newChatroom.id });
-      }, 1000);
+
+      // Set current chatroom immediately without setTimeout
+      dispatch({ type: "SET_CURRENT_CHATROOM", payload: newChatroom.id });
 
       const searchParams = new URLSearchParams(location.search);
       searchParams.set("chatroom_id", newChatroom.id);
@@ -250,7 +282,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       return newChatroom.id;
     } catch (error) {
       console.error("Failed to create chatroom:", error);
-      handleError("Failed to create a new chat. Please try again.");
       return null;
     }
   };

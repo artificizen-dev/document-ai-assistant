@@ -119,9 +119,6 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
 
           {assessmentContent && (
             <div className="mt-4">
-              <h3 className="text-md font-medium text-gray-800 mb-1">
-                {isEthics ? "Initial Feedback:" : "Initial Assessment:"}
-              </h3>
               <div className="bg-white p-3 rounded-md border border-gray-200">
                 <p className="text-gray-700">{assessmentContent}</p>
               </div>

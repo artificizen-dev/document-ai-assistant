@@ -182,6 +182,7 @@ const EvaluationResultPage: React.FC = () => {
                 weaknesses={
                   !isNewFormat ? evaluationData.weaknesses : undefined
                 }
+                category={evaluationData.category}
               />
             )}
           </EvaluationTabs>

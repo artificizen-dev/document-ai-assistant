@@ -115,3 +115,29 @@ button {
   box-shadow: var(--shadow-card);
   padding: 1.5rem;
 }
+
+.prose p {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.prose ul {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.prose li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.prose span[style*="color:red"] {
+  color: #dc2626 !important;
+  font-weight: 500;
+}
+
+/* Ensure proper spacing and readability */
+.prose * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}

@@ -126,6 +126,22 @@ const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
     }
   };
 
+  const processAnswerHTML = (answer: any) => {
+    if (!answer) return "";
+
+    // Remove the ```html wrapper if it exists
+    let cleanedAnswer = answer
+      .replace(/```html\n?/g, "")
+      .replace(/```\n?$/g, "");
+
+    // Ensure proper HTML structure
+    if (!cleanedAnswer.trim().startsWith("<")) {
+      cleanedAnswer = `<div>${cleanedAnswer}</div>`;
+    }
+
+    return cleanedAnswer;
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* PDF Document Section */}
@@ -187,8 +203,14 @@ const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
           <div>
             <h4 className="font-medium text-gray-900 mb-2">Answer:</h4>
             <div
-              className="prose prose-sm max-w-none bg-gray-50 p-3 rounded-md"
-              dangerouslySetInnerHTML={{ __html: answer }}
+              className="prose prose-sm max-w-none bg-gray-50 p-4 rounded-md border border-gray-200"
+              style={{
+                lineHeight: "1.6",
+                fontSize: "14px",
+              }}
+              dangerouslySetInnerHTML={{
+                __html: processAnswerHTML(answer),
+              }}
             />
           </div>
         </div>

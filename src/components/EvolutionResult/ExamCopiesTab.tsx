@@ -129,17 +129,85 @@ const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
   const processAnswerHTML = (answer: any) => {
     if (!answer) return "";
 
-    // Remove the ```html wrapper if it exists
-    let cleanedAnswer = answer
-      .replace(/```html\n?/g, "")
-      .replace(/```\n?$/g, "");
+    let formattedAnswer = answer;
 
-    // Ensure proper HTML structure
-    if (!cleanedAnswer.trim().startsWith("<")) {
-      cleanedAnswer = `<div>${cleanedAnswer}</div>`;
+    // Check if answer already contains HTML (starts with ```html)
+    if (formattedAnswer.includes("```html")) {
+      // Remove the ```html wrapper
+      formattedAnswer = formattedAnswer
+        .replace(/```html\n?/g, "")
+        .replace(/```\n?$/g, "");
+
+      // Replace font color tags with span classes for better styling
+      formattedAnswer = formattedAnswer
+        .replace(
+          /<font color="red">/g,
+          '<span class="text-red-600 font-medium">'
+        )
+        .replace(/<\/font>/g, "</span>");
+
+      // Add Tailwind classes to existing HTML elements
+      formattedAnswer = formattedAnswer
+        .replace(/<h1>/g, '<h1 class="text-2xl font-bold text-gray-900 mb-4">')
+        .replace(
+          /<h2>/g,
+          '<h2 class="text-xl font-semibold text-gray-800 mt-6 mb-3">'
+        )
+        .replace(
+          /<h3>/g,
+          '<h3 class="text-lg font-medium text-gray-700 mt-4 mb-2">'
+        )
+        .replace(
+          /<h4>/g,
+          '<h4 class="text-base font-medium text-gray-700 mt-3 mb-2">'
+        )
+        .replace(/<p>/g, '<p class="mb-3 text-gray-900">')
+        .replace(/<ul>/g, '<ul class="list-disc pl-6 mb-3 space-y-1">')
+        .replace(/<li>/g, '<li class="text-gray-900">');
+
+      return formattedAnswer;
     }
 
-    return cleanedAnswer;
+    // Handle plain text formatting (existing logic for non-HTML content)
+    formattedAnswer = formattedAnswer
+      // Replace double line breaks with paragraph breaks
+      .replace(/\n\n/g, "</p><p>")
+      // Replace single line breaks with <br> tags
+      .replace(/\n/g, "<br>")
+      // Handle bullet points (①②③④⑤ symbols)
+      .replace(/([①②③④⑤])/g, "<strong>$1</strong>")
+      // Handle asterisk bullet points
+      .replace(/\* /g, "• ")
+      // Handle numbered points like "1.", "2.", etc.
+      .replace(/^(\d+\.)\s/gm, "<strong>$1</strong> ")
+      // Make section headers bold (lines that end with a colon or are standalone)
+      .replace(/^([^<\n]+:)$/gm, "<strong>$1</strong>")
+      // Handle standalone section titles
+      .replace(
+        /^(British Economic policies|Negative side|Positive side)$/gm,
+        '<h4 class="font-semibold text-gray-800 mt-4 mb-2">$1</h4>'
+      )
+      // Handle quotes with proper styling
+      .replace(/"([^"]+)"/g, '<em>"$1"</em>')
+      // Handle examples (e.g. text)
+      .replace(/e\.g\./g, "<em>e.g.</em>");
+
+    // Wrap in paragraphs if not already wrapped
+    if (!formattedAnswer.includes("<p>") && !formattedAnswer.includes("<h4>")) {
+      formattedAnswer = `<p>${formattedAnswer}</p>`;
+    } else if (!formattedAnswer.startsWith("<")) {
+      formattedAnswer = `<p>${formattedAnswer}`;
+    }
+
+    // Ensure proper closing
+    if (
+      formattedAnswer.startsWith("<p>") &&
+      !formattedAnswer.endsWith("</p>")
+    ) {
+      formattedAnswer += "</p>";
+    }
+
+    return formattedAnswer;
   };
 
   return (
@@ -202,8 +270,9 @@ const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
 
           <div>
             <h4 className="font-medium text-gray-900 mb-2">Answer:</h4>
+
             <div
-              className="prose prose-sm max-w-none bg-gray-50 p-4 rounded-md border border-gray-200"
+              className="prose prose-sm max-w-none bg-gray-50 p-4 rounded-md border border-gray-200 [&>p]:mb-3 [&>h4]:text-base [&>strong]:text-gray-900 [&>em]:text-gray-700"
               style={{
                 lineHeight: "1.6",
                 fontSize: "14px",

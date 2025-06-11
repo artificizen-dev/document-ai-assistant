@@ -18,9 +18,9 @@ const LandingPage = () => {
     evaluations,
     fetchEvaluations,
     isLoadingEvaluations,
-    fetchChatrooms,
+    // fetchChatrooms,
     chatrooms,
-    isLoadingChatrooms,
+    // isLoadingChatrooms,
   } = useAppContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -52,7 +52,7 @@ const LandingPage = () => {
   useEffect(() => {
     if (user) {
       fetchEvaluations();
-      fetchChatrooms();
+      // fetchChatrooms();
     }
   }, [user]);
 
@@ -174,11 +174,13 @@ const LandingPage = () => {
               <div className="mt-auto">
                 <button
                   onClick={handleStartLearning}
-                  className="w-full bg-black text-white py-2 px-4 rounded flex items-center justify-center"
-                  disabled={isLoadingChatrooms}
+                  className="w-full bg-gray-700 text-white py-2 px-4 rounded flex items-center justify-center"
+                  // disabled={isLoadingChatrooms}
+                  disabled
                 >
-                  {isLoadingChatrooms ? "Loading" : "Start Learning"}
-                  <HiArrowRight className="h-4 w-4 ml-2" />
+                  {/* {isLoadingChatrooms ? "Loading" : "Start Learning"} */}
+                  Comming Soon
+                  {/* <HiArrowRight className="h-4 w-4 ml-2" /> */}
                 </button>
               </div>
             </div>

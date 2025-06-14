@@ -138,6 +138,7 @@ const EvaluationResultPage: React.FC = () => {
         time={formattedTime}
         documentId={evaluationData.id}
         category={evaluationData.category}
+        category_name={evaluationData.category_name}
         userFeedback={evaluationData.user_feedback}
       />
 

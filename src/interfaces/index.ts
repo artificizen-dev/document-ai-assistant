@@ -4,6 +4,7 @@ export interface EvaluationResponse {
   doc_link: string;
   question: string;
   category?: string;
+  category_name?: string;
   score_sum: string;
   answer?: string;
   created_at: string;
@@ -94,6 +95,7 @@ export interface AppState {
   };
   chatrooms: Chatroom[];
   currentChatroomId: string | null;
+  credits: Credits | null;
 }
 
 export interface AppContextType extends AppState {
@@ -124,6 +126,8 @@ export interface AppContextType extends AppState {
   createChatroom: () => Promise<string | null>;
   selectChatroom: (chatroomId: string) => void;
   isLoadingChatrooms: boolean;
+  fetchCredits: () => Promise<void>;
+  isLoadingCredits: boolean;
 }
 
 export interface EvaluationCardProps {
@@ -191,6 +195,7 @@ export interface EvaluationHeaderProps {
   time: string;
   documentId: number;
   category?: string;
+  category_name?: string;
   userFeedback: boolean | null;
 }
 
@@ -229,7 +234,8 @@ export type ActionType =
   | { type: "SET_EVALUATIONS"; payload: Evaluation[] }
   | { type: "SET_CHATROOMS"; payload: Chatroom[] }
   | { type: "ADD_CHATROOM"; payload: Chatroom }
-  | { type: "SET_CURRENT_CHATROOM"; payload: string };
+  | { type: "SET_CURRENT_CHATROOM"; payload: string }
+  | { type: "SET_CREDITS"; payload: Credits };
 
 export interface User {
   id: string;
@@ -248,6 +254,7 @@ export const initialState: AppState = {
   evaluations: [],
   chatrooms: [],
   currentChatroomId: null,
+  credits: null,
 };
 
 export interface ChatMessageProps {
@@ -298,4 +305,12 @@ export interface ChatThread {
 export interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
+export interface Credits {
+  id: number;
+  total_credits: number;
+  remaining_credits: number;
+  used_credits: number;
+  user: number;
 }

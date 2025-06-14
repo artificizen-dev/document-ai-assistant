@@ -81,6 +81,12 @@ const appReducer = (state: AppState, action: ActionType): AppState => {
         evaluations: action.payload,
       };
 
+    case "SET_CREDITS":
+      return {
+        ...state,
+        credits: action.payload,
+      };
+
     case "START_DOCUMENT_PROCESSING":
       return {
         ...state,
@@ -148,6 +154,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoadingEvaluations, setIsLoadingEvaluations] = useState(false);
   const [isLoadingChatrooms, setIsLoadingChatrooms] = useState(false);
+  const [isLoadingCredits, setIsLoadingCredits] = useState(false);
 
   const triggerRefresh = () => {
     setRefreshKey((prevKey) => prevKey + 1);
@@ -177,6 +184,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     checkAuthStatus();
     initializeSessionId();
   }, []);
+
+  const fetchCredits = async () => {
+    try {
+      setIsLoadingCredits(true);
+      const token = access_token();
+      if (!token) {
+        return;
+      }
+      const response = await axios.get(
+        `${backendURL}/api/services/check-credits/`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      dispatch({ type: "SET_CREDITS", payload: response.data });
+    } catch (error) {
+      console.error("Failed to fetch credits:", error);
+    } finally {
+      setIsLoadingCredits(false);
+    }
+  };
 
   const fetchEvaluations = async () => {
     try {
@@ -409,6 +437,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         createChatroom,
         selectChatroom,
         isLoadingChatrooms,
+        fetchCredits,
+        isLoadingCredits,
       }}
     >
       {children}

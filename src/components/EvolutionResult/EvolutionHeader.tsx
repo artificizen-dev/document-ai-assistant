@@ -11,6 +11,7 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   time,
   documentId,
   category,
+  category_name,
   userFeedback: initialUserFeedback,
 }) => {
   // Local state to manage feedback without page reload
@@ -85,6 +86,11 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
             {category && (
               <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full">
                 {category}
+              </span>
+            )}
+            {category_name && (
+              <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full">
+                {category_name}
               </span>
             )}
           </div>

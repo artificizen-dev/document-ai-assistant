@@ -160,6 +160,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     setRefreshKey((prevKey) => prevKey + 1);
   };
 
+  const isUnauthorizedError = (error: any): boolean => {
+    return (
+      error.response?.status === 401 ||
+      error.response?.data?.code === "token_not_valid" ||
+      error.response?.data?.detail?.includes("not valid") ||
+      error.response?.data?.detail?.includes("expired")
+    );
+  };
+
+  const handleUnauthorizedError = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("profileImage");
+    localStorage.removeItem("evaluationId");
+
+    dispatch({ type: "LOGOUT" });
+
+    // toast.error("Session expired. Please login again.", {
+    //   position: "top-right",
+    //   autoClose: 3000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    // });
+
+    navigate("/login");
+  };
+
   useEffect(() => {
     const checkAuthStatus = () => {
       const token = localStorage.getItem("token");
@@ -201,6 +232,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch({ type: "SET_CREDITS", payload: response.data });
     } catch (error) {
       console.error("Failed to fetch credits:", error);
+      if (isUnauthorizedError(error)) {
+        handleUnauthorizedError();
+      }
     } finally {
       setIsLoadingCredits(false);
     }
@@ -219,6 +253,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch({ type: "SET_EVALUATIONS", payload: response.data });
     } catch (error) {
       console.error("Failed to fetch evaluations:", error);
+      if (isUnauthorizedError(error)) {
+        handleUnauthorizedError();
+      }
     } finally {
       setIsLoadingEvaluations(false);
     }
@@ -241,6 +278,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     } catch (error) {
       console.error("Failed to fetch chatrooms:", error);
+      if (isUnauthorizedError(error)) {
+        handleUnauthorizedError();
+      }
     } finally {
       setIsLoadingChatrooms(false);
     }
@@ -276,6 +316,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       return newChatroom.id;
     } catch (error) {
       console.error("Failed to create chatroom:", error);
+      if (isUnauthorizedError(error)) {
+        handleUnauthorizedError();
+      }
       return null;
     }
   };

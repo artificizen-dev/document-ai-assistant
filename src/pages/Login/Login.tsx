@@ -177,6 +177,7 @@ const LoginPage: React.FC = () => {
         email: user.email,
         username: user.displayName,
         avatar: user.photoURL,
+        session_id: session_id,
       });
 
       console.log("Google login response:", response.data);

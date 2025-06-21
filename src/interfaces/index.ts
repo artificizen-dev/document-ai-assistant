@@ -16,6 +16,7 @@ export interface EvaluationResponse {
   weaknesses?: { [key: string]: any };
   improvements?: { [key: string]: any };
   scores?: { [key: string]: number };
+  instruction_analyses?: string;
   llm_response?: {
     Evaluation?: EvaluationCategory[];
     "Evaluation-P1"?: EvaluationCategory[];
@@ -23,6 +24,7 @@ export interface EvaluationResponse {
       overall_feedback?: string[];
       suggested_improvements?: string[];
     };
+    instructional_analyses?: string;
   };
 }
 

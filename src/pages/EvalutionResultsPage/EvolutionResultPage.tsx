@@ -116,19 +116,31 @@ const EvaluationResultPage: React.FC = () => {
   }
 
   const isNewFormat = !!evaluationData.llm_response;
+  console.log("is new response is", isNewFormat);
 
-  const overallScore = isNewFormat
-    ? evaluationData.score_sum
-    : (() => {
-        const scoreValues = Object.values(evaluationData.scores || {});
-        return scoreValues.length > 0
-          ? scoreValues.reduce((sum, score) => sum + score, 0)
-          : 0;
-      })();
+  // const overallScore = isNewFormat
+  //   ? evaluationData.score_sum
+  //   : (() => {
+  //       const scoreValues = Object.values(evaluationData.scores || {});
+  //       return scoreValues.length > 0
+  //         ? scoreValues.reduce((sum, score) => sum + score, 0)
+  //         : 0;
+  //     })();
+  const overallScore =
+    isNewFormat || isSessionUser
+      ? parseFloat(evaluationData.score_sum || "0")
+      : (() => {
+          const scoreValues = Object.values(evaluationData.scores || {});
+          return scoreValues.length > 0
+            ? scoreValues.reduce((sum, score) => sum + score, 0)
+            : 0;
+        })();
 
   const createdDate = new Date(evaluationData.created_at);
   const formattedDate = createdDate.toLocaleDateString();
   const formattedTime = createdDate.toLocaleTimeString();
+
+  console.log("Evaluation Data:", evaluationData);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
@@ -147,7 +159,14 @@ const EvaluationResultPage: React.FC = () => {
         documentCount={1}
         documentType="exam copy"
         category={evaluationData.category}
-        llm_response={isNewFormat ? evaluationData.llm_response : undefined}
+        // llm_response={isNewFormat ? evaluationData.llm_response : undefined}
+        llm_response={
+          isNewFormat
+            ? evaluationData.llm_response
+            : isSessionUser
+            ? { instructional_analyses: evaluationData.instruction_analyses }
+            : undefined
+        }
       />
 
       {isSessionUser ? (

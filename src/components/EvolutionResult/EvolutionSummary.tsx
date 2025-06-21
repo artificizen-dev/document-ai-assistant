@@ -31,11 +31,18 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
   const scorePercentage = (numericScore / 10) * 100;
   const isEthics = category === "Ethics";
 
+  // const assessmentContent = isEthics
+  //   ? llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.["Feedback"]
+  //   : llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.[
+  //       "Instruction Analyses"
+  //     ];
+
   const assessmentContent = isEthics
-    ? llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.["Feedback"]
+    ? llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.["Feedback"] ||
+      llm_response?.instructional_analyses
     : llm_response?.["Evaluation-P1"]?.[0]?.items?.[0]?.[
         "Instruction Analyses"
-      ];
+      ] || llm_response?.instructional_analyses;
 
   const getScoreColors = (score: number) => {
     if (score >= 0 && score <= 39) {

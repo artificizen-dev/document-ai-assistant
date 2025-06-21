@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
-import Footer from "../../Dashboard/footer/Footer";
+// import Footer from "../../Dashboard/footer/Footer";
 import { FiLogOut, FiUser, FiMail, FiLogIn } from "react-icons/fi";
 import { useAppContext } from "../../../Providers/AppContext";
 import ROUTES from "../../../routes";
@@ -152,7 +152,7 @@ const DashboardLayout: React.FC = () => {
           </main>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 // import Footer from "../../Dashboard/footer/Footer";
@@ -7,6 +7,7 @@ import { FiLogOut, FiUser, FiMail, FiLogIn } from "react-icons/fi";
 import { useAppContext } from "../../../Providers/AppContext";
 import ROUTES from "../../../routes";
 import Avatar from "boring-avatars";
+import mainLogo from "../../../assets/main-logo.png";
 
 const DashboardLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -61,10 +62,10 @@ const DashboardLayout: React.FC = () => {
     <div className="flex flex-col h-screen bg-white">
       {/* Top Header */}
       <header className="w-full bg-white border-b border-gray-200 px-4 py-1">
-        <div className="flex justify-end items-center">
-          {/* <h2 className="md:text-2xl text-xl font-medium">
-            {getHeaderTitle()}
-          </h2> */}
+        <div className="flex justify-between items-center py-2">
+          <Link to={ROUTES.home}>
+            <img src={mainLogo} alt="logo" className="h-8" />
+          </Link>
 
           {/* User Avatar with Dropdown */}
           <div className="relative" ref={dropdownRef}>

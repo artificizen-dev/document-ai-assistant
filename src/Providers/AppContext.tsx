@@ -405,6 +405,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("profileImage");
     localStorage.removeItem("evaluationId");
+    localStorage.removeItem("transaction_id");
+    localStorage.removeItem("client_code");
+    localStorage.removeItem("enc_data");
 
     dispatch({ type: "LOGOUT" });
   };

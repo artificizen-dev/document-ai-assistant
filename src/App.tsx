@@ -8,12 +8,15 @@ import EvaluatePage from "./pages/EvaluationPage/EvaluationPage";
 import EvaluationResultPage from "./pages/EvalutionResultsPage/EvolutionResultPage";
 import LoginPage from "./pages/Login/Login";
 import SignupPage from "./pages/Signup/Signup";
+import HomePage from "./pages/HomePage/HomePage";
+import PaymentSuccessPage from "./pages/PaymentSuccess/PaymentSuccessPage";
 
 function App() {
   return (
     <Routes>
       {/* Public routes */}
       <Route path={ROUTES.default} element={<LandingPage />} />
+      <Route path={ROUTES.home} element={<HomePage />} />
       <Route path={ROUTES.login} element={<LoginPage />} />
       <Route path={ROUTES.signup} element={<SignupPage />} />
 
@@ -26,6 +29,12 @@ function App() {
         />
       </Route>
       <Route path={ROUTES.newChat} element={<LearnPage />}></Route>
+
+      {/* Payment success page */}
+      <Route
+        path={ROUTES.paymentSuccess}
+        element={<PaymentSuccessPage />} // Placeholder for PaymentSuccessPage component
+      />
 
       {/* Fallback route for undefined paths */}
       <Route path="*" element={<Navigate to={ROUTES.default} replace />} />

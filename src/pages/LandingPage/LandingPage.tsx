@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoBookOutline } from "react-icons/io5";
 import { MdOutlineAssessment } from "react-icons/md";
 import { HiArrowRight } from "react-icons/hi";
@@ -8,6 +8,7 @@ import Footer from "../../components/Dashboard/footer/Footer";
 import ROUTES from "../../routes";
 import { useAppContext } from "../../Providers/AppContext";
 import Avatar from "boring-avatars";
+import mainLogo from "../../assets/main-logo.png";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -68,10 +69,10 @@ const LandingPage = () => {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="w-full bg-white border-b border-gray-200 py-2 px-4">
-        <div className="flex justify-end items-center">
-          {/* <h2 className="md:text-2xl text-xl font-medium">
-            Document AI Assistant
-          </h2> */}
+        <div className="flex justify-between items-center">
+          <Link to={ROUTES.home}>
+            <img src={mainLogo} alt="logo" className="h-8" />
+          </Link>
 
           {/* User Avatar with Dropdown */}
           <div className="relative" ref={dropdownRef}>

@@ -132,7 +132,6 @@ const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
         const form = document.createElement("form");
         form.method = "POST";
         form.action = data.payment_url;
-        debugger;
 
         // Add enc_data field
         const encDataInput = document.createElement("input");

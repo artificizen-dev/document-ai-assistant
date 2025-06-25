@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAppContext } from "../../Providers/AppContext";
 import { access_token, backendURL } from "../../utils/constants";
 
 const PaymentSuccessPage = () => {
+  const [searchParams] = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState<
     "processing" | "success" | "error"
@@ -12,10 +14,9 @@ const PaymentSuccessPage = () => {
   useEffect(() => {
     const processPayment = async () => {
       try {
-        // Get enc_data from localStorage
-        const encData = localStorage.getItem("enc_data");
+        const clientTxnId = searchParams.get("clientTxnId");
 
-        if (!encData) {
+        if (!clientTxnId) {
           setPaymentStatus("error");
           setIsProcessing(false);
           return;
@@ -23,9 +24,9 @@ const PaymentSuccessPage = () => {
 
         const token = access_token();
 
-        // First API call to /api/payments/response/
-        const responseCall = await fetch(
-          `${backendURL}/api/payments/response/`,
+        // Call check-status API
+        const statusCall = await fetch(
+          `${backendURL}/api/payments/check-status/`,
           {
             method: "POST",
             headers: {
@@ -33,38 +34,15 @@ const PaymentSuccessPage = () => {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              encResponse: encData,
+              clientTxnId: clientTxnId,
             }),
           }
         );
 
-        if (responseCall.ok) {
-          const responseData = await responseCall.json();
-
-          // Second API call to /api/payments/check-status/
-          const statusCall = await fetch(
-            `${backendURL}/api/payments/check-status/`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                clientTxnId: responseData.clientTxnId,
-              }),
-            }
-          );
-
-          if (statusCall.ok) {
-            setPaymentStatus("success");
-            // Refresh credits after successful payment
-            fetchCredits();
-            // Clear enc_data from localStorage
-            localStorage.removeItem("enc_data");
-          } else {
-            setPaymentStatus("error");
-          }
+        if (statusCall.ok) {
+          setPaymentStatus("success");
+          // Refresh credits after successful payment
+          fetchCredits();
         } else {
           setPaymentStatus("error");
         }
@@ -77,7 +55,7 @@ const PaymentSuccessPage = () => {
     };
 
     processPayment();
-  }, [fetchCredits]);
+  }, [searchParams, fetchCredits]);
 
   if (isProcessing) {
     return (

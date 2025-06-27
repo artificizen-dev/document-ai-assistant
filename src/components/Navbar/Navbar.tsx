@@ -109,9 +109,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
     fetchCredits();
   }, []);
 
-  const handleBuyCredits = () => {
-    setShowBuyModal(true);
-  };
+  // const handleBuyCredits = () => {
+  //   setShowBuyModal(true);
+  // };
 
   const handleCloseBuyModal = () => {
     setShowBuyModal(false);
@@ -169,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               </div>
 
               {/* Buy Now Button or New Evaluation Button */}
-              {credits?.remaining_credits === 0 ? (
+              {/* {credits?.remaining_credits === 0 ? (
                 <button
                   onClick={handleBuyCredits}
                   className="bg-red-500 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-red-600 transition-colors"
@@ -183,7 +183,18 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 >
                   <FiPlus size={16} className="mr-1" /> New Evaluation
                 </button>
-              )}
+              )} */}
+              <button
+                onClick={() => navigate(ROUTES.evaluate)}
+                disabled={credits?.remaining_credits === 0}
+                className={`flex items-center py-1 px-1 rounded-md transition-all duration-200 border ${
+                  credits?.remaining_credits === 0
+                    ? "border-gray-100 text-gray-300 cursor-not-allowed"
+                    : "border-gray-200 text-gray-600 hover:text-black hover:border-gray-300"
+                }`}
+              >
+                <FiPlus size={16} className="mr-1" /> New Evaluation
+              </button>
             </div>
           )}
         </div>

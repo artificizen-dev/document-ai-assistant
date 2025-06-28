@@ -306,7 +306,7 @@ const LoginPage: React.FC = () => {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={formData.password}
                 onChange={handleChange}
                 className={`pl-10 w-full py-2 px-3 border ${

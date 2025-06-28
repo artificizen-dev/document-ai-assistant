@@ -8,7 +8,7 @@ export const ROUTES = {
   "evalution-summary": "/evaluation-summary/:id",
   chat: "/learn/chat",
   newChat: "/learn/chat",
-  paymentSuccess: "/payment/success",
+  paymentSuccess: "/payment/status",
 };
 
 export default ROUTES;

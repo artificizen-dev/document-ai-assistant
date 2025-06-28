@@ -328,6 +328,7 @@ const SignupPage: React.FC = () => {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiLock className="text-gray-400" />
               </div>
+              <input type="password" className="hidden" />
               <input
                 id="password"
                 name="password"

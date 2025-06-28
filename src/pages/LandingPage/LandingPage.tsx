@@ -4,7 +4,7 @@ import { IoBookOutline } from "react-icons/io5";
 import { MdOutlineAssessment } from "react-icons/md";
 import { HiArrowRight } from "react-icons/hi";
 import { FiLogOut, FiUser, FiMail, FiLogIn } from "react-icons/fi";
-import Footer from "../../components/Dashboard/footer/Footer";
+// import Footer from "../../components/Dashboard/footer/Footer";
 import ROUTES from "../../routes";
 import { useAppContext } from "../../Providers/AppContext";
 import Avatar from "boring-avatars";
@@ -223,7 +223,7 @@ const LandingPage = () => {
         </div>
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

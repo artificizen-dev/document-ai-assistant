@@ -128,7 +128,7 @@ const SignupPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        navigate(ROUTES.home);
       }
     } catch (error: any) {
       console.error("Signup error:", error);
@@ -208,7 +208,7 @@ const SignupPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        navigate(ROUTES.home);
       }
     } catch (error: any) {
       console.error("Google signup error:", error);

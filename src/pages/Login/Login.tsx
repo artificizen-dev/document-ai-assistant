@@ -123,7 +123,7 @@ const LoginPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        navigate(ROUTES.home);
       }
     } catch (error: any) {
       console.error("Login error:", error);
@@ -213,7 +213,7 @@ const LoginPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        navigate(ROUTES.home);
       }
     } catch (error: any) {
       console.error("Google login error:", error);

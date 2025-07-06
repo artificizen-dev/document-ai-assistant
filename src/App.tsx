@@ -40,7 +40,7 @@
 
 // export default App;
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import "./App.css";
 import ROUTES from "./routes";
@@ -58,16 +58,16 @@ function App() {
   const isProduction = import.meta.env.VITE_Environment === "production";
   const hostname = window.location.hostname;
   const isOracleDomain = hostname === "oracle.squirkle.xyz";
+  const location = useLocation();
 
   useEffect(() => {
     if (!isProduction) return;
 
-    const currentPath = window.location.pathname;
-    if (currentPath === "/main") {
+    if (location.pathname === "/main") {
       window.location.href = "https://oracle.squirkle.xyz/";
       return;
     }
-  }, [isProduction]);
+  }, [isProduction, location.pathname]);
 
   const getRootComponent = () => {
     if (isProduction && isOracleDomain) {

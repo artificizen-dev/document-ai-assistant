@@ -104,6 +104,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const token = access_token();
   const { credits, isLoadingCredits, fetchCredits } = useAppContext();
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const isProduction = import.meta.env.VITE_Environment === "production";
 
   useEffect(() => {
     fetchCredits();
@@ -134,7 +135,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             </button>
 
             <button
-              onClick={() => navigate(ROUTES.default)}
+              onClick={() =>
+                navigate(isProduction ? ROUTES.home : ROUTES.default)
+              }
               className="flex items-center text-gray-600 hover:text-black"
             >
               <FiArrowLeft size={16} className="mr-2" /> Back to Home

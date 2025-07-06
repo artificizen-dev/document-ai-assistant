@@ -37,6 +37,7 @@ const SignupPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const documentId = localStorage.getItem("evaluationId");
+  const isProduction = import.meta.env.VITE_Environment === "production";
 
   const validateForm = (): boolean => {
     const newErrors: AuthError = {};
@@ -128,7 +129,11 @@ const SignupPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.home);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Signup error:", error);
@@ -208,7 +213,11 @@ const SignupPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.home);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Google signup error:", error);

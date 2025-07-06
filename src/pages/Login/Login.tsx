@@ -21,6 +21,7 @@ const LoginPage: React.FC = () => {
   } = useAppContext();
   const session_id = localStorage.getItem("sessionId");
   const documentId = localStorage.getItem("evaluationId");
+  const isProduction = import.meta.env.VITE_Environment === "production";
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -123,7 +124,11 @@ const LoginPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.home);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Login error:", error);
@@ -213,7 +218,11 @@ const LoginPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.home);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Google login error:", error);

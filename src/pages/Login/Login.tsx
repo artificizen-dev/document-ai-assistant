@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiMail, FiLock, FiAlertCircle, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiAlertCircle, FiEye, FiEyeOff } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { AuthError, LoginFormData, User } from "../../interfaces";
 import { backendURL } from "../../utils/constants";
@@ -9,16 +9,13 @@ import axios from "axios";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAppContext } from "../../Providers/AppContext";
 import { app } from "../../utils/firebase";
-import { FaHome } from "react-icons/fa";
+import background from "../../assets/login-bg.png";
+import LayoutFooter from "../../components/LayoutFooter/LayoutFooter";
+import logo from "../../assets/main-logo.png";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const {
-    login,
-    // handleSuccess,
-    // handleError,
-    setLoading,
-  } = useAppContext();
+  const { login, setLoading } = useAppContext();
   const session_id = localStorage.getItem("sessionId");
   const documentId = localStorage.getItem("evaluationId");
   const isProduction = import.meta.env.VITE_Environment === "production";
@@ -102,25 +99,17 @@ const LoginPage: React.FC = () => {
           "",
       };
 
-      // Get access token
       const accessToken = response.data.access || response.data.token || "";
 
-      // Store profile image if available
       if (response.data.profile_image) {
         localStorage.setItem("profileImage", response.data.profile_image);
       }
 
-      // Store refresh token if available
       if (response.data.refresh) {
         localStorage.setItem("refreshToken", response.data.refresh);
       }
 
-      // Login using the context - this will update global state and localStorage
       login(accessToken, userData);
-
-      // handleSuccess("Login successful!");
-
-      // Navigate to default route after successful login
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
@@ -137,19 +126,16 @@ const LoginPage: React.FC = () => {
           setErrors({
             email: error.response.data.email,
           });
-          // handleError(error.response.data.email);
         } else if (error.response.data.password) {
           setErrors({
             password: error.response.data.password,
           });
-          // handleError(error.response.data.password);
         } else {
           const errorMessage =
             error.response.data.message || "Invalid email or password";
           setErrors({
             general: errorMessage,
           });
-          // handleError(errorMessage);
         }
       } else {
         const errorMessage =
@@ -157,7 +143,6 @@ const LoginPage: React.FC = () => {
         setErrors({
           general: errorMessage,
         });
-        // handleError(errorMessage);
       }
     } finally {
       setIsLoading(false);
@@ -174,10 +159,8 @@ const LoginPage: React.FC = () => {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
 
-      // Get user info from Google
       const user = result.user;
 
-      // Send user data to your backend
       const response = await axios.post(`${backendURL}/api/users/social/`, {
         email: user.email,
         username: user.displayName,
@@ -214,7 +197,6 @@ const LoginPage: React.FC = () => {
 
       login(accessToken, userData);
 
-      // handleSuccess("Login with Google successful!");
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
@@ -228,7 +210,6 @@ const LoginPage: React.FC = () => {
       console.error("Google login error:", error);
       const errorMessage =
         error.message || "Google login failed. Please try again.";
-      // handleError(errorMessage);
       console.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -241,151 +222,189 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
-        <div className="my-0">
-          <Link
-            to={ROUTES.default}
-            className="inline-flex items-center gap-1 text-gray-800 hover:text-black transition-colors duration-200 font-medium"
-          >
-            <FaHome size={18} />
-            <span className="flex items-center">Home</span>
-          </Link>
+    <div className="min-h-screen flex bg-gradient-to-r from-[#DDE5E4] to-[#e8f4f0] relative">
+      <div className="hidden lg:flex lg:flex-1 relative">
+        <div
+          className="absolute inset-0 bg-cover  bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${background})` }}
+        >
+          <div className="absolute inset-0"></div>
         </div>
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Welcome Back
-          </h1>
-          <p className="text-gray-600">
-            Log in to your Document AI Assistant account
-          </p>
-        </div>
-
-        {errors.general && (
-          <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
-            <div className="flex items-center">
-              <FiAlertCircle className="text-red-400 mr-2" />
-              <p className="text-red-700 text-sm">{errors.general}</p>
-            </div>
-          </div>
-        )}
-
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Email Address
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FiMail className="text-gray-400" />
-              </div>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`pl-10 w-full py-2 px-3 border ${
-                  errors.email ? "border-red-300" : "border-gray-300"
-                } rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent`}
-                placeholder="you@example.com"
-              />
-            </div>
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Password
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FiLock className="text-gray-400" />
-              </div>
-              <input type="password" className="hidden" />
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="new-password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`pl-10 w-full py-2 px-3 border ${
-                  errors.password ? "border-red-300" : "border-gray-300"
-                } rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent`}
-                placeholder="••••••••"
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? (
-                  <FiEyeOff className="text-gray-400 hover:text-gray-600" />
-                ) : (
-                  <FiEye className="text-gray-400 hover:text-gray-600" />
-                )}
-              </div>
-            </div>
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black ${
-              isLoading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
-          >
-            {isLoading ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
-
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">
-              Or continue with
-            </span>
+        <div className="relative z-10 flex flex-col justify-center px-16 py-24">
+          <div className="mb-8">
+            <p className="text-[#6B7280] text-sm font-['Funnel_Sans'] tracking-wide mb-6">
+              A SMART LEARNING SPACE GUIDED BY AI PROFESSORS.
+            </p>
+            <h1 className="text-6xl font-['Funnel_Sans'] font-bold text-[#1F2937] leading-tight">
+              Learn Smarter.
+              <br />
+              <span className="text-[#4B5563]">Evaluate Faster.</span>
+            </h1>
+            <p className="text-[#6B7280] text-lg font-['Funnel_Sans'] mt-6 max-w-md leading-relaxed">
+              A smart learning space guided by AI professors, designed for
+              students to learn in their own shape, at their own pace.
+            </p>
           </div>
         </div>
+      </div>
 
-        <div>
+      {/* Right Side - Login Form */}
+      <div className="flex-1 flex items-center justify-center px-4 lg:px-8">
+        <div className="max-w-md w-full  bg-[#FFFFFF] p-5 rounded-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center mb-6">
+              <img src={logo} alt="logo" />
+            </div>
+            <h2 className="text-2xl font-['Grosteque'] font-bold text-[#1F2937] mb-2">
+              Welcome back
+            </h2>
+          </div>
+
+          {/* Google Sign In Button */}
           <button
             type="button"
             onClick={handleGoogleLogin}
             disabled={isLoading}
-            className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-[#E5E7EB] rounded-xl shadow-sm text-sm font-['Funnel_Sans'] font-medium text-[#374151] bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1F2937] transition-all duration-200 mb-6"
           >
             <FcGoogle className="h-5 w-5" />
-            Google
+            Sign in with Google
           </button>
-        </div>
 
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <Link
-              to={ROUTES.signup}
-              className="font-medium text-black hover:underline"
+          {/* Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#E5E7EB]"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-transparent text-[#9CA3AF] font-['Funnel_Sans']">
+                Or sign in with email
+              </span>
+            </div>
+          </div>
+
+          {/* Error Message */}
+          {errors.general && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+              <div className="flex items-center">
+                <FiAlertCircle className="text-red-400 mr-2" />
+                <p className="text-red-700 text-sm font-['Funnel_Sans']">
+                  {errors.general}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Form */}
+          <div className="space-y-6">
+            {/* Email Field */}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-['Funnel_Sans'] font-medium text-[#374151] mb-2"
+              >
+                Email
+              </label>
+              <div className="relative">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`w-full py-3 px-4 border ${
+                    errors.email ? "border-red-300" : "border-[#E5E7EB]"
+                  } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F2937] focus:border-transparent bg-white font-['Funnel_Sans'] text-[#1F2937] placeholder-[#9CA3AF] transition-all duration-200`}
+                  placeholder="Enter your email"
+                />
+              </div>
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600 font-['Funnel_Sans']">
+                  {errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-['Funnel_Sans'] font-medium text-[#374151] mb-2"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full py-3 px-4 pr-12 border ${
+                    errors.password ? "border-red-300" : "border-[#E5E7EB]"
+                  } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F2937] focus:border-transparent bg-white font-['Funnel_Sans'] text-[#1F2937] placeholder-[#9CA3AF] transition-all duration-200`}
+                  placeholder="••••••••"
+                />
+                <div
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <FiEyeOff className="text-[#9CA3AF] hover:text-[#6B7280] transition-colors duration-200" />
+                  ) : (
+                    <FiEye className="text-[#9CA3AF] hover:text-[#6B7280] transition-colors duration-200" />
+                  )}
+                </div>
+              </div>
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-600 font-['Funnel_Sans']">
+                  {errors.password}
+                </p>
+              )}
+
+              <div className="flex justify-end mt-2">
+                <button
+                  type="button"
+                  className="text-sm text-[#9CA3AF] hover:text-[#6B7280] font-['Funnel_Sans'] transition-colors duration-200"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className={`w-full py-3 px-4 rounded-xl shadow-sm text-sm font-['Funnel_Sans'] font-medium text-white bg-[#1F2937] hover:bg-[#111827] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1F2937] transition-all duration-200 ${
+                isLoading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Sign up
-            </Link>
-          </p>
+              {isLoading ? "Signing in..." : "Sign in"}
+            </button>
+          </div>
+
+          {/* Sign Up Link */}
+          <div className="text-center mt-6">
+            <p className="text-sm text-[#6B7280] font-['Funnel_Sans']">
+              Already have an account?{" "}
+              <Link
+                to={ROUTES.signup}
+                className="font-medium text-[#1F2937] hover:underline transition-colors duration-200"
+              >
+                Sign up
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <LayoutFooter />
     </div>
   );
 };

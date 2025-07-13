@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { FiClock, FiFileText } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
+import { HiOutlineCloudUpload } from "react-icons/hi";
 
 const ProcessingLoader: React.FC<{ documents: any }> = ({ documents }) => {
   const [, forceUpdate] = useState({});
@@ -25,46 +26,119 @@ const ProcessingLoader: React.FC<{ documents: any }> = ({ documents }) => {
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center py-10">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-        <div className="flex flex-col items-center mb-6">
-          <div className="relative w-24 h-24 mb-4">
-            <div className="absolute inset-0 border-t-4 border-gray-200 rounded-full animate-spin"></div>
-            <div className="absolute inset-0 border-t-4 border-black rounded-full animate-pulse"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <FiFileText className="w-10 h-10 text-gray-700" />
+    <div className="min-h-screen bg-gradient-to-br from-[#DDE5E4] to-[#e8f4f0] flex items-center justify-center px-6">
+      <div className="max-w-lg w-full text-center">
+        {/* Header Text */}
+        <div className="mb-12">
+          <h1 className="text-4xl font-['Grosteque'] font-bold text-[#1F2937] mb-4">
+            Evaluating
+            <br />
+            in progress...
+          </h1>
+        </div>
+
+        {/* Animated Card Container */}
+        <div className="relative mb-12">
+          <div className="relative w-64 h-64 mx-auto">
+            {/* Static Background Cards */}
+            <div className="absolute -left-8 top-4 w-48 h-56 bg-white/60 rounded-3xl shadow-lg transform -rotate-12"></div>
+            <div className="absolute -right-8 top-4 w-48 h-56 bg-white/60 rounded-3xl shadow-lg transform rotate-12"></div>
+
+            {/* Main Card with Animated Border */}
+            <div className="relative w-64 h-64">
+              {/* Rotating Border Effect */}
+              <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                <div
+                  className="absolute inset-0 rounded-3xl animate-spin"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg, transparent 0deg, transparent 270deg, #10B981 360deg)",
+                    padding: "3px",
+                  }}
+                >
+                  <div className="w-full h-full bg-white rounded-3xl"></div>
+                </div>
+              </div>
+
+              {/* Static White Card Content */}
+              <div className="absolute inset-3 bg-white rounded-3xl shadow-lg flex flex-col items-center justify-center">
+                {/* Document Icon */}
+                <div className="relative">
+                  <div className="w-16 h-20 bg-gray-100 rounded-lg border-2 border-gray-200 flex flex-col items-center justify-center">
+                    {/* Document lines */}
+                    <div className="space-y-1.5">
+                      <div className="w-8 h-0.5 bg-gray-400 rounded"></div>
+                      <div className="w-6 h-0.5 bg-gray-400 rounded"></div>
+                      <div className="w-7 h-0.5 bg-gray-400 rounded"></div>
+                      <div className="w-5 h-0.5 bg-gray-400 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <h2 className="text-xl font-semibold text-center">
-            Evaluating Documents
-          </h2>
-          <p className="text-gray-500 text-center mt-2">
-            We're analyzing your documents. This may take a few minutes.
+        </div>
+
+        {/* Status Text */}
+        <div className="mb-12">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <HiOutlineCloudUpload className="w-5 h-5 text-[#6B7280]" />
+            <p className="text-lg font-['Funnel_Sans'] text-[#6B7280]">
+              Please wait...
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom Text */}
+        <div className="max-w-md mx-auto">
+          <p className="text-[#6B7280] font-['Funnel_Sans'] leading-relaxed">
+            You can navigate to other parts of the application while we process
+            your documents. We'll notify you when they're ready.
           </p>
         </div>
 
-        <div className="space-y-3 mt-6">
-          {processingDocs.map((doc: any) => (
-            <div
-              key={doc.name}
-              className="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200"
-            >
-              <FiClock className="text-yellow-500 mr-3" />
-              <div className="flex-1">
-                <p className="font-medium text-sm truncate">{doc.name}</p>
-                <p className="text-xs text-gray-500">
-                  Processing for {formatTimeSince(doc.startTime)}
-                </p>
-              </div>
+        {/* Processing Documents List (if needed) */}
+        {processingDocs.length > 0 && (
+          <div className="mt-8 bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+            <h3 className="text-sm font-['Funnel_Sans'] font-medium text-[#374151] mb-4">
+              Processing Documents
+            </h3>
+            <div className="space-y-3">
+              {processingDocs.map((doc: any) => (
+                <div
+                  key={doc.name}
+                  className="flex items-center p-3 bg-white rounded-xl border border-[#E5E7EB]"
+                >
+                  <FiClock className="text-[#10B981] mr-3 w-4 h-4" />
+                  <div className="flex-1 text-left">
+                    <p className="font-['Funnel_Sans'] font-medium text-sm text-[#1F2937] truncate">
+                      {doc.name}
+                    </p>
+                    <p className="text-xs text-[#6B7280] font-['Funnel_Sans']">
+                      Processing for {formatTimeSince(doc.startTime)}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-
-        <p className="text-xs text-gray-500 mt-6 text-center">
-          You can navigate to other parts of the application while we process
-          your documents. We'll notify you when they're ready.
-        </p>
+          </div>
+        )}
       </div>
+
+      <style>{`
+        @keyframes borderRotate {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        
+        .animate-border {
+          animation: borderRotate 3s linear infinite;
+        }
+      `}</style>
     </div>
   );
 };

@@ -10,7 +10,7 @@ const EvaluatePage: React.FC = () => {
 
   return (
     <section className="min-h-[85vh] flex items-center justify-center">
-      <div className="max-w-3xl mx-auto py-6 px-4">
+      <div className=" mx-auto py-6 px-4">
         <FileUpload onFilesSelected={handleFilesSelected} files={files} />
       </div>
     </section>

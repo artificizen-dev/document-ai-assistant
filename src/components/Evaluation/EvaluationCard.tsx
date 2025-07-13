@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { FiFileText, FiTrash2 } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { FiTrash2 } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
 import { EvaluationCardProps } from "../../interfaces";
 import axios from "axios";
 import { backendURL, access_token } from "../../utils/constants";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import pdfView from "../../assets/pdf.png";
+import { FaChevronRight } from "react-icons/fa";
 
 const EvaluationCard: React.FC<EvaluationCardProps> = ({
   id,
@@ -16,6 +18,8 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const currentID = useParams<{ id: string }>().id;
+  console.log("Current ID:", currentID);
 
   const formatDate = (dateString: string) => {
     try {
@@ -56,33 +60,38 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({
       setIsDeleting(false);
     }
   };
+  const isActive = currentID === id.toString();
 
   return (
     <>
       <div
-        className="bg-gray-100 rounded-lg p-3 mb-3 cursor-pointer hover:bg-gray-200 transition-colors relative group"
+        className={`rounded-lg p-3 py-4 mb-3 cursor-pointer transition-colors relative group ${
+          isActive ? "bg-white/20" : "bg-[#5E5E5E2E]/82 hover:bg-gray-200"
+        }`}
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="flex items-start">
-          <div className="bg-gray-200 p-2 rounded mr-3">
-            <FiFileText className="text-gray-600" size={16} />
+          <div className="mr-3">
+            <img src={pdfView} alt="pdf" className="w-[25px] h-[30px]" />
           </div>
-          <div className="w-full">
-            <h3 className="font-medium text-xs">Evaluation: {docName}</h3>
-            <div className="text-xs text-gray-500 mt-0.5">
-              <span>{formattedDate}</span>
+          <div className="w-full flex justify-between items-center">
+            <div>
+              <h3 className="font-medium text-xs">Evaluation: {docName}</h3>
+              <div className="text-xs text-gray-500 mt-0.5">
+                <span>{formattedDate}</span>
+              </div>
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full pr-1">
-              <span>1 document</span>
+            <div>
+              <FaChevronRight className="text-[#9c9a9a]" />
             </div>
           </div>
         </div>
 
         {/* Delete icon that appears on hover */}
         <div
-          className={`absolute right-2 bottom-2 transition-opacity duration-200 ${
+          className={`absolute right-2 bottom-0 transition-opacity duration-200 ${
             isHovered ? "opacity-100" : "opacity-0"
           }`}
         >

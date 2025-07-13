@@ -8,6 +8,7 @@ import EvaluationCard from "../Evaluation/EvaluationCard";
 import { EvaluationListItem, SidebarProps } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../routes";
+import dochistory from "../../assets/history-doc.png";
 
 const ProcessingCard: React.FC<{
   id: string;
@@ -124,7 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <aside
-      className={`bg-white border-r border-gray-200 transition-all duration-300 md:relative absolute z-20 md:h-auto h-full ${
+      className={`shadow-2xl border-r border-gray-200 transition-all duration-300 md:relative absolute z-20 md:h-auto h-full ${
         isOpen ? "md:w-70 w-60" : "w-0 overflow-hidden"
       }`}
     >
@@ -137,7 +138,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       </button>
 
       <div className="flex flex-col h-full p-4 overflow-auto">
-        <h2 className="font-medium text-gray-800 mb-4">Evaluation History</h2>
+        <div className="flex gap-2 items-center align-center mb-4">
+          <img src={dochistory} alt="docs" />
+          <h2 className="font-medium text-gray-800">Evaluation History</h2>
+        </div>
 
         {isLoading ? (
           <div className="flex items-center justify-center py-10">

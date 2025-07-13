@@ -146,7 +146,7 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
                 fontWeight="bold"
                 fill="#000000"
               >
-                {numericScore}
+                {Math.round(numericScore)}
               </text>
             </svg>
           </div>

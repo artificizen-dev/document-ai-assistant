@@ -21,6 +21,7 @@ const LoginPage: React.FC = () => {
   } = useAppContext();
   const session_id = localStorage.getItem("sessionId");
   const documentId = localStorage.getItem("evaluationId");
+  const isProduction = import.meta.env.VITE_Environment === "production";
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -123,7 +124,11 @@ const LoginPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Login error:", error);
@@ -213,7 +218,11 @@ const LoginPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Google login error:", error);
@@ -302,11 +311,12 @@ const LoginPage: React.FC = () => {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiLock className="text-gray-400" />
               </div>
+              <input type="password" className="hidden" />
               <input
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={formData.password}
                 onChange={handleChange}
                 className={`pl-10 w-full py-2 px-3 border ${

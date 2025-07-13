@@ -37,6 +37,7 @@ const SignupPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const documentId = localStorage.getItem("evaluationId");
+  const isProduction = import.meta.env.VITE_Environment === "production";
 
   const validateForm = (): boolean => {
     const newErrors: AuthError = {};
@@ -128,7 +129,11 @@ const SignupPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Signup error:", error);
@@ -208,7 +213,11 @@ const SignupPage: React.FC = () => {
       if (documentId) {
         navigate(`/evaluation-summary/${documentId}`);
       } else {
-        navigate(ROUTES.default);
+        if (isProduction) {
+          navigate(ROUTES.home);
+        } else {
+          navigate(ROUTES.default);
+        }
       }
     } catch (error: any) {
       console.error("Google signup error:", error);
@@ -328,6 +337,7 @@ const SignupPage: React.FC = () => {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiLock className="text-gray-400" />
               </div>
+              <input type="password" className="hidden" />
               <input
                 id="password"
                 name="password"

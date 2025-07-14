@@ -712,22 +712,22 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
         <div className="grid lg:grid-cols-2 gap-8 p-2 bg-[#FCFCFC] rounded-2xl shadow-2xl">
           {/* Left Column - Upload Area with Document Preview */}
           <div className="space-y-6  md:w-[429px]">
-            <div className="border-2 border-dashed border-[#D1D5DB] rounded-2xl p-2 md:p-8 bg-[#F9F9F9] h-full">
+            <div className="border-2 border-dashed border-[#D1D5DB] rounded-2xl p-2 md:p-4 bg-[#F9F9F9] h-full">
               {/* Success Icon */}
-              <div className="flex justify-center mb-6">
-                <div className="w-[42px] h-[42px] bg-gradient-to-b from-[#B6E588] to-[#35765E]  rounded-full flex items-center justify-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-[42px] h-[42px] bg-gradient-to-b shadow-2xl from-[#B6E588] to-[#35765E]  rounded-full flex items-center justify-center">
                   <BsFolderCheck className="w-6 h-6 text-white" />
                 </div>
               </div>
 
-              <div className="text-center mb-8">
-                <h3 className="text-[22px] font-['Funnel_Sans'] font-bold text-[#1F2937] mb-2">
+              <div className="text-center mb-2">
+                <h3 className="text-[22px] font-['Funnel_Sans'] font-medium text-[#1F2937] mb-2">
                   Your document <br /> is uploaded!
                 </h3>
               </div>
 
               {/* Document Preview */}
-              <div className="bg-gray-50 rounded-xl md:p-6 mb-6">
+              <div className="bg-gray-50 rounded-xl md:p-2 mb-6">
                 <div className="bg-white rounded-lg shadow-sm p-4 min-h-[316px] flex items-center justify-center">
                   <img
                     src={docPrev}

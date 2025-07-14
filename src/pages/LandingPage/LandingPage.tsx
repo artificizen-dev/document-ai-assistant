@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiLogOut, FiUser, FiMail, FiLogIn, FiPlus } from "react-icons/fi";
+import { FiLogOut, FiUser, FiMail, FiLogIn } from "react-icons/fi";
 import ROUTES from "../../routes";
 import { useAppContext } from "../../Providers/AppContext";
 import mainLogo from "../../assets/main-logo.png";
 import LayoutFooter from "../../components/LayoutFooter/LayoutFooter";
-import coins from "../../assets/coins2.png";
+// import coins from "../../assets/coins2.png";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -19,9 +19,9 @@ const LandingPage = () => {
     // fetchChatrooms,
     // isLoadingChatrooms,
     chatrooms,
-    credits,
-    fetchCredits,
-    isLoadingCredits,
+    // credits,
+    // fetchCredits,
+    // isLoadingCredits,
   } = useAppContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -52,7 +52,7 @@ const LandingPage = () => {
   useEffect(() => {
     if (user) {
       fetchEvaluations();
-      fetchCredits();
+      // fetchCredits();
     }
   }, [user]);
 
@@ -82,7 +82,7 @@ const LandingPage = () => {
           {/* Right side - Credits, New evaluation, Grid, Avatar */}
           <div className="flex-1 flex items-center justify-end gap-4">
             {/* Credits */}
-            {user && (
+            {/* {user && (
               <div className="flex items-center gap-2 px-3 py-2 rounded-lg">
                 <img src={coins} alt="coins" />
                 <span className="text-sm font-['Funnel_Sans'] font-medium text-[#374151]">
@@ -102,10 +102,10 @@ const LandingPage = () => {
                   )}
                 </span>
               </div>
-            )}
+            )} */}
 
             {/* New evaluation button */}
-            <button
+            {/* <button
               onClick={() => navigate("/evaluate")}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#FFFFFF] hover:bg-black/5 transition-colors duration-200"
             >
@@ -113,7 +113,7 @@ const LandingPage = () => {
               <span className="text-sm font-['Funnel_Sans'] font-medium text-[#374151]">
                 New evaluation
               </span>
-            </button>
+            </button> */}
 
             {/* User Avatar with Dropdown */}
             <div className="relative" ref={dropdownRef}>

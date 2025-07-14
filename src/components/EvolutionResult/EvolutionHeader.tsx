@@ -4,6 +4,7 @@ import { HiThumbUp, HiThumbDown } from "react-icons/hi";
 import { EvaluationHeaderProps } from "../../interfaces";
 import axios from "axios";
 import { backendURL, access_token } from "../../utils/constants";
+import docImg from "../../assets/doc-menu.png";
 
 const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   title,
@@ -75,24 +76,29 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   return (
     <div className="mb-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-        <div className="mb-3 md:mb-0">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-            {displayTitle}
-          </h1>
-          <div className="flex items-center mt-1">
-            <p className="text-xs md:text-sm text-gray-500">
-              {date} {time}
-            </p>
-            {category && (
-              <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full">
-                {category}
-              </span>
-            )}
-            {category_name && (
-              <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full">
-                {category_name}
-              </span>
-            )}
+        <div className="flex items-center gap-2 mb-3 md:mb-0">
+          <div>
+            <img src={docImg} alt="" className="h-[45px] w-[49px]" />
+          </div>
+          <div>
+            <h1 className="text-[18px] md:text-[22px] font-bold text-gray-900">
+              {displayTitle}
+            </h1>
+            <div className="flex items-center mt-1">
+              <p className="text-[12px] md:text-[14px] text-gray-500">
+                {date} {time}
+              </p>
+              {category && (
+                <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full">
+                  {category}
+                </span>
+              )}
+              {category_name && (
+                <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full">
+                  {category_name}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

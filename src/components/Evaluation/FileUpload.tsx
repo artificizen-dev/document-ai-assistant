@@ -729,7 +729,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
               {/* Document Preview */}
               <div className="bg-gray-50 rounded-xl p-6 mb-6">
                 <div className="bg-white rounded-lg shadow-sm p-4 min-h-[316px] flex items-center justify-center">
-                  <img src={docPrev} alt="preview" />
+                  <img
+                    src={docPrev}
+                    alt="Document Preview"
+                    className="max-w-full max-h-full object-contain"
+                  />
                 </div>
               </div>
 

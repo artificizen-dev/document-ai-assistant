@@ -1,4 +1,3 @@
-import mainLogo from "../../assets/main-logo.png";
 import heroImage from "../../assets/flower.png";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../routes";
@@ -16,82 +15,55 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12">
-        <nav className="flex items-center justify-between py-4">
-          <div className="flex items-center space-x-2">
-            <img src={mainLogo} alt="logo" className="h-8" />
-          </div>
-          <button
-            onClick={handleStart}
-            className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
-          >
-            Open App
-          </button>
-        </nav>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-[#12261e] to-[#4B724F] text-white relative">
+      {/* Main Content - Centered */}
+      <div className="min-h-screen flex flex-col justify-center items-center">
+        <div className="flex justify-center mb-8">
+          <img src={heroImage} alt="" className="w-[108px] h-[108px]" />
+        </div>
 
-      {/* Main Content */}
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 py-12 lg:py-20">
-        <div className="flex-col md:flex md:flex-row justify-between items-center">
-          {/* Left Column - Text Content */}
-          <div className="space-y-6 md:w-[50%]">
+        <div className="flex flex-col items-center justify-center px-6">
+          <div className="text-center space-y-8">
+            {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-3xl lg:text-[56px] font-extrabold text-[#204336] leading-tight font-['Grosteque']">
-                Not school. Not coaching.
+              <h1 className="text-[40px] lg:text-[74px] font-['Funnel_Sans'] font-bold text-[#CBFB93] !leading-[1]">
+                Not school.
                 <br />
-                <h1 className="text-[46px]">
-                  Just learning — <em className="italic">your way</em>
-                </h1>
+                Not coaching.
               </h1>
 
-              <div className="space-y-2 text-base lg:text-[36px] text-[#7A7A7A]">
-                <p>Where structure meets freedom,</p>
-                <p>and AI meets curiosity.</p>
-              </div>
+              <h2 className="text-[30px] lg:text-[42px] font-['Funnel_Sans'] font-medium text-[#CBFB93]">
+                Just learning - your way
+              </h2>
+            </div>
 
-              <div className="space-y-2 text-base lg:text-[36px] text-[#7A7A7A] font-normal font-['Funnel_Sans']">
-                <p>Squirkle is your space to think,</p>
-                <p>
-                  talk, and grow — <em className="italic">shaped by you.</em>
-                </p>
-              </div>
+            {/* Description */}
+            <div className="space-y-2 text-[14px] lg:text-[16px] font-['Funnel_Sans'] text-[#CCECDB] max-w-[500px] mx-auto">
+              <p>
+                Where structure meets freedom, and AI meets curiosity. Squirkle
+              </p>
+              <p>is your space to think, talk, and grow — shaped by you.</p>
+            </div>
 
-              <div className="pt-2">
-                <h2 className="text-lg lg:text-[32px] font-bold text-[#7A7A7A] tracking-wider">
-                  FLUID. PERSONAL. EVOLVING.
-                </h2>
-              </div>
-
-              <div className="pt-4">
-                <p className="text-base flex justify-end lg:text-lg text-[#7A7A7A] italic">
-                  That's the Squirkle way.
-                </p>
-              </div>
+            {/* Open App Button */}
+            <div className="pt-2">
+              <button
+                onClick={handleStart}
+                className="bg-[#1B382D] text-[#CBFB93] px-4 py-2 rounded-xl font-['Funnel_Sans'] font-medium text-[16px] hover:bg-[#1F4631] transition-colors duration-200 border border-white/10"
+              >
+                Open app
+              </button>
             </div>
           </div>
-
-          {/* Right Column - Visual Element */}
-          <div className="flex justify-center lg:justify-end md:w-[40%]">
-            <div
-              className="relative w-80 h-80 lg:w-120 lg:h-[500px] rounded-3xl flex items-center justify-center p-8"
-              style={{
-                background: "#204336",
-              }}
-            >
-              <img
-                src={heroImage}
-                alt="Squirkle visual"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="mt-5">
-          <h2 className="text-[#222227] text-[11px]">©2025 - Squirkle</h2>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="absolute bottom-6 left-6">
+        <p className="text-[#CBFB93] text-sm font-['Funnel_Sans']">
+          ©2025 - Squirkle
+        </p>
+      </footer>
     </div>
   );
 };

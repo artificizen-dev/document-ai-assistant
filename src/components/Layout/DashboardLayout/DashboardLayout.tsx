@@ -230,14 +230,18 @@ const DashboardLayout: React.FC = () => {
     fetchCredits();
   };
 
+  const handleBuyCredits = () => {
+    setShowBuyModal(true);
+  };
+
   return (
     <>
       <div className="flex flex-col h-screen bg-gradient-to-br from-[#DEE4E5] to-[#F1FBE4]">
         {/* Combined Header */}
-        <header className="w-full py-4 px-6">
+        <header className="w-full py-4 px-4 sm:px-6">
           <div className="flex justify-between items-center max-w-[1800px] mx-auto">
             {/* Left side - Menu Button */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <button
                 onClick={toggleSidebar}
                 className="flex items-center gap-2 p-2 hover:bg-black/5 rounded-lg transition-colors duration-200"
@@ -249,16 +253,16 @@ const DashboardLayout: React.FC = () => {
             {/* Center - Logo */}
             <div className="flex items-center">
               <Link to={ROUTES.home} className="flex items-center">
-                <img src={mainLogo} alt="Squirkle" className="h-8" />
+                <img src={mainLogo} alt="Squirkle" className="h-6 sm:h-8" />
               </Link>
             </div>
 
             {/* Right side - Credits, New evaluation, Grid, Avatar */}
-            <div className="flex items-center justify-end gap-4">
+            <div className="flex items-center justify-end gap-2 sm:gap-4">
               {token && (
                 <>
-                  {/* Credits */}
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#FFFFFF]/80">
+                  {/* Credits - Hidden on mobile, show on sm+ */}
+                  <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-[#FFFFFF]/80">
                     <img src={coins} alt="coins" />
                     <span className="text-sm font-['Funnel_Sans'] font-medium text-[#374151]">
                       {isLoadingCredits ? (
@@ -281,21 +285,44 @@ const DashboardLayout: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* New evaluation button */}
-                  <button
-                    onClick={() => navigate(ROUTES.evaluate)}
-                    disabled={credits?.remaining_credits === 0}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
-                      credits?.remaining_credits === 0
-                        ? "text-gray-300 cursor-not-allowed"
-                        : "text-[#374151] bg-[#FFFFFF] hover:bg-black/5"
-                    }`}
-                  >
-                    <FiPlus className="w-4 h-4" />
-                    <span className="text-sm font-['Funnel_Sans'] font-medium">
-                      New evaluation
+                  {/* Mobile Credits - Show only number */}
+                  <div className="flex sm:hidden items-center gap-1 px-2 py-1 rounded-lg bg-[#FFFFFF]/80">
+                    <img src={coins} alt="coins" className="w-4 h-4" />
+                    <span className="text-xs font-['Funnel_Sans'] font-medium text-[#374151]">
+                      {isLoadingCredits ? (
+                        <div className="animate-pulse">
+                          <div className="w-6 h-2 bg-gray-300 rounded"></div>
+                        </div>
+                      ) : credits ? (
+                        <span className="text-gray-900 font-medium">
+                          {credits.remaining_credits}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">--</span>
+                      )}
                     </span>
-                  </button>
+                  </div>
+
+                  {/* New evaluation button */}
+                  {credits?.remaining_credits === 0 ? (
+                    <button
+                      onClick={handleBuyCredits}
+                      className="bg-red-500 text-white px-2 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-red-600 transition-colors"
+                    >
+                      <span className="hidden sm:inline">Buy Now</span>
+                      <span className="sm:hidden">Buy</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => navigate(ROUTES.evaluate)}
+                      className="flex items-center bg-[#FFFFFF] hover:bg-gray-300 py-2 px-1 sm:px-2 rounded-md transition-all duration-200 border border-gray-200 text-gray-600 hover:text-black hover:border-gray-300"
+                    >
+                      <FiPlus size={16} className="mr-0 sm:mr-1" />
+                      <span className="hidden sm:inline text-sm">
+                        New Evaluation
+                      </span>
+                    </button>
+                  )}
                 </>
               )}
 
@@ -311,16 +338,16 @@ const DashboardLayout: React.FC = () => {
                     <img
                       src={profileImage}
                       alt="User Profile"
-                      className="w-8 h-8 rounded-full object-cover"
+                      className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover"
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <button className="p-2 hover:bg-black/5 rounded-lg transition-colors duration-200">
-                      <div className="grid grid-cols-3 gap-0.5 w-5 h-5">
+                    <button className="p-1.5 sm:p-2 hover:bg-black/5 rounded-lg transition-colors duration-200">
+                      <div className="grid grid-cols-3 gap-0.5 w-4 h-4 sm:w-5 sm:h-5">
                         {[...Array(9)].map((_, i) => (
                           <div
                             key={i}
-                            className="w-1 h-1 bg-[#374151] rounded-sm"
+                            className="w-0.5 h-0.5 sm:w-1 sm:h-1 bg-[#374151] rounded-sm"
                           ></div>
                         ))}
                       </div>
@@ -330,7 +357,7 @@ const DashboardLayout: React.FC = () => {
 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-auto bg-white rounded-xl shadow-lg py-2 z-10 border border-white/20">
+                  <div className="absolute right-0 mt-2 w-auto min-w-[200px] bg-white rounded-xl shadow-lg py-2 z-10 border border-white/20">
                     {user ? (
                       <>
                         <div className="px-4 py-3 border-b border-gray-100">
@@ -343,6 +370,42 @@ const DashboardLayout: React.FC = () => {
                             {user?.email || "No email"}
                           </p>
                         </div>
+
+                        {/* Mobile Credits in Dropdown */}
+                        <div className="sm:hidden px-4 py-2 border-b border-gray-100">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-['Funnel_Sans'] text-[#6B7280]">
+                              Credits
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <img
+                                src={coins}
+                                alt="coins"
+                                className="w-4 h-4"
+                              />
+                              <span className="text-sm font-['Funnel_Sans'] font-medium text-[#374151]">
+                                {isLoadingCredits ? (
+                                  <div className="animate-pulse">
+                                    <div className="w-8 h-3 bg-gray-300 rounded"></div>
+                                  </div>
+                                ) : credits ? (
+                                  <>
+                                    <span className="text-gray-900 font-medium">
+                                      {credits.remaining_credits}
+                                    </span>
+                                    <span className="text-gray-400">
+                                      {" "}
+                                      Credits
+                                    </span>
+                                  </>
+                                ) : (
+                                  <span className="text-gray-400">--/--</span>
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
                         <button
                           onClick={handleLogout}
                           className="flex w-full items-center px-4 py-2 text-sm font-['Funnel_Sans'] text-[#374151] hover:bg-gray-50"

@@ -240,7 +240,7 @@ const EvaluationResultPage: React.FC = () => {
               Question
             </h3>
             <div className="bg-[#FCFCFC] rounded-xl p-4 border border-gray-100">
-              <p className="text-[#374151] font-['Funnel_Sans']">
+              <p className="text-[#414651] text-[14px] font-['Funnel_Sans']">
                 {evaluationData.question || "No question provided"}
               </p>
             </div>
@@ -343,18 +343,19 @@ const EvaluationResultPage: React.FC = () => {
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-xl font-['Grosteque'] font-semibold text-[#1F2937]">
-                Document Preview
+              <h2 className="text-[18px] font-['Funnel_Sans'] font-semibold text-[#1F2937]">
+                Submitted Answer
               </h2>
               <button
                 onClick={closeDrawer}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="p-2 flex justify-center items-center gap-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
               >
                 <FiX className="w-6 h-6 text-[#6B7280]" />
+                <p>close</p>
               </button>
             </div>
 
-            <div className="p-6 h-full overflow-auto">
+            <div className="p-6 h-full overflow-auto bg-[#FCFCFC]">
               <ExamCopiesTab
                 docName={evaluationData.doc_name}
                 docLink={evaluationData.doc_link}

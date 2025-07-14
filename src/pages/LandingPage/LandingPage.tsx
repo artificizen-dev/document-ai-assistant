@@ -200,7 +200,7 @@ const LandingPage = () => {
           {/* Cards Container */}
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto bg-[#ECECEC]/70 md:p-6 rounded-2xl relative shadow-lg">
             {/* Learn Card */}
-            <div className="absolute -top-3 left-6">
+            <div className="absolute top-[-4%] md:-top-3  left-6">
               <span className="bg-[#84cc16] text-white text-xs font-['Funnel_Sans'] font-medium px-3 py-1 rounded-full">
                 COMING SOON
               </span>

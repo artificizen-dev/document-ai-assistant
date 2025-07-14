@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiFileText, FiDownload } from "react-icons/fi";
+import { FiFileText } from "react-icons/fi";
 import axios from "axios";
 import { backendURL } from "../../utils/constants";
 import { useAppContext } from "../../Providers/AppContext";
@@ -14,7 +14,6 @@ interface ExamCopiesTabProps {
 const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
   docName,
   docLink,
-  question,
   answer,
 }) => {
   const { handleError } = useAppContext();
@@ -214,19 +213,6 @@ const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* PDF Document Section */}
       <div className="border rounded-lg overflow-hidden">
-        <div className="bg-gray-100 p-4 flex justify-between items-center border-b">
-          <div className="flex items-center">
-            <FiFileText className="mr-2 text-gray-600" />
-            <h3 className="font-medium">{docName}</h3>
-          </div>
-          <button
-            onClick={handleDownload}
-            className="text-gray-600 hover:text-black"
-            title="Download PDF"
-          >
-            <FiDownload />
-          </button>
-        </div>
         <div className="h-[600px] relative">
           {isLoadingPdf ? (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -259,18 +245,8 @@ const ExamCopiesTab: React.FC<ExamCopiesTabProps> = ({
 
       {/* Question and Answer Section */}
       <div className="border rounded-lg overflow-hidden">
-        <div className="bg-gray-100 p-4 border-b">
-          <h3 className="font-medium">Question and Answer</h3>
-        </div>
         <div className="p-4 overflow-y-auto h-[600px]">
-          <div className="mb-4">
-            <h4 className="font-medium text-gray-900 mb-2">Question:</h4>
-            <p className="bg-gray-50 p-3 rounded-md">{question}</p>
-          </div>
-
           <div>
-            <h4 className="font-medium text-gray-900 mb-2">Answer:</h4>
-
             <div
               className="prose prose-sm max-w-none bg-gray-50 p-4 rounded-md border border-gray-200 [&>p]:mb-3 [&>h4]:text-base [&>strong]:text-gray-900 [&>em]:text-gray-700"
               style={{

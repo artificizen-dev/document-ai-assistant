@@ -621,10 +621,13 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
 
   if (isNewFormat) {
     return (
-      <div className="space-y-8">
-        <h3 className="text-xl font-semibold my-5 text-gray-800 border-b pb-2 border-gray-200">
+      <div className="space-y-8 bg-[#E8EEED] p-4 rounded-2xl shadow-2xl">
+        <h3 className="text-[16px] font-semibold mt-5 !mb-1 font-['Funnel_Sans'] text-[#414651] border-b border-gray-200">
           Detailed Evaluation
         </h3>
+        <p className="text-[10px] text-[#9E9F9F] !mt-0 font-['Funnel_Sans']">
+          Smart AI Review
+        </p>
 
         {/* Regular Evaluation sections */}
         {llm_response?.Evaluation?.map((category, categoryIndex) => (

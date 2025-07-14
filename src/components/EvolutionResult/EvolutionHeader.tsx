@@ -1,77 +1,17 @@
-import React, { useState } from "react";
-import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
-import { HiThumbUp, HiThumbDown } from "react-icons/hi";
+import React from "react";
 import { EvaluationHeaderProps } from "../../interfaces";
-import axios from "axios";
-import { backendURL, access_token } from "../../utils/constants";
 import docImg from "../../assets/doc-menu.png";
 
 const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   title,
   date,
   time,
-  documentId,
   category,
   category_name,
-  userFeedback: initialUserFeedback,
 }) => {
-  // Local state to manage feedback without page reload
-  const [userFeedback, setUserFeedback] = useState(initialUserFeedback);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const displayTitle = title.includes("Evaluation")
     ? title
     : `Evaluation ${date}`;
-
-  const submitFeedback = async (liked: boolean) => {
-    if (isSubmitting || userFeedback === liked) return;
-
-    setUserFeedback(liked);
-
-    setIsSubmitting(true);
-
-    try {
-      const token = access_token();
-
-      if (!token) {
-        console.error("Authentication required");
-        setUserFeedback(initialUserFeedback);
-        return;
-      }
-
-      await axios.post(
-        `${backendURL}/api/services/doc-feedback/`,
-        {
-          doc_id: documentId,
-          user_feedback: liked,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Failed to submit feedback:", error);
-      setUserFeedback(initialUserFeedback);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const renderThumbsUp = () => {
-    if (userFeedback === true) {
-      return <HiThumbUp className="mr-1.5" size={14} />;
-    }
-    return <FiThumbsUp className="mr-1.5" size={14} />;
-  };
-
-  const renderThumbsDown = () => {
-    if (userFeedback === false) {
-      return <HiThumbDown className="mr-1.5" size={14} />;
-    }
-    return <FiThumbsDown className="mr-1.5" size={14} />;
-  };
 
   return (
     <div className="mb-6">
@@ -81,11 +21,11 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
             <img src={docImg} alt="" className="h-[45px] w-[49px]" />
           </div>
           <div>
-            <h1 className="text-[18px] md:text-[22px] font-bold text-gray-900">
+            <h1 className="text-[18px] font-['Funnel_Sans'] md:text-[22px] font-bold text-gray-900">
               {displayTitle}
             </h1>
             <div className="flex items-center mt-1">
-              <p className="text-[12px] md:text-[14px] text-gray-500">
+              <p className="text-[12px] md:text-[14px] font-['Funnel_Sans'] text-gray-500">
                 {date} {time}
               </p>
               {category && (
@@ -99,62 +39,6 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
                 </span>
               )}
             </div>
-          </div>
-        </div>
-
-        <div className="flex md:hidden w-full space-x-2 mb-3">
-          <button
-            onClick={() => submitFeedback(true)}
-            disabled={isSubmitting}
-            className={`flex items-center justify-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs ${
-              userFeedback === true
-                ? "text-blue-600 border-blue-200 bg-blue-50"
-                : "text-gray-700 hover:bg-gray-50"
-            } disabled:opacity-50 w-1/2`}
-            aria-label="Like evaluation"
-          >
-            {renderThumbsUp()} Like
-          </button>
-          <button
-            onClick={() => submitFeedback(false)}
-            disabled={isSubmitting}
-            className={`flex items-center justify-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs ${
-              userFeedback === false
-                ? "text-red-600 border-red-200 bg-red-50"
-                : "text-gray-700 hover:bg-gray-50"
-            } disabled:opacity-50 w-1/2`}
-            aria-label="Dislike evaluation"
-          >
-            {renderThumbsDown()} Dislike
-          </button>
-        </div>
-
-        <div className="flex flex-wrap gap-2 w-full md:w-auto">
-          <div className="hidden md:flex space-x-2">
-            <button
-              onClick={() => submitFeedback(true)}
-              disabled={isSubmitting}
-              className={`flex items-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs ${
-                userFeedback === true
-                  ? "text-blue-600 border-blue-200 bg-blue-50"
-                  : "text-gray-700 hover:bg-gray-50"
-              } disabled:opacity-50`}
-              aria-label="Like evaluation"
-            >
-              {renderThumbsUp()}
-            </button>
-            <button
-              onClick={() => submitFeedback(false)}
-              disabled={isSubmitting}
-              className={`flex items-center border border-gray-200 bg-white py-1.5 px-3 rounded-md text-xs ${
-                userFeedback === false
-                  ? "text-red-600 border-red-200 bg-red-50"
-                  : "text-gray-700 hover:bg-gray-50"
-              } disabled:opacity-50`}
-              aria-label="Dislike evaluation"
-            >
-              {renderThumbsDown()}
-            </button>
           </div>
         </div>
       </div>

@@ -43,13 +43,13 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
   const { lightColor, darkColor } = getScoreColors(scorePercentage);
 
   return (
-    <div className="bg-[#FCFCFC] rounded-lg p-6 mb-6">
+    <div className="bg-[#E8EEED] rounded-lg shadow-2xl p-6 mb-6">
       <div className="flex flex-col md:flex-row justify-between md:gap-5 mb-4">
         <div className="flex-1">
-          <h2 className="text-[16px] font-normal text-[#414651] mb-1">
+          <h2 className="text-[16px] font-normal text-[#414651] mb-1 font-['Funnel_Sans']">
             Evaluation Summary
           </h2>
-          <p className="text-[#9E9F9F] text-[10px]">
+          <p className="text-[#9E9F9F] text-[10px] font-['Funnel_Sans']">
             {documentCount} {documentType} evaluated
           </p>
 

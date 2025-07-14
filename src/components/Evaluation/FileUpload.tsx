@@ -616,7 +616,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
   }
 
   return (
-    <div className="w-full mx-auto px-6 py-8">
+    <div className="w-full mx-auto px-2 md:px-6 py-2 md:py-8">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-[40px] font-['Funnel_Sans'] font-medium text-[#204336] mb-4">
@@ -712,7 +712,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
         <div className="grid lg:grid-cols-2 gap-8 p-2 bg-[#FCFCFC] rounded-2xl shadow-2xl">
           {/* Left Column - Upload Area with Document Preview */}
           <div className="space-y-6  md:w-[429px]">
-            <div className="border-2 border-dashed border-[#D1D5DB] rounded-2xl p-8 bg-[#F9F9F9] h-full">
+            <div className="border-2 border-dashed border-[#D1D5DB] rounded-2xl p-2 md:p-8 bg-[#F9F9F9] h-full">
               {/* Success Icon */}
               <div className="flex justify-center mb-6">
                 <div className="w-[42px] h-[42px] bg-gradient-to-b from-[#B6E588] to-[#35765E]  rounded-full flex items-center justify-center">
@@ -727,7 +727,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
               </div>
 
               {/* Document Preview */}
-              <div className="bg-gray-50 rounded-xl p-6 mb-6">
+              <div className="bg-gray-50 rounded-xl md:p-6 mb-6">
                 <div className="bg-white rounded-lg shadow-sm p-4 min-h-[316px] flex items-center justify-center">
                   <img
                     src={docPrev}

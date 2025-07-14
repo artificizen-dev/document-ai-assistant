@@ -125,7 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <aside
-      className={`shadow-2xl border-r border-gray-200 transition-all duration-300 md:relative absolute z-20 md:h-auto h-full ${
+      className={`shadow-2xl border-r border-gray-200 bg-[#F5F2ED] md:bg-transparent transition-all duration-300 md:relative absolute z-20 md:h-auto h-full ${
         isOpen ? "md:w-70 w-60" : "w-0 overflow-hidden"
       }`}
     >

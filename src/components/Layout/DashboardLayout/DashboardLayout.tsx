@@ -307,7 +307,7 @@ const DashboardLayout: React.FC = () => {
                   {credits?.remaining_credits === 0 ? (
                     <button
                       onClick={handleBuyCredits}
-                      className="bg-red-500 text-white px-2 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-red-600 transition-colors"
+                      className="bg-red-500 text-white px-2 sm:px-4 py-1 md:py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-red-600 transition-colors"
                     >
                       <span className="hidden sm:inline">Buy Now</span>
                       <span className="sm:hidden">Buy</span>
@@ -315,7 +315,7 @@ const DashboardLayout: React.FC = () => {
                   ) : (
                     <button
                       onClick={() => navigate(ROUTES.evaluate)}
-                      className="flex items-center bg-[#FFFFFF] hover:bg-gray-300 py-2 px-1 sm:px-2 rounded-md transition-all duration-200 border border-gray-200 text-gray-600 hover:text-black hover:border-gray-300"
+                      className="flex items-center bg-[#FFFFFF] hover:bg-gray-300 py-1 md:py-2 px-1 sm:px-2 rounded-md transition-all duration-200 border border-gray-200 text-gray-600 hover:text-black hover:border-gray-300"
                     >
                       <FiPlus size={16} className="mr-0 sm:mr-1" />
                       <span className="hidden sm:inline text-sm">

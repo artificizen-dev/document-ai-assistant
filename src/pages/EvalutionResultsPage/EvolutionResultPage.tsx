@@ -192,7 +192,7 @@ const EvaluationResultPage: React.FC = () => {
         category_name={evaluationData.category_name}
         userFeedback={evaluationData.user_feedback}
       />
-      <div className="flex gap-6">
+      <div className="md:flex gap-6">
         {/* Main Content - Left Side */}
         <div className="flex-1">
           <EvaluationSummary
@@ -233,7 +233,7 @@ const EvaluationResultPage: React.FC = () => {
         </div>
 
         {/* Right Sidebar */}
-        <div className="w-80 space-y-6">
+        <div className="md:w-80 mt-4 md:mt-0 space-y-6">
           {/* Question Section */}
           <div className="bg-[#E8EEED] shadow-2xl rounded-2xl p-6 border border-gray-200">
             <h3 className="text-[16px] font-['Funnel_Sans'] font-semibold text-[#414651] mb-4">

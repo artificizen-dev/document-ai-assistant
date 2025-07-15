@@ -56,7 +56,7 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
           {assessmentContent && (
             <div className="mt-4">
               <div className="bg-[#F8F7F7] p-3 rounded-md border border-gray-200">
-                <p className="text-[#414651] text-[12px]">
+                <p className="text-[#414651] font-['Funnel_Sans'] text-[12px]">
                   {assessmentContent}
                 </p>
               </div>

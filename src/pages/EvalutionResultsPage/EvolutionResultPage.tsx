@@ -236,7 +236,7 @@ const EvaluationResultPage: React.FC = () => {
         <div className="md:w-80 mt-4 md:mt-0 space-y-6">
           {/* Question Section */}
           <div className="bg-[#E8EEED] shadow-2xl rounded-2xl p-6 border border-gray-200">
-            <h3 className="text-[16px] font-['Funnel_Sans'] font-semibold text-[#414651] mb-4">
+            <h3 className="text-[16px] font-normal text-[#414651] mb-4 font-['Grotesque']">
               Question
             </h3>
             <div className="bg-[#FCFCFC] rounded-xl p-4 border border-gray-100">
@@ -248,7 +248,7 @@ const EvaluationResultPage: React.FC = () => {
 
           {/* Submitted Answer Section */}
           <div className="bg-[#E8EEED] shadow-2xl rounded-2xl p-6 border border-gray-200">
-            <h3 className="text-[16px] font-['Funnel_Sans'] font-semibold text-[#414651] mb-4">
+            <h3 className="text-[16px] font-normal text-[#414651] mb-4 font-['Grotesque']">
               Submitted answer
             </h3>
 
@@ -284,7 +284,7 @@ const EvaluationResultPage: React.FC = () => {
 
           {/* Rating Section */}
           <div className="bg-[#E8EEED] flex justify-between items-center shadow-2xl rounded-2xl p-6 border border-gray-200">
-            <h3 className="text-[16px] font-['Funnel_Sans'] font-semibold text-[#414651]">
+            <h3 className="text-[16px] font-normal text-[#414651] mb-1 font-['Grotesque']">
               Rating
             </h3>
             <div className="flex gap-3">

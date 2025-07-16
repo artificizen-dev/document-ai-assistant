@@ -8,7 +8,7 @@ import EvaluationCard from "../Evaluation/EvaluationCard";
 import { EvaluationListItem, SidebarProps } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../routes";
-import dochistory from "../../assets/history-doc.png";
+import dochistory from "../../assets/doc-svg.svg";
 
 const ProcessingCard: React.FC<{
   id: string;

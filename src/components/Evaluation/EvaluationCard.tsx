@@ -5,7 +5,7 @@ import { EvaluationCardProps } from "../../interfaces";
 import axios from "axios";
 import { backendURL, access_token } from "../../utils/constants";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import pdfView from "../../assets/pdf.png";
+import pdfView from "../../assets/pdf.svg";
 import { FaChevronRight } from "react-icons/fa";
 
 const EvaluationCard: React.FC<EvaluationCardProps> = ({

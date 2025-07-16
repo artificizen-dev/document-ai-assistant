@@ -787,9 +787,9 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
 
     // Get stroke color based on score
     let strokeColor = "#EF4444"; // Red (default)
-    if (score >= 2) strokeColor = "#204336"; // Dark green for 2+
+    if (score >= 2) strokeColor = "#3D7E66"; // Dark green for 2+
     else if (score >= 1.8) strokeColor = "#F59E0B"; // Yellow
-    else if (score >= 1.2) strokeColor = "#F97316"; // Orange
+    else if (score >= 1.2) strokeColor = "#EF4444"; // Orange
 
     return (
       <div className="relative w-40 h-20 flex items-end justify-center">
@@ -798,7 +798,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
           <path
             d="M 10 35 A 30 30 0 0 1 70 35"
             fill="none"
-            stroke="#E5E7EB"
+            stroke="#DBDBDB"
             strokeWidth="6"
             strokeLinecap="round"
           />
@@ -815,8 +815,12 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
           />
         </svg>
         <div className="absolute bottom-0 flex flex-col items-center justify-center">
-          <span className="text-sm font-medium text-gray-600 mb-1">Score</span>
-          <span className="text-lg font-bold text-gray-900">{score}/3</span>
+          <span className="text-[10px] font-bold text-gray-600 mb-1">
+            Score
+          </span>
+          <span className="text-lg font-inter font-bold text-gray-900">
+            {score}/3
+          </span>
         </div>
       </div>
     );
@@ -825,7 +829,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
   if (isNewFormat) {
     return (
       <div className="space-y-8 bg-[#E8EEED] p-4 rounded-2xl shadow-2xl">
-        <h3 className="text-[16px] font-semibold mt-5 !mb-1 font-['Funnel_Sans'] text-[#414651] border-b border-gray-200">
+        <h3 className="text-[16px] font-semibold mt-5 !mb-1 font-['Grotesque'] text-[#414651] border-b border-gray-200">
           Detailed Evaluation
         </h3>
         <p className="text-[10px] text-[#9E9F9F] !mt-0 font-['Funnel_Sans']">
@@ -836,15 +840,17 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
         {llm_response?.Evaluation?.map((category, categoryIndex) => (
           <div
             key={`eval-${categoryIndex}`}
-            className={`rounded-lg overflow-hidden mb-5 border border-gray-200 transition-all duration-300 shadow-sm 
+            className={`rounded-lg overflow-hidden mb-5 border border-gray-200 transition-all duration-300
             ${expandedSections[`eval-${categoryIndex}`] ? "shadow-md" : ""}`}
           >
             <button
               className="w-full flex justify-between items-center p-5 
-              bg-gray-50 hover:bg-gray-100 transition-all duration-300 text-left"
+              bg-[#FCFCFC] hover:bg-gray-100 transition-all duration-300 text-left"
               onClick={() => toggleSection(`eval-${categoryIndex}`)}
             >
-              <h4 className="font-semibold text-gray-900">{category.name}</h4>
+              <h4 className="font-semibold font-['Grotesque'] text-[#414651]">
+                {category.name}
+              </h4>
               {expandedSections[`eval-${categoryIndex}`] ? (
                 <FiChevronUp className="text-gray-500 transition-transform duration-300" />
               ) : (
@@ -860,7 +866,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                   : "max-h-0 opacity-0"
               }`}
             >
-              <div className="p-5 border-t border-gray-200 bg-white">
+              <div className="p-5 bg-white">
                 {isEthics
                   ? // For Ethics response with nested items structure
                     category.items.map((subItem, subItemIndex) => (
@@ -882,10 +888,10 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                             {subItem.Feedback && (
                               <div className="lg:col-span-2">
                                 <div className="bg-[#F8F7F7] p-4 rounded-lg border border-gray-200">
-                                  <h6 className="text-[#414651] text-[14px] font-medium mb-3 text-sm">
+                                  <h6 className="text-[#414651] font-[`Funnel Sans`] text-[14px] font-medium mb-3 text-sm">
                                     Feedback
                                   </h6>
-                                  <p className="text-[#414651] text-[12px] font-[`Funnel Sans`] leading-relaxed text-sm">
+                                  <p className="text-[#414651] text-[12px] font-[`Funnel Sans`] leading-relaxed text-[12px]">
                                     {subItem.Feedback}
                                   </p>
                                 </div>
@@ -912,7 +918,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                               subItem.Strengths.length > 0 && (
                                 <div>
                                   <div className="h-full rounded-lg border border-green-200">
-                                    <h6 className="font-medium p-4 text-[#00A656] bg-[#DEF2E8]  mb-3 flex items-center text-14px">
+                                    <h6 className="font-semibold p-4 text-[#00A656] bg-[#DEF2E8]  mb-3 flex items-center text-14px">
                                       <FiCheckCircle
                                         className="text-green-600 mr-2"
                                         size={16}
@@ -924,9 +930,9 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                                         (strength, idx) => (
                                           <li
                                             key={`strength-${categoryIndex}-${subItemIndex}-${idx}`}
-                                            className="text-gray-700 text-[14px] font-['Funnel_Sans'] leading-relaxed flex items-start"
+                                            className="text-[#414651] text-[11px] font-['Funnel_Sans'] leading-relaxed flex items-start"
                                           >
-                                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                            <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-2 flex-shrink-0"></span>
                                             {strength}
                                           </li>
                                         )
@@ -940,7 +946,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                               subItem.Weaknesses.length > 0 && (
                                 <div>
                                   <div className="h-full rounded-lg border border-red-200">
-                                    <h6 className="font-medium p-4 text-[#FD4C4C] text-[14px] bg-[#FCE7E7] mb-3 flex items-center text-sm">
+                                    <h6 className="font-semibold p-4 text-[#FD4C4C] text-[14px] bg-[#FCE7E7] mb-3 flex items-center text-sm">
                                       <FiXCircle
                                         className="text-red-600 mr-2"
                                         size={16}
@@ -952,9 +958,9 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                                         (weakness, idx) => (
                                           <li
                                             key={`weakness-${categoryIndex}-${subItemIndex}-${idx}`}
-                                            className="text-gray-700 text-[14px] leading-relaxed flex items-start"
+                                            className="text-gray-700 text-[11px] leading-relaxed flex items-start"
                                           >
-                                            <span className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                            <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-2 flex-shrink-0"></span>
                                             {weakness}
                                           </li>
                                         )
@@ -990,7 +996,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                                   <h6 className="font-medium text-gray-800 mb-3 text-sm">
                                     Feedback
                                   </h6>
-                                  <p className="text-gray-700 leading-relaxed text-sm">
+                                  <p className="text-gray-700 leading-relaxed text-[12px]">
                                     {item.Feedback}
                                   </p>
                                 </div>
@@ -1016,7 +1022,7 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                             {item.Strengths && item.Strengths.length > 0 && (
                               <div>
                                 <div className="h-full rounded-lg border border-green-200">
-                                  <h6 className="font-medium p-4   bg-[#DEF2E8] mb-3 flex items-center text-[14px]">
+                                  <h6 className="font-semibold text-[#00A656] p-4   bg-[#DEF2E8] mb-3 flex items-center text-[14px]">
                                     <FiCheckCircle
                                       className="text-green-600 mr-2"
                                       size={16}
@@ -1027,9 +1033,9 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                                     {item.Strengths.map((strength, idx) => (
                                       <li
                                         key={`strength-${idx}`}
-                                        className="text-gray-700 text-[14px] leading-relaxed flex items-start"
+                                        className="text-[#414651] text-[11px] leading-relaxed flex items-start"
                                       >
-                                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                        <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-2 flex-shrink-0"></span>
                                         {strength}
                                       </li>
                                     ))}
@@ -1053,9 +1059,9 @@ const DetailedFeedbackTab: React.FC<DetailedFeedbackTabProps> = ({
                                     {item.Weaknesses.map((weakness, idx) => (
                                       <li
                                         key={`weakness-${idx}`}
-                                        className="text-gray-700 text-[14px] leading-relaxed flex items-start"
+                                        className="text-[#414651] text-[11px] leading-relaxed flex items-start"
                                       >
-                                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                        <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-2 flex-shrink-0"></span>
                                         {weakness}
                                       </li>
                                     ))}

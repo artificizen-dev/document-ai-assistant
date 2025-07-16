@@ -26,7 +26,7 @@ const ProcessingLoader: React.FC<{ documents: any }> = ({ documents }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#DDE5E4] to-[#e8f4f0] flex items-center justify-center px-6">
+    <div className="flex items-center justify-center px-6">
       <div className="max-w-lg w-full text-center">
         {/* Header Text */}
         <div className="mb-12">

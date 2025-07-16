@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiLogOut, FiUser, FiMail, FiLogIn } from "react-icons/fi";
 import ROUTES from "../../routes";
 import { useAppContext } from "../../Providers/AppContext";
-import mainLogo from "../../assets/main-logo.png";
+import mainLogo from "../../assets/Logo.svg";
 import LayoutFooter from "../../components/LayoutFooter/LayoutFooter";
 // import coins from "../../assets/coins2.png";
 
@@ -188,7 +188,7 @@ const LandingPage = () => {
         <div className="max-w-4xl w-full">
           {/* Header Text */}
           <div className="text-center mb-16">
-            <h1 className="text-[40px] font-['Funnel_Sans'] font-medium text-[#1F2937] mb-4">
+            <h1 className="text-[40px] font-['Grotesque'] font-medium text-[#204336] mb-4">
               Choose your experience
             </h1>
             <p className="text-[14px] font-['Funnel_Sans'] text-[#6B7280] max-w-2xl mx-auto leading-relaxed">
@@ -207,7 +207,7 @@ const LandingPage = () => {
             </div>
             <div className="relative bg-[#E2E2E2]/70 backdrop-blur-sm rounded-2xl p-4  transition-all duration-300 flex flex-col h-full">
               <div className="mb-4">
-                <h2 className="text-[40px] font-['Funnel_Sans'] font-bold text-[#1F2937] mb-2">
+                <h2 className="text-[40px] font-['Grotesque'] font-medium text-[#1F2937] mb-2">
                   Learn
                 </h2>
                 <p className="text-[22px] text-[#9CA3AF] font-['Funnel_Sans'] mb-6">
@@ -236,7 +236,7 @@ const LandingPage = () => {
             {/* Evaluate Card */}
             <div className="bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl p-4 hover:bg-white/80 transition-all duration-300 flex flex-col h-full shadow-lg">
               <div className="mb-6">
-                <h2 className="text-[40px] font-['Funnel_Sans'] font-bold text-[#204336] mb-2">
+                <h2 className="text-[40px] font-['Grotesque'] font-medium text-[#204336] mb-2">
                   Evaluate
                 </h2>
                 <p className="text-[22px] text-[#9CA3AF] font-['Funnel_Sans'] mb-4">

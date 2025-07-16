@@ -11,7 +11,7 @@ import { useAppContext } from "../../Providers/AppContext";
 import { app } from "../../utils/firebase";
 import background from "../../assets/login-bg.png";
 import LayoutFooter from "../../components/LayoutFooter/LayoutFooter";
-import logo from "../../assets/main-logo.png";
+import logo from "../../assets/Logo.svg";
 
 const SignupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -229,6 +229,11 @@ const SignupPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex bg-gradient-to-r from-[#DDE5E4] to-[#e8f4f0] relative">
+      <header className="absolute top-0 left-0 right-0 z-20 p-6">
+        <div className="flex justify-center">
+          <img src={logo} alt="logo" className="" />
+        </div>
+      </header>
       {/* Left Side - Background Image and Text */}
       <div className="hidden lg:flex lg:flex-1 relative">
         <div
@@ -239,15 +244,15 @@ const SignupPage: React.FC = () => {
         </div>
         <div className="relative z-10 flex flex-col justify-center px-16 py-24">
           <div className="mb-8">
-            <p className="text-[#6B7280] text-sm font-['Funnel_Sans'] tracking-wide mb-6">
+            <p className="text-[#6B7280] rounded-2xl border-[1px] border-[#16231B29] inline p-1 px-2 text-[12px] font-['Funnel_Sans'] tracking-wide mb-6">
               A SMART LEARNING SPACE GUIDED BY AI PROFESSORS.
             </p>
-            <h1 className="text-6xl font-['Funnel_Sans'] font-bold text-[#1F2937] leading-tight">
+            <h1 className="text-[74px] font-['Grotesque'] font-medium text-[#204336] leading-tight">
               Learn Smarter.
               <br />
-              <span className="text-[#4B5563]">Evaluate Faster.</span>
+              <span className="text-[#204336]">Evaluate Faster.</span>
             </h1>
-            <p className="text-[#6B7280] text-lg font-['Funnel_Sans'] mt-6 max-w-md leading-relaxed">
+            <p className="text-[#414651] text-[16px] font-['Funnel_Sans'] mt-6 max-w-md leading-relaxed">
               A smart learning space guided by AI professors, designed for
               students to learn in their own shape, at their own pace.
             </p>
@@ -260,15 +265,9 @@ const SignupPage: React.FC = () => {
         <div className="max-w-md w-full bg-[#FFFFFF] p-6 rounded-2xl">
           {/* Header */}
           <div className="text-center mb-6">
-            <div className="flex items-center justify-center mb-4">
-              <img src={logo} alt="logo" />
-            </div>
-            <h2 className="text-2xl font-['Grosteque'] font-bold text-[#1F2937] mb-2">
+            <h2 className="text-[30px] font-['Grotesque'] font-normal text-[#204336] mb-2">
               Create Account
             </h2>
-            <p className="text-[#6B7280] text-sm font-['Funnel_Sans']">
-              Sign up for Document AI Assistant
-            </p>
           </div>
 
           {/* Google Sign Up Button */}
@@ -288,7 +287,7 @@ const SignupPage: React.FC = () => {
               <div className="w-full border-t border-[#E5E7EB]"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-[#FFFFFF] text-[#9CA3AF] font-['Funnel_Sans']">
+              <span className="px-4 text-[12px] bg-[#FFFFFF] text-[#9CA3AF] font-['Funnel_Sans']">
                 Or sign up with email
               </span>
             </div>

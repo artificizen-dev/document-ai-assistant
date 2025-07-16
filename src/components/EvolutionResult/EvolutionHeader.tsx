@@ -1,6 +1,6 @@
 import React from "react";
 import { EvaluationHeaderProps } from "../../interfaces";
-import docImg from "../../assets/doc-menu.png";
+import docImg from "../../assets/doc-svg.svg";
 
 const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
   title,
@@ -21,7 +21,7 @@ const EvaluationHeader: React.FC<EvaluationHeaderProps> = ({
             <img src={docImg} alt="" className="h-[45px] w-[49px]" />
           </div>
           <div>
-            <h1 className="text-[18px] font-['Funnel_Sans'] md:text-[22px] font-bold text-gray-900">
+            <h1 className="text-[18px] font-['Grotesque'] md:text-[22px] font-normal text-gray-900">
               {displayTitle}
             </h1>
             <div className="flex items-center mt-1">

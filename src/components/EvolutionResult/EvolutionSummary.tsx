@@ -24,18 +24,18 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
   const getScoreColors = (score: number) => {
     if (score >= 0 && score <= 39) {
       return {
-        lightColor: "#E5E7EB",
+        lightColor: "#DBDBDB",
         darkColor: "#EF4444",
       };
     } else if (score >= 40 && score <= 69) {
       return {
-        lightColor: "#E5E7EB",
+        lightColor: "#DBDBDB",
         darkColor: "#F59E0B",
       };
     } else {
       return {
-        lightColor: "#E5E7EB",
-        darkColor: "#10B981",
+        lightColor: "#DBDBDB",
+        darkColor: "#3D7E66",
       };
     }
   };
@@ -46,7 +46,7 @@ const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
     <div className="bg-[#E8EEED] rounded-lg shadow-2xl p-6 mb-6">
       <div className="flex flex-col md:flex-row justify-between md:gap-5 mb-4">
         <div className="flex-1">
-          <h2 className="text-[16px] font-normal text-[#414651] mb-1 font-['Funnel_Sans']">
+          <h2 className="text-[16px] font-normal text-[#414651] mb-1 font-['Grotesque']">
             Evaluation Summary
           </h2>
           <p className="text-[#9E9F9F] text-[10px] font-['Funnel_Sans']">

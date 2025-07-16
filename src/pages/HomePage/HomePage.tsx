@@ -17,7 +17,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#12261e] to-[#4B724F] text-white relative">
       {/* Main Content - Centered */}
-      <div className="min-h-screen flex flex-col justify-center items-center">
+      <div className="max-w-7xl mx-auto min-h-screen flex flex-col justify-center items-center">
         <div className="flex justify-center mb-8">
           <img src={heroImage} alt="" className="w-[108px] h-[108px]" />
         </div>
@@ -26,13 +26,13 @@ const HomePage = () => {
           <div className="text-center space-y-8">
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-[40px] lg:text-[74px] font-['Funnel_Sans'] font-bold text-[#CBFB93] !leading-[1]">
+              <h1 className="text-[40px] lg:text-[74px]  font-['Grotesque'] font-medium text-[#CBFB93] !leading-[1]">
                 Not school.
                 <br />
                 Not coaching.
               </h1>
 
-              <h2 className="text-[30px] lg:text-[42px] font-['Funnel_Sans'] font-medium text-[#CBFB93]">
+              <h2 className="text-[30px] lg:text-[42px] font-['Grotesque'] font-medium text-[#CBFB93]">
                 Just learning - your way
               </h2>
             </div>
@@ -49,7 +49,7 @@ const HomePage = () => {
             <div className="pt-2">
               <button
                 onClick={handleStart}
-                className="bg-[#1B382D] text-[#CBFB93] px-4 py-2 rounded-xl font-['Funnel_Sans'] font-medium text-[16px] hover:bg-[#1F4631] transition-colors duration-200 border border-white/10"
+                className="bg-[#1B382D] text-[#CBFB93] px-4 py-2 rounded-md font-['Funnel_Sans'] font-medium text-[16px] hover:bg-[#1F4631] transition-colors duration-200 border border-white/10"
               >
                 Open app
               </button>

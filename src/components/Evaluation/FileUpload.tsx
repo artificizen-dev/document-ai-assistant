@@ -408,7 +408,13 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
 
         {/* Right Column - Form */}
         <div className="bg-[#F9F9F9] rounded-2xl p-8 border border-[#E5E7EB]">
-          <div className="bg-[#F8F7F7] rounded-2xl p-2 border-[1px] border-gray-200">
+          <div
+            className={`rounded-2xl p-2 ${
+              selectedFiles.length > 0
+                ? "bg-[#F8F7F7] border-[1px] border-gray-200"
+                : ""
+            }`}
+          >
             <h3 className="text-lg font-['Funnel_Sans'] font-semibold text-[#1F2937] mb-4">
               {selectedFiles.length > 0
                 ? "Selected Documents"

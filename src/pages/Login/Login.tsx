@@ -225,7 +225,9 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen flex bg-gradient-to-r from-[#DDE5E4] to-[#e8f4f0] relative">
       <header className="absolute top-0 left-0 right-0 z-20 p-6">
         <div className="flex justify-center">
-          <img src={logo} alt="logo" className="" />
+          <Link to={ROUTES.home} className="flex items-center">
+            <img src={logo} alt="logo" className="" />
+          </Link>
         </div>
       </header>
       <div className="hidden lg:flex lg:flex-1 relative">

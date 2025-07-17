@@ -181,6 +181,8 @@ const EvaluationResultPage: React.FC = () => {
     }
   };
 
+  console.log("is session user,", isSessionUser);
+
   return (
     <div className="max-w-[1400px] mx-auto px-4 py-6">
       <EvaluationHeader
@@ -233,94 +235,98 @@ const EvaluationResultPage: React.FC = () => {
         </div>
 
         {/* Right Sidebar */}
-        <div className="md:w-80 mt-4 md:mt-0 space-y-6">
-          {/* Question Section */}
-          <div className="bg-[#E8EEED] shadow-2xl rounded-2xl p-6 border border-gray-200">
-            <h3 className="text-[16px] font-normal text-[#414651] mb-4 font-['Grotesque']">
-              Question
-            </h3>
-            <div className="bg-[#FCFCFC] rounded-xl p-4 border border-gray-100">
-              <p className="text-[#414651] text-[14px] font-['Funnel_Sans']">
-                {evaluationData.question || "No question provided"}
-              </p>
+        {!isSessionUser && (
+          <div className="md:w-80 mt-4 md:mt-0 space-y-6">
+            {/* Question Section */}
+            <div className="bg-[#E8EEED] shadow-2xl rounded-2xl p-6 border border-gray-200">
+              <h3 className="text-[16px] font-normal text-[#414651] mb-4 font-['Grotesque']">
+                Question
+              </h3>
+              <div className="bg-[#FCFCFC] rounded-xl p-4 border border-gray-100">
+                <p className="text-[#414651] text-[14px] font-['Funnel_Sans']">
+                  {evaluationData.question || "No question provided"}
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* Submitted Answer Section */}
-          <div className="bg-[#E8EEED] shadow-2xl rounded-2xl p-6 border border-gray-200">
-            <h3 className="text-[16px] font-normal text-[#414651] mb-4 font-['Grotesque']">
-              Submitted answer
-            </h3>
+            {/* Submitted Answer Section */}
+            <div className="bg-[#E8EEED] shadow-2xl rounded-2xl p-6 border border-gray-200">
+              <h3 className="text-[16px] font-normal text-[#414651] mb-4 font-['Grotesque']">
+                Submitted answer
+              </h3>
 
-            {/* PDF Preview - Clickable */}
-            <div
-              className="cursor-pointer"
-              onClick={() => setIsDrawerOpen(true)}
-            >
-              <div className="bg-[#F9FAFB] rounded-xl p-4 border border-gray-100 hover:bg-gray-50 transition-colors duration-200">
-                {evaluationData.doc_link ? (
-                  <div className="aspect-[3/4] bg-white rounded-lg border border-gray-200 relative overflow-hidden">
-                    <iframe
-                      src={`${evaluationData.doc_link}#toolbar=0&navpanes=0&scrollbar=0&page=1&view=FitH`}
-                      className="w-full h-full rounded-lg pointer-events-none"
-                      title="PDF Preview"
-                    />
-                    <div className="absolute inset-0 bg-transparent flex items-end justify-center pb-4 opacity-0 hover:opacity-100 transition-opacity duration-200">
-                      <p className="text-xs text-white bg-black/70 px-2 py-1 rounded font-['Funnel_Sans']">
-                        Click to view full document
+              {/* PDF Preview - Clickable */}
+              <div
+                className="cursor-pointer"
+                onClick={() => setIsDrawerOpen(true)}
+              >
+                <div className="bg-[#F9FAFB] rounded-xl p-4 border border-gray-100 hover:bg-gray-50 transition-colors duration-200">
+                  {evaluationData.doc_link ? (
+                    <div className="aspect-[3/4] bg-white rounded-lg border border-gray-200 relative overflow-hidden">
+                      <iframe
+                        src={`${evaluationData.doc_link}#toolbar=0&navpanes=0&scrollbar=0&page=1&view=FitH`}
+                        className="w-full h-full rounded-lg pointer-events-none"
+                        title="PDF Preview"
+                      />
+                      <div className="absolute inset-0 bg-transparent flex items-end justify-center pb-4 opacity-0 hover:opacity-100 transition-opacity duration-200">
+                        <p className="text-xs text-white bg-black/70 px-2 py-1 rounded font-['Funnel_Sans']">
+                          Click to view full document
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="aspect-[3/4] bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center">
+                      <p className="text-[#9CA3AF] font-['Funnel_Sans'] text-sm">
+                        No document available
                       </p>
                     </div>
-                  </div>
-                ) : (
-                  <div className="aspect-[3/4] bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center">
-                    <p className="text-[#9CA3AF] font-['Funnel_Sans'] text-sm">
-                      No document available
-                    </p>
-                  </div>
-                )}
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Rating Section */}
+            <div className="bg-[#E8EEED] flex justify-between items-center shadow-2xl rounded-2xl p-6 border border-gray-200">
+              <h3 className="text-[16px] font-normal text-[#414651] mb-1 font-['Grotesque']">
+                Rating
+              </h3>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => submitFeedback(true)}
+                  disabled={isSubmitting}
+                  className={`flex items-center justify-center py-2 px-3 rounded-xl transition-all duration-200 ${
+                    userFeedback === true
+                      ? "bg-green-100 border-2 border-green-500"
+                      : "bg-[#F9FAFB] border border-gray-200 hover:bg-green-50 hover:border-green-200"
+                  } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  <FiThumbsUp
+                    className={`w-4 h-4 ${
+                      userFeedback === true
+                        ? "text-green-600"
+                        : "text-[#6B7280]"
+                    }`}
+                  />
+                </button>
+                <button
+                  onClick={() => submitFeedback(false)}
+                  disabled={isSubmitting}
+                  className={`flex items-center justify-center py-2 px-3 rounded-xl transition-all duration-200 ${
+                    userFeedback === false
+                      ? "bg-red-100 border-2 border-red-500"
+                      : "bg-[#F9FAFB] border border-gray-200 hover:bg-red-50 hover:border-red-200"
+                  } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  <FiThumbsDown
+                    className={`w-4 h-4 ${
+                      userFeedback === false ? "text-red-600" : "text-[#6B7280]"
+                    }`}
+                  />
+                </button>
               </div>
             </div>
           </div>
-
-          {/* Rating Section */}
-          <div className="bg-[#E8EEED] flex justify-between items-center shadow-2xl rounded-2xl p-6 border border-gray-200">
-            <h3 className="text-[16px] font-normal text-[#414651] mb-1 font-['Grotesque']">
-              Rating
-            </h3>
-            <div className="flex gap-3">
-              <button
-                onClick={() => submitFeedback(true)}
-                disabled={isSubmitting}
-                className={`flex items-center justify-center py-2 px-3 rounded-xl transition-all duration-200 ${
-                  userFeedback === true
-                    ? "bg-green-100 border-2 border-green-500"
-                    : "bg-[#F9FAFB] border border-gray-200 hover:bg-green-50 hover:border-green-200"
-                } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
-              >
-                <FiThumbsUp
-                  className={`w-4 h-4 ${
-                    userFeedback === true ? "text-green-600" : "text-[#6B7280]"
-                  }`}
-                />
-              </button>
-              <button
-                onClick={() => submitFeedback(false)}
-                disabled={isSubmitting}
-                className={`flex items-center justify-center py-2 px-3 rounded-xl transition-all duration-200 ${
-                  userFeedback === false
-                    ? "bg-red-100 border-2 border-red-500"
-                    : "bg-[#F9FAFB] border border-gray-200 hover:bg-red-50 hover:border-red-200"
-                } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
-              >
-                <FiThumbsDown
-                  className={`w-4 h-4 ${
-                    userFeedback === false ? "text-red-600" : "text-[#6B7280]"
-                  }`}
-                />
-              </button>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Side Drawer for Full Document View */}

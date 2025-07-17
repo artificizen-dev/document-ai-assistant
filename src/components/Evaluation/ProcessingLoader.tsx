@@ -147,9 +147,7 @@ const ProcessingLoader: React.FC<{ documents: any }> = ({ documents }) => {
         {/* Header Text */}
         <div className="mb-12">
           <h1 className="text-4xl font-['Grosteque'] font-bold text-[#1F2937] mb-4">
-            Evaluating
-            <br />
-            in progress...
+            Evaluating in progress...
           </h1>
         </div>
 

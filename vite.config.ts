@@ -9,4 +9,10 @@ export default defineConfig({
     outDir: "dist",
     sourcemap: false,
   },
+  resolve: {
+    alias: {
+      // force the light build everywhere lottie-web is imported
+      "lottie-web": "lottie-web/build/player/lottie_light.js",
+    },
+  },
 });

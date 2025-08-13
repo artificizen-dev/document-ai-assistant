@@ -8,9 +8,10 @@ import { useAppContext } from "../../Providers/AppContext";
 import { access_token } from "../../utils/constants";
 import { FileUploadProps, SelectedFile } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
-import ProcessingLoader from "./ProcessingLoader";
 import documentImage from "../../assets/document.png";
 import { BsFolderCheck } from "react-icons/bs";
+
+const ProcessingLoader = React.lazy(() => import("./ProcessingLoader"));
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
   const navigate = useNavigate();
@@ -265,7 +266,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, files }) => {
   return (
     <div className="w-full mx-auto px-2 md:px-6 py-2 md:py-2">
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-6">
         <h1 className="text-[40px] font-['Grotesque'] font-medium text-[#204336] mb-4">
           AI Powered Evaluation
         </h1>

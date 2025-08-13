@@ -2,7 +2,7 @@ runtime: nodejs20
 env: standard
 
 env_variables:
-  VITE_Environment: "production"
+  VITE_ENVIRONMENT: "production"
 
 handlers:
   - url: /(.*\..+)$

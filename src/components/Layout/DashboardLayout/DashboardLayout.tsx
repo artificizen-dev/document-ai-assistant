@@ -68,9 +68,9 @@ const DashboardLayout: React.FC = () => {
     fetchCredits();
   };
 
-  const handleBuyCredits = () => {
-    setShowBuyModal(true);
-  };
+  // const handleBuyCredits = () => {
+  //   setShowBuyModal(true);
+  // };
 
   return (
     <>
@@ -142,7 +142,7 @@ const DashboardLayout: React.FC = () => {
                   </div>
 
                   {/* New evaluation button */}
-                  {credits?.remaining_credits === 0 ? (
+                  {/* {credits?.remaining_credits === 0 ? (
                     <button
                       onClick={handleBuyCredits}
                       className="bg-red-500 text-white px-2 sm:px-4 py-1 md:py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-red-600 transition-colors"
@@ -160,7 +160,18 @@ const DashboardLayout: React.FC = () => {
                         New Evaluation
                       </span>
                     </button>
-                  )}
+                  )} */}
+                  <button
+                    onClick={() => navigate(ROUTES.evaluate)}
+                    disabled={credits?.remaining_credits === 0}
+                    className={`flex items-center py-1 px-1 rounded-md transition-all duration-200 border ${
+                      credits?.remaining_credits === 0
+                        ? "border-gray-100 text-gray-300 cursor-not-allowed"
+                        : "border-gray-200 text-gray-600 hover:text-black hover:border-gray-300"
+                    }`}
+                  >
+                    <FiPlus size={16} className="mr-1" /> New Evaluation
+                  </button>
                 </>
               )}
 

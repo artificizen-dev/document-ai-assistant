@@ -5,7 +5,9 @@ import ROUTES from "../../routes";
 const HomePage = () => {
   const navigate = useNavigate();
   const handleStart = () => {
-    const isProduction = import.meta.env.VITE_Environment === "production";
+    const isProduction = import.meta.env.VITE_ENVIRONMENT === "production";
+    console.log("Environment:", import.meta.env.VITE_ENVIRONMENT);
+    console.log("isProduction:", isProduction);
 
     if (isProduction) {
       window.location.href = "https://oracle.squirkle.xyz/";

@@ -16,7 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const token = access_token();
   const { credits, isLoadingCredits, fetchCredits } = useAppContext();
   const [showBuyModal, setShowBuyModal] = useState(false);
-  const isProduction = import.meta.env.VITE_Environment === "production";
+  const isProduction = import.meta.env.VITE_ENVIRONMENT === "production";
 
   useEffect(() => {
     fetchCredits();

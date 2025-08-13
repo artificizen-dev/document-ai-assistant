@@ -28,7 +28,7 @@ const SignupPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const documentId = localStorage.getItem("evaluationId");
-  const isProduction = import.meta.env.VITE_Environment === "production";
+  const isProduction = import.meta.env.VITE_ENVIRONMENT === "production";
 
   const validateForm = (): boolean => {
     const newErrors: AuthError = {};

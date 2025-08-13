@@ -55,10 +55,11 @@ import HomePage from "./pages/HomePage/HomePage";
 import PaymentSuccessPage from "./pages/PaymentSuccess/PaymentSuccessPage";
 
 function App() {
-  const isProduction = import.meta.env.VITE_Environment === "production";
+  const isProduction = import.meta.env.VITE_ENVIRONMENT === "production";
   const hostname = window.location.hostname;
   const isOracleDomain = hostname === "oracle.squirkle.xyz";
   const location = useLocation();
+  console.log(import.meta.env);
 
   useEffect(() => {
     if (!isProduction) return;
